@@ -27,9 +27,8 @@
     <div id="login-screen" class="flex items-center justify-center min-h-screen px-4 bg-gradient-to-br from-zinc-100 to-zinc-200">
         <div class="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-md border border-zinc-100 text-center">
             <div class="flex flex-col items-center mb-6">
-                <!-- Logomarca ADCOL Substituindo a Letra 'A' -->
+                <!-- Logomarca ADCOL Limpa -->
                 <img src="logo.png" alt="Logo ADCOL" class="w-32 h-auto mb-4 drop-shadow-md">
-            
                 <p class="text-[10px] uppercase tracking-widest text-zinc-400 font-bold mt-1">Digital Workplace</p>
             </div>
             <h2 class="text-lg font-semibold text-zinc-700 mb-2">Bem-vindo(a)</h2>
@@ -59,7 +58,6 @@
                     <button onclick="switchTab('onboarding')" id="btn-onboarding" class="w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-zinc-400 hover:bg-zinc-800 hover:text-white text-sm font-medium transition"><i data-lucide="graduation-cap" class="w-4 h-4"></i><span>Trilha de Capacitação</span></button>
                     <p class="text-[10px] uppercase text-zinc-500 font-bold px-3 pt-4 mb-2 tracking-widest">Arquivos Corporativos</p>
                     <button onclick="toggleSetores()" class="w-full flex items-center justify-between px-3 py-2 rounded-lg text-zinc-400 hover:bg-zinc-800 hover:text-white text-sm font-medium transition"><div class="flex items-center space-x-3"><i data-lucide="folders" class="w-4 h-4"></i><span>Departamentos</span></div><i data-lucide="chevron-right" id="sector-chevron" class="w-4 h-4 transition-transform duration-200"></i></button>
-                    <!-- Os setores agora são injetados pelo JS baseado no cargo do usuário -->
                     <div id="sector-menu-list" class="hidden ml-4 mt-1 border-l border-zinc-700 pl-2 space-y-1"></div>
                 </nav>
             </div>
@@ -216,6 +214,18 @@
         </div>
     </div>
     <!-- Modais e Lógica -->
+    <div id="mood-modal" class="hidden fixed inset-0 bg-zinc-900/80 backdrop-blur-sm flex items-center justify-center p-4 z-[80]">
+        <div class="bg-white rounded-3xl shadow-2xl p-8 w-full max-w-sm text-center transform transition-all">
+            <h3 class="text-xl font-bold text-zinc-800 mb-2">Como você está hoje?</h3>
+            <p class="text-sm text-zinc-500 mb-8">Seu bem-estar é prioridade para a ADCOL.</p>
+            <div class="flex justify-center space-x-6">
+                <button onclick="registerMood('feliz')" class="text-5xl hover:scale-125 transition-transform" title="Ótimo">😀</button>
+                <button onclick="registerMood('neutro')" class="text-5xl hover:scale-125 transition-transform" title="Normal">😐</button>
+                <button onclick="registerMood('estressado')" class="text-5xl hover:scale-125 transition-transform" title="Cansado/Estressado">😫</button>
+            </div>
+        </div>
+    </div>
+
     <div id="upload-modal" class="hidden fixed inset-0 bg-zinc-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-[60]">
         <div class="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-md border border-zinc-100">
             <div class="flex items-center justify-between mb-5 pb-3 border-b border-zinc-100"><h3 class="text-base font-bold text-zinc-800"><i data-lucide="file-plus" class="w-5 h-5 inline mr-2 text-burgundy"></i> Inserir Documento</h3><button onclick="closeModal()" class="text-zinc-400 hover:text-zinc-600"><i data-lucide="x" class="w-5 h-5"></i></button></div>
@@ -417,6 +427,11 @@
             document.getElementById('login-screen').classList.add('hidden'); 
             document.getElementById('main-app').classList.remove('hidden');
             renderEventos(); renderPosts(); switchTab('home');
+
+            // Ativa o termômetro de humor se o usuário acabou de logar
+            setTimeout(() => {
+                document.getElementById('mood-modal').classList.remove('hidden');
+            }, 500);
         }
 
         function handleLogin(e) {
@@ -477,6 +492,12 @@
         function deleteDocument(id) { if(confirm('Excluir documento?')) { dbDocumentos = dbDocumentos.filter(d => d.id !== id); renderSectorContent(activeTab); } }
         function openEventModal() { document.getElementById('ev-id').value = ''; document.getElementById('event-modal-title').innerHTML = `<i data-lucide="calendar-plus" class="w-5 h-5 inline mr-2 text-orange-500"></i> Novo Evento`; document.getElementById('event-modal').classList.remove('hidden'); try{lucide.createIcons();}catch(e){} }
         function closeEventModal() { document.getElementById('event-modal').classList.add('hidden'); document.getElementById('ev-titulo').value = ''; document.getElementById('ev-dia').value = ''; document.getElementById('ev-desc').value = ''; }
+        
+        function registerMood(mood) {
+            // No futuro, enviaremos isso para o Supabase
+            console.log(`Humor registrado: ${mood} pelo usuário ${sessionUser.nome}`);
+            document.getElementById('mood-modal').classList.add('hidden');
+        }
     </script>
 </body>
-</html> 
+</html>
