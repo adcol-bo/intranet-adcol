@@ -213,7 +213,36 @@
         </div>
     </div>
 
-    <div id="wiki-modal" class="hidden fixed inset-0 bg-zinc-900/80 backdrop-blur-sm flex items-center justify-center p-4 z-[70]"><div class="bg-white rounded-2xl shadow-2xl w-full max-w-3xl flex flex-col border border-zinc-100"><div class="p-5 border-b border-zinc-100 flex items-center justify-between bg-zinc-50 rounded-t-2xl"><div><h3 class="text-base font-bold text-zinc-800"><i data-lucide="pen-tool" class="w-4 h-4 inline mr-2 text-blue-600"></i> Escrever Novo Artigo</h3><p class="text-[11px] text-zinc-500 mt-1">Compartilhe conhecimento e ganhe ADCoins após a aprovação.</p></div><button onclick="document.getElementById('wiki-modal').classList.add('hidden')" class="text-zinc-400 hover:text-zinc-600 p-2"><i data-lucide="x" class="w-5 h-5"></i></button></div><form onsubmit="handleCreateWiki(event)" class="p-6 space-y-4"><div><label class="block text-xs font-bold uppercase text-zinc-500 mb-1">Título do Artigo</label><input id="wiki-title" type="text" required class="w-full p-2.5 bg-zinc-50 border border-zinc-200 rounded-lg text-sm outline-none focus:ring-2 focus:ring-blue-500" placeholder="Ex: Como gerar o relatório de inconsistências no ERP"></div><div><label class="block text-xs font-bold uppercase text-zinc-500 mb-1">Setor / Categoria</label><select id="wiki-cat" class="w-full p-2.5 bg-zinc-50 border border-zinc-200 rounded-lg text-sm outline-none focus:ring-2 focus:ring-blue-500"><option>Fiscal</option><option>Contábil</option><option>Pessoal</option><option>Sistemas/TI</option></select></div><div><label class="block text-xs font-bold uppercase text-zinc-500 mb-1">Conteúdo (Passo a passo)</label><textarea id="wiki-content" required class="w-full bg-zinc-50 border border-zinc-200 rounded-xl p-3 text-sm focus:ring-2 focus:ring-blue-500 resize-none h-40" placeholder="Descreva a solução detalhadamente..."></textarea></div><div class="flex justify-end space-x-3 pt-4 border-t border-zinc-100"><button type="button" onclick="document.getElementById('wiki-modal').classList.add('hidden')" class="px-5 py-2.5 rounded-lg text-sm font-bold text-zinc-600 hover:bg-zinc-100 transition">Cancelar</button><button type="submit" class="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-bold transition shadow-md">Enviar para Aprovação</button></div></form></div></div>
+    <div id="wiki-modal" class="hidden fixed inset-0 bg-zinc-900/80 backdrop-blur-sm flex items-center justify-center p-4 z-[70]">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-3xl flex flex-col border border-zinc-100">
+            <div class="p-5 border-b border-zinc-100 flex items-center justify-between bg-zinc-50 rounded-t-2xl">
+                <div><h3 class="text-base font-bold text-zinc-800"><i data-lucide="pen-tool" class="w-4 h-4 inline mr-2 text-blue-600"></i> Escrever Novo Artigo</h3><p class="text-[11px] text-zinc-500 mt-1">Compartilhe conhecimento e ganhe ADCoins após a aprovação.</p></div>
+                <button onclick="document.getElementById('wiki-modal').classList.add('hidden')" class="text-zinc-400 hover:text-zinc-600 p-2"><i data-lucide="x" class="w-5 h-5"></i></button>
+            </div>
+            <form onsubmit="handleCreateWiki(event)" class="p-6 space-y-4">
+                <div><label class="block text-xs font-bold uppercase text-zinc-500 mb-1">Título do Artigo</label><input id="wiki-title" type="text" required class="w-full p-2.5 bg-zinc-50 border border-zinc-200 rounded-lg text-sm outline-none focus:ring-2 focus:ring-blue-500" placeholder="Ex: Como gerar o relatório de inconsistências no ERP"></div>
+                <div>
+                    <label class="block text-xs font-bold uppercase text-zinc-500 mb-1">Setor / Categoria</label>
+                    <select id="wiki-cat" class="w-full p-2.5 bg-zinc-50 border border-zinc-200 rounded-lg text-sm outline-none focus:ring-2 focus:ring-blue-500">
+                        <option>Fiscal</option>
+                        <option>Contábil</option>
+                        <option>Pessoal</option>
+                        <option>Sistemas/TI</option>
+                        <!-- NOVOS SETORES ADICIONADOS AQUI -->
+                        <option>Qualidade</option>
+                        <option>Legalização</option>
+                        <option>Financeiro</option>
+                    </select>
+                </div>
+                <div><label class="block text-xs font-bold uppercase text-zinc-500 mb-1">Conteúdo (Passo a passo)</label><textarea id="wiki-content" required class="w-full bg-zinc-50 border border-zinc-200 rounded-xl p-3 text-sm focus:ring-2 focus:ring-blue-500 resize-none h-40" placeholder="Descreva a solução detalhadamente..."></textarea></div>
+                <div class="flex justify-end space-x-3 pt-4 border-t border-zinc-100">
+                    <button type="button" onclick="document.getElementById('wiki-modal').classList.add('hidden')" class="px-5 py-2.5 rounded-lg text-sm font-bold text-zinc-600 hover:bg-zinc-100 transition">Cancelar</button>
+                    <button type="submit" class="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-bold transition shadow-md">Enviar para Aprovação</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
     <div id="mood-modal" class="hidden fixed inset-0 bg-zinc-900/80 backdrop-blur-sm flex items-center justify-center p-4 z-[80]"><div class="bg-white rounded-3xl shadow-2xl p-8 w-full max-w-sm text-center transform transition-all"><h3 class="text-xl font-bold text-zinc-800 mb-2">Como você está hoje?</h3><p class="text-sm text-zinc-500 mb-8">Seu bem-estar é prioridade para a ADCOL.</p><div class="flex justify-center space-x-6"><button onclick="registerMood('feliz')" class="text-5xl hover:scale-125 transition-transform" title="Ótimo">😀</button><button onclick="registerMood('neutro')" class="text-5xl hover:scale-125 transition-transform" title="Normal">😐</button><button onclick="registerMood('estressado')" class="text-5xl hover:scale-125 transition-transform" title="Cansado/Estressado">😫</button></div></div></div>
     <div id="upload-modal" class="hidden fixed inset-0 bg-zinc-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-[60]"><div class="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-md border border-zinc-100"><div class="flex items-center justify-between mb-5 pb-3 border-b border-zinc-100"><h3 class="text-base font-bold text-zinc-800"><i data-lucide="file-plus" class="w-5 h-5 inline mr-2 text-burgundy"></i> Inserir Documento</h3><button onclick="closeModal()" class="text-zinc-400 hover:text-zinc-600"><i data-lucide="x" class="w-5 h-5"></i></button></div><form onsubmit="handleUpload(event)" class="space-y-4"><div><label class="block text-xs font-bold uppercase text-zinc-500 mb-1">Nome do Arquivo</label><input id="modal-doc-name" type="text" required class="w-full p-2.5 bg-zinc-50 border border-zinc-200 rounded-lg text-sm outline-none focus:ring-2 focus:ring-burgundy"></div><div class="grid grid-cols-2 gap-4"><div><label class="block text-xs font-bold uppercase text-zinc-500 mb-1">Categoria</label><select id="modal-doc-type" class="w-full p-2.5 bg-zinc-50 border border-zinc-200 rounded-lg text-sm outline-none focus:ring-2 focus:ring-burgundy"><option value="Formulário">Formulário</option><option value="Manual">Manual</option><option value="Cargo">Cargo</option></select></div><div><label class="block text-xs font-bold uppercase text-zinc-500 mb-1">Setor</label><select id="modal-doc-sector" class="w-full p-2.5 bg-zinc-50 border border-zinc-200 rounded-lg text-sm outline-none focus:ring-2 focus:ring-burgundy"></select></div></div><div class="flex justify-end space-x-3 pt-3"><button type="button" onclick="closeModal()" class="px-5 py-2.5 rounded-lg text-sm font-bold text-zinc-600 hover:bg-zinc-100 transition">Cancelar</button><button type="submit" class="px-5 py-2.5 bg-burgundy hover:bg-burgundy-hover text-white rounded-lg text-sm font-bold transition shadow-md">Salvar</button></div></form></div></div>
     <div id="event-modal" class="hidden fixed inset-0 bg-zinc-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-[60]"><div class="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-md border border-zinc-100"><div class="flex items-center justify-between mb-5 pb-3 border-b border-zinc-100"><h3 class="text-base font-bold text-zinc-800" id="event-modal-title"><i data-lucide="calendar-plus" class="w-5 h-5 inline mr-2 text-orange-500"></i> Evento</h3><button onclick="closeEventModal()" class="text-zinc-400 hover:text-zinc-600"><i data-lucide="x" class="w-5 h-5"></i></button></div><form onsubmit="handleSaveEvent(event)" class="space-y-4"><input type="hidden" id="ev-id"><div><label class="block text-xs font-bold uppercase text-zinc-500 mb-1">Título</label><input id="ev-titulo" type="text" required class="w-full p-2.5 bg-zinc-50 border border-zinc-200 rounded-lg text-sm outline-none focus:ring-2 focus:ring-orange-500"></div><div class="grid grid-cols-2 gap-4"><div><label class="block text-xs font-bold uppercase text-zinc-500 mb-1">Dia</label><input id="ev-dia" type="number" min="1" max="31" required class="w-full p-2.5 bg-zinc-50 border border-zinc-200 rounded-lg text-sm outline-none focus:ring-2 focus:ring-orange-500"></div><div><label class="block text-xs font-bold uppercase text-zinc-500 mb-1">Mês (Ex: Jun)</label><input id="ev-mes" type="text" maxlength="3" required class="w-full p-2.5 bg-zinc-50 border border-zinc-200 rounded-lg text-sm uppercase outline-none focus:ring-2 focus:ring-orange-500"></div></div><div><label class="block text-xs font-bold uppercase text-zinc-500 mb-1">Descrição</label><input id="ev-desc" type="text" required class="w-full p-2.5 bg-zinc-50 border border-zinc-200 rounded-lg text-sm outline-none focus:ring-2 focus:ring-orange-500"></div><div><label class="block text-xs font-bold uppercase text-zinc-500 mb-1">Cor</label><select id="ev-cor" class="w-full p-2.5 bg-zinc-50 border border-zinc-200 rounded-lg text-sm outline-none focus:ring-2 focus:ring-orange-500"><option value="bg-blue-600">Azul</option><option value="bg-red-500">Vermelho</option><option value="bg-emerald-500">Verde</option><option value="bg-orange-500">Laranja</option></select></div><div class="flex justify-end space-x-3 pt-3"><button type="button" onclick="closeEventModal()" class="px-5 py-2.5 rounded-lg text-sm font-bold text-zinc-600 hover:bg-zinc-100 transition">Cancelar</button><button type="submit" class="px-5 py-2.5 bg-orange-500 hover:bg-orange-600 text-white rounded-lg text-sm font-bold transition shadow-md">Salvar Evento</button></div></form></div></div>
@@ -308,9 +337,8 @@
             try { lucide.createIcons(); } catch(e){}
         }
 
-        // --- SISTEMA DESEMPENHO E PDF OFICIAL ADCOL ---
+        // --- SISTEMA DESEMPENHO E PDF OFICIAL ADCOL COM LOGO ---
         function renderPerformanceTab() {
-            // TABELA DO GESTOR
             if (sessionUser.role === 'admin' || sessionUser.role === 'gestor') { 
                 document.getElementById('manager-perf-zone').classList.remove('hidden'); 
                 let equipe = dbUsuarios.filter(u => u.id !== sessionUser.id && u.role !== 'admin'); 
@@ -318,32 +346,25 @@
                 
                 document.getElementById('table-team-perf').innerHTML = equipe.map(u => {
                     let userEvals = dbAvaliacoes.filter(a => a.avaliado_id === u.id);
-                    let status = `Pendente`; let mediaText = `-`;
-                    let pdfBtn = ``;
+                    let status = `Pendente`; let mediaText = `-`; let pdfBtn = ``;
                     
                     if (userEvals.length > 0) {
                         status = `<span class="text-emerald-600 font-bold">Avaliado</span>`;
-                        let lastEval = userEvals[userEvals.length - 1]; // Pega a avaliação mais recente
+                        let lastEval = userEvals[userEvals.length - 1]; 
                         let soma = 0; let qtd = 0;
                         for(let key in lastEval.notas) { soma += lastEval.notas[key]; qtd++; }
                         let media = (soma / qtd).toFixed(1);
                         mediaText = `<span class="text-blue-600 font-bold">${media}</span>`;
-                        
-                        // Botão de Download do PDF para o Gestor
                         pdfBtn = `<button onclick="downloadEvalPDF(${lastEval.id})" class="text-xs bg-zinc-100 text-zinc-600 hover:bg-zinc-200 px-3 py-1.5 rounded-lg font-bold transition ml-2 shadow-sm"><i data-lucide="download" class="w-3.5 h-3.5 inline"></i> PDF</button>`;
                     }
                     
                     return `<tr class="hover:bg-zinc-50 transition"><td class="p-4 font-bold text-zinc-800">${u.nome} <span class="text-[10px] bg-zinc-100 text-zinc-500 px-2 py-0.5 rounded ml-2">${u.setor}</span></td><td class="p-4 text-zinc-500 text-xs">${status}</td><td class="p-4 text-xs">${mediaText}</td><td class="p-4 text-right flex items-center justify-end"><button onclick="openEvalModal(${u.id}, '${u.nome}')" class="text-xs bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white px-3 py-1.5 rounded-lg font-bold transition shadow-sm">Nova</button>${pdfBtn}</td></tr>`
                 }).join(''); 
-            } else { 
-                document.getElementById('manager-perf-zone').classList.add('hidden'); 
-            }
+            } else { document.getElementById('manager-perf-zone').classList.add('hidden'); }
             
-            // LISTA DO COLABORADOR
             let minhasAval = dbAvaliacoes.filter(a => a.avaliado_id === sessionUser.id);
             document.getElementById('list-my-evals').innerHTML = minhasAval.length === 0 ? `<p class="text-sm text-zinc-400 italic">Nenhuma avaliação recebida ainda.</p>` : minhasAval.map(a => `<div onclick="downloadEvalPDF(${a.id})" class="p-4 border border-zinc-200 rounded-xl bg-zinc-50 flex items-center justify-between hover:border-blue-300 transition group cursor-pointer"><div class="flex items-center space-x-3"><div class="bg-blue-100 text-blue-600 p-2.5 rounded-lg"><i data-lucide="award" class="w-5 h-5"></i></div><div><h4 class="text-sm font-bold text-zinc-800">Avaliação de Período</h4><p class="text-[10px] text-zinc-500 uppercase font-bold mt-0.5">${new Date(a.created_at).toLocaleDateString('pt-BR')}</p></div></div><button class="text-blue-600 font-bold text-xs"><i data-lucide="download" class="w-4 h-4 mr-1 inline"></i> PDF</button></div>`).join('');
             
-            // NOTA GLOBAL
             let notaGlobal = 0.0;
             if (minhasAval.length > 0) {
                 let allSoma = 0; let allQtd = 0;
@@ -362,7 +383,6 @@
             try { lucide.createIcons(); } catch(e){}
         }
 
-        // --- GERAÇÃO DO PDF DA AVALIAÇÃO ---
         function downloadEvalPDF(evalId) {
             const avaliacao = dbAvaliacoes.find(a => a.id === evalId);
             if(!avaliacao) return alert("Avaliação não encontrada no sistema.");
@@ -371,16 +391,19 @@
             const avaliador = dbUsuarios.find(u => u.id === avaliacao.avaliador_id) || {nome: "Sistema ADCOL"};
             const dataAval = new Date(avaliacao.created_at).toLocaleDateString('pt-BR');
 
-            // HTML estruturado que será impresso como PDF
+            const baseUrl = window.location.href.replace('index.html', '').split('?')[0];
+
             let htmlContent = `
                 <html>
                 <head>
-                    <title>Avaliação_${avaliado.nome.replace(' ', '_')}_${dataAval}</title>
+                    <title>Avaliação_${avaliado.nome.replace(/ /g, '_')}_${dataAval.replace(/\//g, '_')}</title>
                     <style>
                         body { font-family: 'Segoe UI', Arial, sans-serif; padding: 40px; color: #333; max-width: 800px; margin: 0 auto; }
                         .header { border-bottom: 3px solid #8A151B; padding-bottom: 15px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: flex-end;}
+                        .header-left { display: flex; align-items: center; gap: 15px; }
                         .header h1 { color: #8A151B; margin: 0; font-size: 24px; text-transform: uppercase; letter-spacing: 1px;}
                         .header span { font-size: 12px; color: #777; font-weight: bold;}
+                        .logo-print { height: 40px; width: auto; object-fit: contain; }
                         .info-box { background-color: #f4f4f5; padding: 20px; border-radius: 8px; margin-bottom: 30px; }
                         .info-box p { margin: 8px 0; font-size: 14px; }
                         table { width: 100%; border-collapse: collapse; margin-bottom: 30px; }
@@ -394,7 +417,10 @@
                 </head>
                 <body>
                     <div class="header">
-                        <h1>ADCOL - Relatório de Desempenho</h1>
+                        <div class="header-left">
+                            <img src="${baseUrl}logo.png" alt="Logo ADCOL" class="logo-print" onerror="this.src='https://via.placeholder.com/150x50?text=ADCOL'">
+                            <h1>Relatório de Desempenho</h1>
+                        </div>
                         <span>Documento Confidencial</span>
                     </div>
                     
@@ -429,21 +455,17 @@
                 </html>
             `;
             
-            // Abre uma aba oculta para impressão
             let printWindow = window.open('', '_blank', 'width=800,height=600');
             printWindow.document.write(htmlContent);
             printWindow.document.close();
             printWindow.focus();
             
-            // Dá um tempo curto para o navegador carregar o CSS antes de abrir a tela de print
             setTimeout(() => { 
                 printWindow.print(); 
-                // Fecha a aba automaticamente após salvar/cancelar o PDF
                 printWindow.onafterprint = function() { printWindow.close(); };
             }, 500);
         }
 
-        // Lógica de Salvar Avaliação no Supabase
         function openEvalModal(userId, userName) { currentEvalUserId = userId; currentEvalScores = {}; document.getElementById('eval-modal-subtitle').innerText = `Avaliando: ${userName}`; document.getElementById('eval-fortes').value = ''; document.getElementById('eval-melhorar').value = ''; document.getElementById('criteria-list').innerHTML = evaluationCriteria.map(crit => `<div class="flex flex-col md:flex-row md:items-center justify-between p-3 border-b border-zinc-100 hover:bg-zinc-50 transition rounded-lg"><div class="mb-2 md:mb-0 md:mr-4 flex-1"><h4 class="font-bold text-sm text-zinc-800">${crit.title}</h4><p class="text-[11px] text-zinc-500 leading-tight">${crit.desc}</p></div><div class="flex space-x-1" id="stars-${crit.id}">${[1,2,3,4,5].map(v => `<i data-lucide="star" onclick="setRating('${crit.id}', ${v})" class="w-6 h-6 text-zinc-200 hover:text-yellow-400 cursor-pointer transition-colors" id="star-${crit.id}-${v}"></i>`).join('')}</div></div>`).join(''); document.getElementById('eval-modal').classList.remove('hidden'); try { lucide.createIcons(); } catch(e){} }
         function setRating(critId, value) { currentEvalScores[critId] = value; for(let i=1; i<=5; i++) { let star = document.getElementById(`star-${critId}-${i}`); if(i <= value) { star.classList.remove('text-zinc-200'); star.classList.add('text-yellow-400', 'fill-yellow-400'); } else { star.classList.add('text-zinc-200'); star.classList.remove('text-yellow-400', 'fill-yellow-400'); } } }
         function closeEvalModal() { document.getElementById('eval-modal').classList.add('hidden'); }
