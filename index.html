@@ -56,7 +56,10 @@
                     <p class="text-[10px] uppercase text-zinc-500 font-bold px-3 pt-4 mb-2 tracking-widest">Pessoas & Cultura</p>
                     <button onclick="switchTab('performance')" id="btn-performance" class="w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-zinc-400 hover:bg-zinc-800 hover:text-white text-sm font-medium transition"><i data-lucide="trending-up" class="w-4 h-4"></i><span>Meu Desempenho</span></button>
                     <button onclick="switchTab('gamification')" id="btn-gamification" class="w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-zinc-400 hover:bg-zinc-800 hover:text-white text-sm font-medium transition"><i data-lucide="award" class="w-4 h-4"></i><span>Gamificação</span></button>
-                    <button onclick="switchTab('onboarding')" id="btn-onboarding" class="w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-zinc-400 hover:bg-zinc-800 hover:text-white text-sm font-medium transition"><i data-lucide="graduation-cap" class="w-4 h-4"></i><span>Capacitação</span></button>
+                    
+                    <p class="text-[10px] uppercase text-zinc-500 font-bold px-3 pt-4 mb-2 tracking-widest">Conhecimento</p>
+                    <button onclick="switchTab('university')" id="btn-university" class="w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-zinc-400 hover:bg-zinc-800 hover:text-white text-sm font-medium transition"><i data-lucide="graduation-cap" class="w-4 h-4"></i><span>Universidade ADCOL</span></button>
+                    <button onclick="switchTab('wiki')" id="btn-wiki" class="w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-zinc-400 hover:bg-zinc-800 hover:text-white text-sm font-medium transition"><i data-lucide="book-open" class="w-4 h-4"></i><span>Base de Conhecimento</span></button>
 
                     <p class="text-[10px] uppercase text-zinc-500 font-bold px-3 pt-4 mb-2 tracking-widest">Colaboração</p>
                     <button onclick="switchTab('social')" id="btn-social" class="w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-zinc-400 hover:bg-zinc-800 hover:text-white text-sm font-medium transition"><i data-lucide="message-square" class="w-4 h-4"></i><span>Rede Social</span></button>
@@ -107,60 +110,10 @@
                         </div>
                     </div>
                 </div>
-                <!-- NOVA ABA: GAMIFICAÇÃO & RECOMPENSAS -->
                 <div id="tab-gamification" class="hidden space-y-6">
-                    <!-- Cartão de Saldo -->
-                    <div class="bg-gradient-to-r from-yellow-500 to-amber-600 rounded-2xl p-6 text-white shadow-lg flex items-center justify-between">
-                        <div>
-                            <h3 class="text-xs font-bold uppercase tracking-widest opacity-80 mb-1">Seu Saldo Atual</h3>
-                            <div class="text-4xl font-black flex items-center"><i data-lucide="coins" class="w-8 h-8 mr-3 text-yellow-200"></i> <span id="user-adcoins">0</span> <span class="text-lg ml-2 opacity-80 font-bold">ADCoins</span></div>
-                        </div>
-                        <div class="hidden md:block"><i data-lucide="award" class="w-20 h-20 opacity-20"></i></div>
-                    </div>
-
-                    <!-- ADMIN ZONE: Gestão de Recompensas e Pontos (Apenas Diretoria) -->
-                    <div id="admin-gamification-zone" class="hidden space-y-6">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <!-- Painel Creditar Pontos -->
-                            <div class="bg-white p-6 rounded-2xl shadow-sm border border-zinc-200">
-                                <h3 class="text-sm font-bold uppercase tracking-wider text-zinc-400 mb-4 flex items-center"><i data-lucide="plus-circle" class="w-4 h-4 mr-2 text-zinc-500"></i> Creditar Pontos</h3>
-                                <form onsubmit="handleCreditPoints(event)" class="space-y-3">
-                                    <select id="credit-user" class="w-full p-2.5 bg-zinc-50 border border-zinc-200 rounded-lg text-sm" required></select>
-                                    <input type="number" id="credit-amount" placeholder="Quantidade (ex: 50)" class="w-full p-2.5 bg-zinc-50 border border-zinc-200 rounded-lg text-sm" required>
-                                    <input type="text" id="credit-reason" placeholder="Motivo (ex: Missão Relógio Suíço)" class="w-full p-2.5 bg-zinc-50 border border-zinc-200 rounded-lg text-sm" required>
-                                    <button type="submit" class="w-full bg-zinc-800 text-white py-2.5 rounded-lg text-sm font-bold hover:bg-black transition">Enviar ADCoins</button>
-                                </form>
-                            </div>
-                            <!-- Painel Nova Recompensa -->
-                            <div class="bg-white p-6 rounded-2xl shadow-sm border border-zinc-200">
-                                <h3 class="text-sm font-bold uppercase tracking-wider text-zinc-400 mb-4 flex items-center"><i data-lucide="gift" class="w-4 h-4 mr-2 text-zinc-500"></i> Cadastrar Prêmio na Vitrine</h3>
-                                <form onsubmit="handleAddReward(event)" class="space-y-3">
-                                    <input type="text" id="reward-name" placeholder="Nome do Prêmio (ex: Voucher IFood)" class="w-full p-2.5 bg-zinc-50 border border-zinc-200 rounded-lg text-sm" required>
-                                    <input type="number" id="reward-cost" placeholder="Custo em ADCoins (ex: 150)" class="w-full p-2.5 bg-zinc-50 border border-zinc-200 rounded-lg text-sm" required>
-                                    <button type="submit" class="w-full bg-yellow-500 text-white py-2.5 rounded-lg text-sm font-bold hover:bg-yellow-600 transition shadow-md">Adicionar à Vitrine</button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                        <!-- Missões Disponíveis -->
-                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-zinc-200">
-                            <h3 class="text-sm font-bold uppercase tracking-wider text-zinc-400 mb-5 flex items-center"><i data-lucide="target" class="w-4 h-4 mr-2 text-zinc-500"></i> Missões Ativas</h3>
-                            <div class="space-y-3">
-                                <div class="p-4 border border-zinc-100 rounded-xl bg-zinc-50 hover:border-yellow-300 transition"><div class="flex justify-between items-start mb-2"><h4 class="font-bold text-sm text-zinc-800">Relógio Suíço</h4><span class="text-xs font-bold text-yellow-700 bg-yellow-100 border border-yellow-200 px-2 py-0.5 rounded-full">+50 ADCoins</span></div><p class="text-xs text-zinc-500">Entregar obrigações acessórias com 2 dias de antecedência do prazo legal.</p></div>
-                                <div class="p-4 border border-zinc-100 rounded-xl bg-zinc-50 hover:border-yellow-300 transition"><div class="flex justify-between items-start mb-2"><h4 class="font-bold text-sm text-zinc-800">Ideia de Ouro</h4><span class="text-xs font-bold text-yellow-700 bg-yellow-100 border border-yellow-200 px-2 py-0.5 rounded-full">+100 ADCoins</span></div><p class="text-xs text-zinc-500">Sugerir uma melhoria de processo que seja aprovada e implementada.</p></div>
-                                <div class="p-4 border border-zinc-100 rounded-xl bg-zinc-50 hover:border-yellow-300 transition"><div class="flex justify-between items-start mb-2"><h4 class="font-bold text-sm text-zinc-800">Salva-vidas</h4><span class="text-xs font-bold text-yellow-700 bg-yellow-100 border border-yellow-200 px-2 py-0.5 rounded-full">+20 ADCoins</span></div><p class="text-xs text-zinc-500">Ajudar um colega a resolver um problema complexo (Validado no Mural).</p></div>
-                            </div>
-                        </div>
-                        <!-- Vitrine de Recompensas -->
-                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-zinc-200">
-                            <h3 class="text-sm font-bold uppercase tracking-wider text-zinc-400 mb-5 flex items-center"><i data-lucide="shopping-bag" class="w-4 h-4 mr-2 text-zinc-500"></i> Vitrine de Recompensas</h3>
-                            <div id="rewards-store" class="space-y-4 max-h-96 overflow-y-auto custom-scrollbar pr-2">
-                                <!-- Recompensas geradas pelo JS -->
-                            </div>
-                        </div>
-                    </div>
+                    <div class="bg-gradient-to-r from-yellow-500 to-amber-600 rounded-2xl p-6 text-white shadow-lg flex items-center justify-between"><div><h3 class="text-xs font-bold uppercase tracking-widest opacity-80 mb-1">Seu Saldo Atual</h3><div class="text-4xl font-black flex items-center"><i data-lucide="coins" class="w-8 h-8 mr-3 text-yellow-200"></i> <span id="user-adcoins">0</span> <span class="text-lg ml-2 opacity-80 font-bold">ADCoins</span></div></div><div class="hidden md:block"><i data-lucide="award" class="w-20 h-20 opacity-20"></i></div></div>
+                    <div id="admin-gamification-zone" class="hidden space-y-6"><div class="grid grid-cols-1 md:grid-cols-2 gap-6"><div class="bg-white p-6 rounded-2xl shadow-sm border border-zinc-200"><h3 class="text-sm font-bold uppercase tracking-wider text-zinc-400 mb-4 flex items-center"><i data-lucide="plus-circle" class="w-4 h-4 mr-2 text-zinc-500"></i> Creditar Pontos</h3><form onsubmit="handleCreditPoints(event)" class="space-y-3"><select id="credit-user" class="w-full p-2.5 bg-zinc-50 border border-zinc-200 rounded-lg text-sm" required></select><input type="number" id="credit-amount" placeholder="Quantidade (ex: 50)" class="w-full p-2.5 bg-zinc-50 border border-zinc-200 rounded-lg text-sm" required><input type="text" id="credit-reason" placeholder="Motivo (ex: Missão Relógio Suíço)" class="w-full p-2.5 bg-zinc-50 border border-zinc-200 rounded-lg text-sm" required><button type="submit" class="w-full bg-zinc-800 text-white py-2.5 rounded-lg text-sm font-bold hover:bg-black transition">Enviar ADCoins</button></form></div><div class="bg-white p-6 rounded-2xl shadow-sm border border-zinc-200"><h3 class="text-sm font-bold uppercase tracking-wider text-zinc-400 mb-4 flex items-center"><i data-lucide="gift" class="w-4 h-4 mr-2 text-zinc-500"></i> Cadastrar Prêmio na Vitrine</h3><form onsubmit="handleAddReward(event)" class="space-y-3"><input type="text" id="reward-name" placeholder="Nome do Prêmio (ex: Voucher IFood)" class="w-full p-2.5 bg-zinc-50 border border-zinc-200 rounded-lg text-sm" required><input type="number" id="reward-cost" placeholder="Custo em ADCoins (ex: 150)" class="w-full p-2.5 bg-zinc-50 border border-zinc-200 rounded-lg text-sm" required><button type="submit" class="w-full bg-yellow-500 text-white py-2.5 rounded-lg text-sm font-bold hover:bg-yellow-600 transition shadow-md">Adicionar à Vitrine</button></form></div></div></div>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6"><div class="bg-white p-6 rounded-2xl shadow-sm border border-zinc-200"><h3 class="text-sm font-bold uppercase tracking-wider text-zinc-400 mb-5 flex items-center"><i data-lucide="target" class="w-4 h-4 mr-2 text-zinc-500"></i> Missões Ativas</h3><div class="space-y-3"><div class="p-4 border border-zinc-100 rounded-xl bg-zinc-50 hover:border-yellow-300 transition"><div class="flex justify-between items-start mb-2"><h4 class="font-bold text-sm text-zinc-800">Relógio Suíço</h4><span class="text-xs font-bold text-yellow-700 bg-yellow-100 border border-yellow-200 px-2 py-0.5 rounded-full">+50 ADCoins</span></div><p class="text-xs text-zinc-500">Entregar obrigações acessórias com antecedência.</p></div><div class="p-4 border border-zinc-100 rounded-xl bg-zinc-50 hover:border-yellow-300 transition"><div class="flex justify-between items-start mb-2"><h4 class="font-bold text-sm text-zinc-800">Ideia de Ouro</h4><span class="text-xs font-bold text-yellow-700 bg-yellow-100 border border-yellow-200 px-2 py-0.5 rounded-full">+100 ADCoins</span></div><p class="text-xs text-zinc-500">Sugerir uma melhoria de processo aprovada.</p></div><div class="p-4 border border-zinc-100 rounded-xl bg-zinc-50 hover:border-yellow-300 transition"><div class="flex justify-between items-start mb-2"><h4 class="font-bold text-sm text-zinc-800">Multiplicador</h4><span class="text-xs font-bold text-yellow-700 bg-yellow-100 border border-yellow-200 px-2 py-0.5 rounded-full">+40 ADCoins</span></div><p class="text-xs text-zinc-500">Escrever um artigo aprovado na Base de Conhecimento.</p></div></div></div><div class="bg-white p-6 rounded-2xl shadow-sm border border-zinc-200"><h3 class="text-sm font-bold uppercase tracking-wider text-zinc-400 mb-5 flex items-center"><i data-lucide="shopping-bag" class="w-4 h-4 mr-2 text-zinc-500"></i> Vitrine de Recompensas</h3><div id="rewards-store" class="space-y-4 max-h-96 overflow-y-auto custom-scrollbar pr-2"></div></div></div>
                 </div>
 
                 <div id="tab-performance" class="hidden space-y-6">
@@ -168,11 +121,83 @@
                     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6"><div class="lg:col-span-1 bg-white p-6 rounded-2xl shadow-sm border border-zinc-200 text-center flex flex-col items-center justify-center"><h3 class="text-sm font-bold uppercase tracking-wider text-zinc-400 mb-4">Sua Nota Global</h3><div class="relative w-32 h-32 mb-2"><svg class="w-full h-full transform -rotate-90" viewBox="0 0 36 36"><path class="text-zinc-100" stroke-width="3" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" /><path class="text-burgundy" stroke-width="3" stroke-dasharray="85, 100" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" /></svg><div class="absolute inset-0 flex items-center justify-center flex-col"><span class="text-3xl font-black text-zinc-800">4.2</span><span class="text-[10px] font-bold text-zinc-400 uppercase">/ 5.0</span></div></div><p class="text-xs text-zinc-500 mt-2 font-medium">Você está acima da média do escritório!</p></div><div class="lg:col-span-2 bg-white p-6 rounded-2xl shadow-sm border border-zinc-200"><h3 class="text-sm font-bold uppercase tracking-wider text-zinc-400 mb-5 flex items-center"><i data-lucide="file-text" class="w-4 h-4 mr-2 text-zinc-500"></i> Meu Plano de Ação e Feedback</h3><div class="space-y-4" id="list-my-evals"></div></div></div>
                 </div>
 
-                <div id="tab-admin-panel" class="hidden space-y-6"><div class="grid grid-cols-1 lg:grid-cols-3 gap-6"><div class="bg-white p-6 rounded-2xl shadow-sm border border-zinc-200 h-fit"><h3 class="text-sm font-bold uppercase tracking-wider text-zinc-400 mb-5 flex items-center"><i data-lucide="user-plus" class="w-4 h-4 mr-2 text-zinc-500"></i> Cadastrar Usuário</h3><form onsubmit="handleCreateUser(event)" class="space-y-4"><div><label class="block text-xs font-bold text-zinc-600 uppercase mb-1">Nome Completo</label><input id="adm-user-name" type="text" required class="w-full p-2.5 border border-zinc-200 rounded-lg text-sm bg-zinc-50 focus:bg-white focus:ring-2 focus:ring-burgundy outline-none transition"></div><div><label class="block text-xs font-bold text-zinc-600 uppercase mb-1">E-mail</label><input id="adm-user-email" type="email" required class="w-full p-2.5 border border-zinc-200 rounded-lg text-sm bg-zinc-50 focus:bg-white focus:ring-2 focus:ring-burgundy outline-none transition"></div><div><label class="block text-xs font-bold text-zinc-600 uppercase mb-1">Senha Inicial</label><input id="adm-user-password" type="password" required class="w-full p-2.5 border border-zinc-200 rounded-lg text-sm bg-zinc-50 focus:bg-white focus:ring-2 focus:ring-burgundy outline-none transition"></div><div class="grid grid-cols-2 gap-3"><div><label class="block text-xs font-bold text-zinc-600 uppercase mb-1">Nível</label><select id="adm-user-role" class="w-full p-2.5 border border-zinc-200 rounded-lg text-sm bg-zinc-50 focus:bg-white focus:ring-2 focus:ring-burgundy outline-none transition"><option value="colaborador">Colaborador</option><option value="gestor">Gestor</option><option value="admin">Administrador</option></select></div><div><label class="block text-xs font-bold text-zinc-600 uppercase mb-1">Setor</label><select id="adm-user-sector" class="w-full p-2.5 border border-zinc-200 rounded-lg text-sm bg-zinc-50 focus:bg-white focus:ring-2 focus:ring-burgundy outline-none transition"></select></div></div><button type="submit" class="w-full bg-burgundy text-white py-2.5 rounded-lg font-bold text-sm hover:bg-burgundy-hover transition shadow-md">Salvar Usuário</button></form></div><div class="lg:col-span-2 bg-white p-6 rounded-2xl shadow-sm border border-zinc-200"><h3 class="text-sm font-bold uppercase tracking-wider text-zinc-400 mb-5 flex items-center"><i data-lucide="users" class="w-4 h-4 mr-2 text-zinc-500"></i> Usuários Ativos</h3><div class="overflow-hidden border border-zinc-200 rounded-xl"><table class="w-full text-left text-sm"><thead class="bg-zinc-50 text-zinc-500 text-xs uppercase font-bold border-b border-zinc-200"><tr><th class="p-4">Nome</th><th class="p-4">Setor</th><th class="p-4">Permissão</th><th class="p-4 text-right">Ações</th></tr></thead><tbody id="table-users" class="divide-y divide-zinc-100 text-zinc-700"></tbody></table></div></div></div></div>
+                <!-- NOVA ABA: UNIVERSIDADE ADCOL -->
+                <div id="tab-university" class="hidden space-y-6">
+                    <div class="bg-gradient-to-r from-emerald-600 to-teal-700 p-8 rounded-2xl shadow-sm text-white flex flex-col md:flex-row items-center justify-between">
+                        <div class="mb-6 md:mb-0">
+                            <h2 class="text-2xl font-bold flex items-center"><i data-lucide="graduation-cap" class="w-8 h-8 mr-3"></i> Universidade ADCOL</h2>
+                            <p class="text-emerald-100 text-sm mt-2 max-w-md">Sua plataforma de educação corporativa. Desenvolva novas habilidades, conclua módulos e ganhe ADCoins para trocar por prêmios.</p>
+                        </div>
+                        <div class="bg-white/10 p-4 rounded-xl backdrop-blur-sm border border-white/20 text-center w-full md:w-auto">
+                            <span class="block text-[10px] uppercase font-bold tracking-wider text-emerald-200 mb-1">Seu Progresso Global</span>
+                            <span class="text-3xl font-black">15%</span>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+                        <!-- Trilha Onboarding -->
+                        <div class="bg-white rounded-2xl shadow-sm border border-zinc-200 overflow-hidden flex flex-col">
+                            <div class="bg-zinc-50 p-4 border-b border-zinc-100"><h3 class="font-bold text-zinc-800">1. Integração (Onboarding)</h3><p class="text-xs text-zinc-500 mt-1">Obrigatório para novos colaboradores.</p></div>
+                            <div class="p-4 space-y-3 flex-1">
+                                <div class="flex items-center p-3 border border-emerald-200 bg-emerald-50 rounded-xl"><div class="bg-emerald-500 text-white p-1.5 rounded-full mr-3"><i data-lucide="check" class="w-4 h-4"></i></div><div class="flex-1"><h4 class="font-bold text-emerald-900 text-xs">Cultura & Código de Conduta</h4></div></div>
+                                <div class="flex items-center p-3 border border-zinc-200 rounded-xl hover:border-emerald-400 transition cursor-pointer group"><div class="bg-zinc-100 text-zinc-400 group-hover:bg-emerald-100 group-hover:text-emerald-600 p-1.5 rounded-full mr-3 transition"><i data-lucide="play" class="w-4 h-4 ml-0.5"></i></div><div class="flex-1"><h4 class="font-bold text-zinc-800 text-xs">Sistemas Internos</h4><span class="text-[9px] font-bold text-yellow-600 bg-yellow-50 px-1.5 py-0.5 rounded">+10 ADCoins</span></div></div>
+                            </div>
+                        </div>
+
+                        <!-- Trilha Estagiário -->
+                        <div class="bg-white rounded-2xl shadow-sm border border-zinc-200 overflow-hidden flex flex-col">
+                            <div class="bg-zinc-50 p-4 border-b border-zinc-100"><h3 class="font-bold text-zinc-800">2. Programa de Estágio</h3><p class="text-xs text-zinc-500 mt-1">Desenvolvimento base para estagiários.</p></div>
+                            <div class="p-4 space-y-3 flex-1">
+                                <div class="flex items-center p-3 border border-zinc-200 rounded-xl hover:border-emerald-400 transition cursor-pointer group"><div class="bg-zinc-100 text-zinc-400 group-hover:bg-emerald-100 group-hover:text-emerald-600 p-1.5 rounded-full mr-3 transition"><i data-lucide="play" class="w-4 h-4 ml-0.5"></i></div><div class="flex-1"><h4 class="font-bold text-zinc-800 text-xs">Introdução ao Escritório</h4><span class="text-[9px] font-bold text-yellow-600 bg-yellow-50 px-1.5 py-0.5 rounded">+15 ADCoins</span></div></div>
+                                <div class="flex items-center p-3 border border-zinc-200 rounded-xl hover:border-emerald-400 transition cursor-pointer group"><div class="bg-zinc-100 text-zinc-400 group-hover:bg-emerald-100 group-hover:text-emerald-600 p-1.5 rounded-full mr-3 transition"><i data-lucide="play" class="w-4 h-4 ml-0.5"></i></div><div class="flex-1"><h4 class="font-bold text-zinc-800 text-xs">Postura Profissional</h4><span class="text-[9px] font-bold text-yellow-600 bg-yellow-50 px-1.5 py-0.5 rounded">+15 ADCoins</span></div></div>
+                            </div>
+                        </div>
+
+                        <!-- Trilha Nível Júnior -->
+                        <div class="bg-white rounded-2xl shadow-sm border border-zinc-200 overflow-hidden flex flex-col">
+                            <div class="bg-zinc-50 p-4 border-b border-zinc-100"><h3 class="font-bold text-zinc-800">3. Nível Júnior (Técnico)</h3><p class="text-xs text-zinc-500 mt-1">Fundamentos operacionais.</p></div>
+                            <div class="p-4 space-y-3 flex-1">
+                                <div class="flex items-center p-3 border border-zinc-200 rounded-xl hover:border-emerald-400 transition cursor-pointer group"><div class="bg-zinc-100 text-zinc-400 group-hover:bg-emerald-100 group-hover:text-emerald-600 p-1.5 rounded-full mr-3 transition"><i data-lucide="play" class="w-4 h-4 ml-0.5"></i></div><div class="flex-1"><h4 class="font-bold text-zinc-800 text-xs">Domínio ERP - Módulo Básico</h4><span class="text-[9px] font-bold text-yellow-600 bg-yellow-50 px-1.5 py-0.5 rounded">+30 ADCoins</span></div></div>
+                                <div class="flex items-center p-3 border border-zinc-200 rounded-xl hover:border-emerald-400 transition cursor-pointer group"><div class="bg-zinc-100 text-zinc-400 group-hover:bg-emerald-100 group-hover:text-emerald-600 p-1.5 rounded-full mr-3 transition"><i data-lucide="play" class="w-4 h-4 ml-0.5"></i></div><div class="flex-1"><h4 class="font-bold text-zinc-800 text-xs">Atendimento ao Cliente</h4><span class="text-[9px] font-bold text-yellow-600 bg-yellow-50 px-1.5 py-0.5 rounded">+20 ADCoins</span></div></div>
+                            </div>
+                        </div>
+
+                        <!-- Trilha Nível Pleno/Sênior -->
+                        <div class="bg-white rounded-2xl shadow-sm border border-zinc-200 overflow-hidden flex flex-col opacity-75">
+                            <div class="bg-zinc-50 p-4 border-b border-zinc-100 flex items-center justify-between"><h3 class="font-bold text-zinc-800">4. Nível Pleno/Sênior</h3><i data-lucide="lock" class="w-4 h-4 text-zinc-400"></i></div>
+                            <div class="p-4 space-y-3 flex-1 flex flex-col items-center justify-center text-center">
+                                <i data-lucide="shield-alert" class="w-8 h-8 text-zinc-300 mb-2"></i>
+                                <p class="text-xs text-zinc-500">Conclua o Nível Júnior para desbloquear módulos avançados de legislação e planejamento.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- NOVA ABA: BASE DE CONHECIMENTO (WIKI) -->
+                <div id="tab-wiki" class="hidden space-y-6">
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white p-6 rounded-2xl shadow-sm border border-zinc-200">
+                        <div>
+                            <h2 class="text-xl font-bold text-zinc-800 flex items-center"><i data-lucide="book-open" class="w-6 h-6 mr-3 text-blue-600"></i> Base de Conhecimento</h2>
+                            <p class="text-xs text-zinc-500 mt-1">Documentações, POPs e resoluções de problemas criados pela equipe.</p>
+                        </div>
+                        <button onclick="document.getElementById('wiki-modal').classList.remove('hidden')" class="bg-blue-600 text-white px-5 py-2.5 rounded-lg text-sm font-bold flex items-center hover:bg-blue-700 transition shadow-md whitespace-nowrap"><i data-lucide="pen-tool" class="w-4 h-4 mr-2"></i> Escrever Artigo <span class="ml-2 bg-yellow-400 text-yellow-900 px-1.5 py-0.5 rounded text-[9px]">+40 ADCoins</span></button>
+                    </div>
+
+                    <div class="bg-white rounded-2xl shadow-sm border border-zinc-200 overflow-hidden">
+                        <div class="p-4 border-b border-zinc-200 bg-zinc-50 flex items-center">
+                            <i data-lucide="search" class="w-5 h-5 text-zinc-400 mr-3"></i>
+                            <input type="text" placeholder="Pesquisar artigos por título, autor ou tag..." class="w-full bg-transparent border-none outline-none text-sm text-zinc-700">
+                        </div>
+                        <div class="divide-y divide-zinc-100" id="wiki-list">
+                            <!-- Preenchido via JS -->
+                        </div>
+                    </div>
+                </div>
+
+                <div id="tab-admin-panel" class="hidden space-y-6"><div class="grid grid-cols-1 lg:grid-cols-3 gap-6"><div class="bg-white p-6 rounded-2xl shadow-sm border border-zinc-200 h-fit"><h3 class="text-sm font-bold uppercase tracking-wider text-zinc-400 mb-5 flex items-center"><i data-lucide="user-plus" class="w-4 h-4 mr-2 text-zinc-500"></i> Cadastrar Usuário</h3><form onsubmit="handleCreateUser(event)" class="space-y-4"><div><label class="block text-xs font-bold text-zinc-600 uppercase mb-1">Nome Completo</label><input id="adm-user-name" type="text" required class="w-full p-2.5 border border-zinc-200 rounded-lg text-sm bg-zinc-50 focus:bg-white focus:ring-2 focus:ring-burgundy outline-none transition"></div><div><label class="block text-xs font-bold text-zinc-600 uppercase mb-1">E-mail</label><input id="adm-user-email" type="email" required class="w-full p-2.5 border border-zinc-200 rounded-lg text-sm bg-zinc-50 focus:bg-white focus:ring-2 focus:ring-burgundy outline-none transition"></div><div><label class="block text-xs font-bold text-zinc-600 uppercase mb-1">Senha Inicial</label><input id="adm-user-password" type="password" required class="w-full p-2.5 border border-zinc-200 rounded-lg text-sm bg-zinc-50 focus:bg-white focus:ring-2 focus:ring-burgundy outline-none transition"></div><div class="grid grid-cols-2 gap-3"><div><label class="block text-xs font-bold text-zinc-600 uppercase mb-1">Nível</label><select id="adm-user-role" class="w-full p-2.5 border border-zinc-200 rounded-lg text-sm bg-zinc-50 focus:bg-white focus:ring-2 focus:ring-burgundy outline-none transition"><option value="estagiario">Estagiário</option><option value="colaborador">Colaborador</option><option value="gestor">Gestor</option><option value="admin">Administrador</option></select></div><div><label class="block text-xs font-bold text-zinc-600 uppercase mb-1">Setor</label><select id="adm-user-sector" class="w-full p-2.5 border border-zinc-200 rounded-lg text-sm bg-zinc-50 focus:bg-white focus:ring-2 focus:ring-burgundy outline-none transition"></select></div></div><button type="submit" class="w-full bg-burgundy text-white py-2.5 rounded-lg font-bold text-sm hover:bg-burgundy-hover transition shadow-md">Salvar Usuário</button></form></div><div class="lg:col-span-2 bg-white p-6 rounded-2xl shadow-sm border border-zinc-200"><h3 class="text-sm font-bold uppercase tracking-wider text-zinc-400 mb-5 flex items-center"><i data-lucide="users" class="w-4 h-4 mr-2 text-zinc-500"></i> Usuários Ativos</h3><div class="overflow-hidden border border-zinc-200 rounded-xl"><table class="w-full text-left text-sm"><thead class="bg-zinc-50 text-zinc-500 text-xs uppercase font-bold border-b border-zinc-200"><tr><th class="p-4">Nome</th><th class="p-4">Setor</th><th class="p-4">Permissão</th><th class="p-4 text-right">Ações</th></tr></thead><tbody id="table-users" class="divide-y divide-zinc-100 text-zinc-700"></tbody></table></div></div></div></div>
 
                 <div id="tab-sector" class="hidden space-y-6"><div id="admin-upload-zone" class="hidden bg-white p-5 rounded-2xl shadow-sm border border-dashed border-zinc-300 flex items-center justify-between"><div class="flex items-center space-x-4"><div class="p-3 bg-red-50 text-burgundy rounded-full"><i data-lucide="upload-cloud"></i></div><div><h4 class="text-sm font-bold text-zinc-800">Área de Gestão de Arquivos</h4><p class="text-xs text-zinc-500 mt-1">Adicione manuais, POPs ou formulários neste setor.</p></div></div><button onclick="openModal()" class="bg-burgundy text-white px-5 py-2.5 rounded-lg text-sm font-bold flex items-center hover:bg-burgundy-hover transition shadow-md"><i data-lucide="plus" class="w-4 h-4 mr-2"></i> Adicionar Documento</button></div><div class="grid grid-cols-1 lg:grid-cols-3 gap-6"><div class="lg:col-span-1 bg-white p-6 rounded-2xl shadow-sm border border-zinc-200"><h3 class="text-xs font-bold uppercase tracking-wider text-zinc-400 mb-4"><i data-lucide="briefcase" class="w-4 h-4 inline mr-1 text-zinc-500"></i> Cargos</h3><ul id="list-cargos" class="space-y-2 text-sm text-zinc-600"></ul></div><div class="lg:col-span-2 bg-white p-6 rounded-2xl shadow-sm border border-zinc-200"><h3 class="text-xs font-bold uppercase tracking-wider text-zinc-400 mb-4"><i data-lucide="folder-open" class="w-4 h-4 inline mr-1 text-zinc-500"></i> Documentos Operacionais</h3><table class="w-full text-left text-sm border border-zinc-200 rounded-xl overflow-hidden"><thead class="bg-zinc-50 text-zinc-500 text-xs uppercase font-bold"><tr><th class="p-4">Nome</th><th class="p-4">Tipo</th><th class="p-4 text-right">Ação</th></tr></thead><tbody id="table-documents" class="divide-y divide-zinc-100 text-zinc-700"></tbody></table></div></div></div>
 
-                <div id="tab-onboarding" class="hidden space-y-6"><div class="bg-white p-8 rounded-2xl shadow-sm border border-zinc-200"><div class="flex items-center justify-between mb-6"><h3 class="text-xl font-bold text-zinc-800 flex items-center"><i data-lucide="map" class="w-6 h-6 mr-3 text-emerald-600"></i> Sua Trilha de Integração</h3><div class="text-right"><span class="text-2xl font-black text-emerald-600">33%</span><p class="text-[10px] uppercase font-bold text-zinc-400">Concluído</p></div></div><div class="w-full bg-zinc-100 rounded-full h-2 mb-8 overflow-hidden"><div class="bg-gradient-to-r from-emerald-400 to-emerald-600 h-2 rounded-full transition-all" style="width: 33%"></div></div><div class="space-y-4"><div class="flex items-center p-5 border border-emerald-200 bg-emerald-50/50 rounded-xl"><div class="bg-emerald-500 text-white p-2.5 rounded-full mr-5 shadow-sm"><i data-lucide="check" class="w-5 h-5"></i></div><div class="flex-1"><h4 class="font-bold text-emerald-900 text-base">Passo 1: Boas-vindas</h4><p class="text-xs text-emerald-700 mt-1">Leitura do Código de Conduta e Planejamento.</p></div><span class="text-xs font-bold text-emerald-700 bg-emerald-100 px-3 py-1.5 rounded-full">Finalizado</span></div><div class="flex items-center p-5 border-2 border-emerald-500 bg-white rounded-xl shadow-md"><div class="bg-emerald-100 text-emerald-600 p-2.5 rounded-full mr-5"><i data-lucide="play" class="w-5 h-5 ml-0.5"></i></div><div class="flex-1"><h4 class="font-bold text-zinc-800 text-base">Passo 2: Sistemas Internos</h4><p class="text-xs text-zinc-500 mt-1">Treinamento de sistemas contábeis.</p></div><button class="text-sm font-bold text-white bg-emerald-500 hover:bg-emerald-600 px-6 py-2.5 rounded-lg transition">Iniciar Módulo</button></div></div></div></div>
                 <div id="tab-social" class="hidden space-y-6"><div class="max-w-3xl mx-auto space-y-6"><div class="bg-white p-5 rounded-2xl shadow-sm border border-zinc-200"><form onsubmit="handleCreatePost(event)" class="flex items-start space-x-4"><div class="w-12 h-12 rounded-full bg-burgundy flex items-center justify-center text-sm font-bold text-white shrink-0 shadow-inner" id="post-avatar">--</div><div class="flex-1"><textarea id="new-post-text" required class="w-full bg-zinc-50 border border-zinc-200 rounded-xl p-4 text-sm focus:outline-none focus:ring-2 focus:ring-burgundy focus:bg-white resize-none transition" rows="2" placeholder="O que você deseja compartilhar com a equipe hoje?"></textarea><div class="flex justify-between items-center mt-3 pt-3 border-t border-zinc-100"><div class="flex space-x-2"><button type="button" class="text-zinc-500 hover:text-burgundy p-2 rounded-lg transition"><i data-lucide="image" class="w-5 h-5"></i></button></div><button type="submit" class="bg-burgundy text-white px-6 py-2 rounded-lg text-sm font-bold hover:bg-burgundy-hover transition shadow-md">Publicar</button></div></div></form></div><div id="list-posts" class="space-y-5"></div></div></div>
                 <div id="tab-calendar" class="hidden space-y-6"><div id="admin-calendar-zone" class="hidden bg-white p-5 rounded-2xl shadow-sm border border-dashed border-orange-300 flex items-center justify-between"><div class="flex items-center space-x-4"><div class="p-3 bg-orange-50 text-orange-600 rounded-full"><i data-lucide="calendar-plus"></i></div><div><h4 class="text-sm font-bold text-zinc-800">Gestão de Calendário</h4><p class="text-xs text-zinc-500 mt-1">Adicione, edite e remova eventos da empresa.</p></div></div><button onclick="openEventModal()" class="bg-orange-500 text-white px-5 py-2.5 rounded-lg text-sm font-bold flex items-center hover:bg-orange-600 transition shadow-md"><i data-lucide="plus" class="w-4 h-4 mr-2"></i> Novo Evento</button></div><div class="bg-white p-6 rounded-2xl shadow-sm border border-zinc-200 flex flex-col md:flex-row gap-8"><div class="w-full md:w-1/3"><div class="flex items-center justify-between mb-6"><h3 class="text-sm font-bold uppercase tracking-wider text-zinc-500 flex items-center"><i data-lucide="calendar" class="w-4 h-4 mr-2 text-zinc-400"></i> <span id="display-month">Julho 2026</span></h3><div class="flex space-x-2"><button onclick="changeMonth(-1)" class="p-1.5 rounded-lg hover:bg-zinc-100 text-zinc-500 transition"><i data-lucide="chevron-left" class="w-4 h-4"></i></button><button onclick="changeMonth(1)" class="p-1.5 rounded-lg hover:bg-zinc-100 text-zinc-500 transition"><i data-lucide="chevron-right" class="w-4 h-4"></i></button></div></div><div class="bg-zinc-50 border border-zinc-200 rounded-xl p-4 text-center"><div class="grid grid-cols-7 gap-1 text-xs font-bold text-zinc-400 mb-3"><div>D</div><div>S</div><div>T</div><div>Q</div><div>Q</div><div>S</div><div>S</div></div><div class="grid grid-cols-7 gap-1 text-sm text-zinc-700 font-medium"><div class="p-1.5 text-zinc-300">31</div><div class="p-1.5 rounded cursor-pointer hover:bg-zinc-100 transition">1</div><div class="p-1.5 rounded cursor-pointer hover:bg-zinc-100 transition">2</div><div class="p-1.5 rounded cursor-pointer hover:bg-zinc-100 transition">3</div><div class="p-1.5 rounded cursor-pointer hover:bg-zinc-100 transition">4</div><div class="p-1.5 bg-red-100 text-red-700 font-bold rounded">5</div><div class="p-1.5 rounded cursor-pointer hover:bg-zinc-100 transition">6</div><div class="p-1.5 rounded cursor-pointer hover:bg-zinc-100 transition">7</div><div class="p-1.5 rounded cursor-pointer hover:bg-zinc-100 transition">8</div><div class="p-1.5 rounded cursor-pointer hover:bg-zinc-100 transition">9</div><div class="p-1.5 rounded cursor-pointer hover:bg-zinc-100 transition">10</div><div class="p-1.5 rounded cursor-pointer hover:bg-zinc-100 transition">11</div><div class="p-1.5 rounded cursor-pointer hover:bg-zinc-100 transition">12</div><div class="p-1.5 rounded cursor-pointer hover:bg-zinc-100 transition">13</div><div class="p-1.5 rounded cursor-pointer hover:bg-zinc-100 transition">14</div><div class="p-1.5 bg-blue-600 text-white font-bold rounded shadow-sm">15</div><div class="p-1.5 rounded cursor-pointer hover:bg-zinc-100 transition">16</div><div class="p-1.5 rounded cursor-pointer hover:bg-zinc-100 transition">17</div><div class="p-1.5 rounded cursor-pointer hover:bg-zinc-100 transition">18</div><div class="p-1.5 rounded cursor-pointer hover:bg-zinc-100 transition">19</div><div class="p-1.5 rounded cursor-pointer hover:bg-zinc-100 transition">20</div><div class="p-1.5 rounded cursor-pointer hover:bg-zinc-100 transition">21</div><div class="p-1.5 rounded cursor-pointer hover:bg-zinc-100 transition">22</div><div class="p-1.5 rounded cursor-pointer hover:bg-zinc-100 transition">23</div><div class="p-1.5 rounded cursor-pointer hover:bg-zinc-100 transition">24</div><div class="p-1.5 font-bold border-2 border-burgundy rounded text-burgundy cursor-pointer hover:bg-red-50 transition">25</div><div class="p-1.5 rounded cursor-pointer hover:bg-zinc-100 transition">26</div><div class="p-1.5 rounded cursor-pointer hover:bg-zinc-100 transition">27</div><div class="p-1.5 rounded cursor-pointer hover:bg-zinc-100 transition">28</div><div class="p-1.5 rounded cursor-pointer hover:bg-zinc-100 transition">29</div><div class="p-1.5 rounded cursor-pointer hover:bg-zinc-100 transition">30</div><div class="p-1.5 rounded cursor-pointer hover:bg-zinc-100 transition">31</div><div class="p-1.5 text-zinc-300">1</div><div class="p-1.5 text-zinc-300">2</div><div class="p-1.5 text-zinc-300">3</div></div></div></div><div class="w-full md:w-2/3"><h3 class="text-xs font-bold uppercase tracking-wider text-zinc-400 mb-6 flex items-center"><i data-lucide="list" class="w-4 h-4 mr-2 text-zinc-500"></i> Agenda do Mês</h3><div id="list-events" class="space-y-4"></div></div></div></div>
 
@@ -180,6 +205,27 @@
         </main>
     </div>
     <!-- MODAIS E LÓGICA -->
+    
+    <!-- Modal Novo Artigo Wiki -->
+    <div id="wiki-modal" class="hidden fixed inset-0 bg-zinc-900/80 backdrop-blur-sm flex items-center justify-center p-4 z-[70]">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-3xl flex flex-col border border-zinc-100">
+            <div class="p-5 border-b border-zinc-100 flex items-center justify-between bg-zinc-50 rounded-t-2xl">
+                <div><h3 class="text-base font-bold text-zinc-800"><i data-lucide="pen-tool" class="w-4 h-4 inline mr-2 text-blue-600"></i> Escrever Novo Artigo</h3><p class="text-[11px] text-zinc-500 mt-1">Compartilhe conhecimento e ganhe ADCoins após a aprovação.</p></div>
+                <button onclick="document.getElementById('wiki-modal').classList.add('hidden')" class="text-zinc-400 hover:text-zinc-600 p-2"><i data-lucide="x" class="w-5 h-5"></i></button>
+            </div>
+            <form onsubmit="handleCreateWiki(event)" class="p-6 space-y-4">
+                <div><label class="block text-xs font-bold uppercase text-zinc-500 mb-1">Título do Artigo</label><input id="wiki-title" type="text" required class="w-full p-2.5 bg-zinc-50 border border-zinc-200 rounded-lg text-sm outline-none focus:ring-2 focus:ring-blue-500" placeholder="Ex: Como gerar o relatório de inconsistências no ERP"></div>
+                <div><label class="block text-xs font-bold uppercase text-zinc-500 mb-1">Setor / Categoria</label><select id="wiki-cat" class="w-full p-2.5 bg-zinc-50 border border-zinc-200 rounded-lg text-sm outline-none focus:ring-2 focus:ring-blue-500"><option>Fiscal</option><option>Contábil</option><option>Pessoal</option><option>Sistemas/TI</option></select></div>
+                <div><label class="block text-xs font-bold uppercase text-zinc-500 mb-1">Conteúdo (Passo a passo)</label><textarea id="wiki-content" required class="w-full bg-zinc-50 border border-zinc-200 rounded-xl p-3 text-sm focus:ring-2 focus:ring-blue-500 resize-none h-40" placeholder="Descreva a solução detalhadamente..."></textarea></div>
+                <div class="flex justify-end space-x-3 pt-4 border-t border-zinc-100">
+                    <button type="button" onclick="document.getElementById('wiki-modal').classList.add('hidden')" class="px-5 py-2.5 rounded-lg text-sm font-bold text-zinc-600 hover:bg-zinc-100 transition">Cancelar</button>
+                    <button type="submit" class="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-bold transition shadow-md">Enviar para Aprovação</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modais Antigos Compactados -->
     <div id="mood-modal" class="hidden fixed inset-0 bg-zinc-900/80 backdrop-blur-sm flex items-center justify-center p-4 z-[80]"><div class="bg-white rounded-3xl shadow-2xl p-8 w-full max-w-sm text-center transform transition-all"><h3 class="text-xl font-bold text-zinc-800 mb-2">Como você está hoje?</h3><p class="text-sm text-zinc-500 mb-8">Seu bem-estar é prioridade para a ADCOL.</p><div class="flex justify-center space-x-6"><button onclick="registerMood('feliz')" class="text-5xl hover:scale-125 transition-transform" title="Ótimo">😀</button><button onclick="registerMood('neutro')" class="text-5xl hover:scale-125 transition-transform" title="Normal">😐</button><button onclick="registerMood('estressado')" class="text-5xl hover:scale-125 transition-transform" title="Cansado/Estressado">😫</button></div></div></div>
     <div id="upload-modal" class="hidden fixed inset-0 bg-zinc-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-[60]"><div class="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-md border border-zinc-100"><div class="flex items-center justify-between mb-5 pb-3 border-b border-zinc-100"><h3 class="text-base font-bold text-zinc-800"><i data-lucide="file-plus" class="w-5 h-5 inline mr-2 text-burgundy"></i> Inserir Documento</h3><button onclick="closeModal()" class="text-zinc-400 hover:text-zinc-600"><i data-lucide="x" class="w-5 h-5"></i></button></div><form onsubmit="handleUpload(event)" class="space-y-4"><div><label class="block text-xs font-bold uppercase text-zinc-500 mb-1">Nome do Arquivo</label><input id="modal-doc-name" type="text" required class="w-full p-2.5 bg-zinc-50 border border-zinc-200 rounded-lg text-sm outline-none focus:ring-2 focus:ring-burgundy"></div><div class="grid grid-cols-2 gap-4"><div><label class="block text-xs font-bold uppercase text-zinc-500 mb-1">Categoria</label><select id="modal-doc-type" class="w-full p-2.5 bg-zinc-50 border border-zinc-200 rounded-lg text-sm outline-none focus:ring-2 focus:ring-burgundy"><option value="Formulário">Formulário</option><option value="Manual">Manual</option><option value="Cargo">Cargo</option></select></div><div><label class="block text-xs font-bold uppercase text-zinc-500 mb-1">Setor</label><select id="modal-doc-sector" class="w-full p-2.5 bg-zinc-50 border border-zinc-200 rounded-lg text-sm outline-none focus:ring-2 focus:ring-burgundy"></select></div></div><div class="flex justify-end space-x-3 pt-3"><button type="button" onclick="closeModal()" class="px-5 py-2.5 rounded-lg text-sm font-bold text-zinc-600 hover:bg-zinc-100 transition">Cancelar</button><button type="submit" class="px-5 py-2.5 bg-burgundy hover:bg-burgundy-hover text-white rounded-lg text-sm font-bold transition shadow-md">Salvar</button></div></form></div></div>
     <div id="event-modal" class="hidden fixed inset-0 bg-zinc-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-[60]"><div class="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-md border border-zinc-100"><div class="flex items-center justify-between mb-5 pb-3 border-b border-zinc-100"><h3 class="text-base font-bold text-zinc-800" id="event-modal-title"><i data-lucide="calendar-plus" class="w-5 h-5 inline mr-2 text-orange-500"></i> Evento</h3><button onclick="closeEventModal()" class="text-zinc-400 hover:text-zinc-600"><i data-lucide="x" class="w-5 h-5"></i></button></div><form onsubmit="handleSaveEvent(event)" class="space-y-4"><input type="hidden" id="ev-id"><div><label class="block text-xs font-bold uppercase text-zinc-500 mb-1">Título</label><input id="ev-titulo" type="text" required class="w-full p-2.5 bg-zinc-50 border border-zinc-200 rounded-lg text-sm outline-none focus:ring-2 focus:ring-orange-500"></div><div class="grid grid-cols-2 gap-4"><div><label class="block text-xs font-bold uppercase text-zinc-500 mb-1">Dia</label><input id="ev-dia" type="number" min="1" max="31" required class="w-full p-2.5 bg-zinc-50 border border-zinc-200 rounded-lg text-sm outline-none focus:ring-2 focus:ring-orange-500"></div><div><label class="block text-xs font-bold uppercase text-zinc-500 mb-1">Mês (Ex: Jun)</label><input id="ev-mes" type="text" maxlength="3" required class="w-full p-2.5 bg-zinc-50 border border-zinc-200 rounded-lg text-sm uppercase outline-none focus:ring-2 focus:ring-orange-500"></div></div><div><label class="block text-xs font-bold uppercase text-zinc-500 mb-1">Descrição</label><input id="ev-desc" type="text" required class="w-full p-2.5 bg-zinc-50 border border-zinc-200 rounded-lg text-sm outline-none focus:ring-2 focus:ring-orange-500"></div><div><label class="block text-xs font-bold uppercase text-zinc-500 mb-1">Cor</label><select id="ev-cor" class="w-full p-2.5 bg-zinc-50 border border-zinc-200 rounded-lg text-sm outline-none focus:ring-2 focus:ring-orange-500"><option value="bg-blue-600">Azul</option><option value="bg-red-500">Vermelho</option><option value="bg-emerald-500">Verde</option><option value="bg-orange-500">Laranja</option></select></div><div class="flex justify-end space-x-3 pt-3"><button type="button" onclick="closeEventModal()" class="px-5 py-2.5 rounded-lg text-sm font-bold text-zinc-600 hover:bg-zinc-100 transition">Cancelar</button><button type="submit" class="px-5 py-2.5 bg-orange-500 hover:bg-orange-600 text-white rounded-lg text-sm font-bold transition shadow-md">Salvar Evento</button></div></form></div></div>
@@ -189,37 +235,24 @@
         const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
         const setores = ["Diretoria", "Pessoal", "Fiscal", "Contábil", "TI", "Legalização", "Financeiro", "Qualidade"];
         
-        // Novo Parâmetro: adcoins (Usuário de teste já começa com saldo para teste)
         let dbUsuarios = [
             { id: 1, nome: "Diretoria ADCOL", email: "admin@adcol.com.br", senha: "123", role: "admin", setor: "Diretoria", adcoins: 0 }, 
             { id: 2, nome: "João Silva", email: "user@adcol.com.br", senha: "123", role: "colaborador", setor: "Fiscal", adcoins: 250 },
-            { id: 3, nome: "Gestor Fiscal", email: "gestor@adcol.com.br", senha: "123", role: "gestor", setor: "Fiscal", adcoins: 0 }
+            { id: 3, nome: "Gestor Fiscal", email: "gestor@adcol.com.br", senha: "123", role: "gestor", setor: "Fiscal", adcoins: 0 },
+            { id: 4, nome: "Novo Estagiário", email: "estagiario@adcol.com.br", senha: "123", role: "estagiario", setor: "Contábil", adcoins: 50 }
         ];
         
         let dbDocumentos = [{ id: 1, nome: "Planejamento Anual", tipo: "Manual", sector: "Diretoria" }];
         let dbEventos = []; let dbPosts = [];
         
-        // Vitrine de Recompensas (Gerenciável)
-        let dbRecompensas = [
-            { id: 1, nome: "Café Premium / Sobremesa Especial", custo: 100 },
-            { id: 2, nome: "Vale-iFood (R$ 30,00)", custo: 150 },
-            { id: 3, nome: "Ingressos para o Cinema", custo: 300 },
-            { id: 4, nome: "Sexta-feira Flex (Sair 3h cedo)", custo: 800 },
-            { id: 5, nome: "Day-Off (1 Dia de Folga Extra)", custo: 1500 }
-        ];
+        let dbRecompensas = [ { id: 1, nome: "Café Premium / Sobremesa Especial", custo: 100 }, { id: 2, nome: "Vale-iFood (R$ 30,00)", custo: 150 }, { id: 3, nome: "Ingressos para o Cinema", custo: 300 }, { id: 4, nome: "Sexta-feira Flex (Sair 3h cedo)", custo: 800 }, { id: 5, nome: "Day-Off (1 Dia de Folga Extra)", custo: 1500 } ];
         
-        const evaluationCriteria = [
-            { id: 'qualidade', title: 'Qualidade', desc: 'Desempenha atividades com atenção e sem gerar retrabalho.' },
-            { id: 'postura', title: 'Postura e Atitude', desc: 'Apresentação adequada e focado no horário de trabalho.' },
-            { id: 'comunicacao', title: 'Comunicação', desc: 'Expressa ideias de forma clara e respeitosa.' },
-            { id: 'flexibilidade', title: 'Flexibilidade', desc: 'Ajusta-se a mudanças e lida bem com imprevistos.' },
-            { id: 'proatividade', title: 'Proatividade', desc: 'Apresenta novas soluções e busca aprender.' },
-            { id: 'organizacao', title: 'Organização e Planejamento', desc: 'Mantém registros claros e nos sistemas corretos.' },
-            { id: 'comprometimento', title: 'Comprometimento', desc: 'Garante que os objetivos de prazos sejam cumpridos.' },
-            { id: 'equipe', title: 'Trabalho em Equipe', desc: 'Interage bem e mantém equilíbrio em conflitos.' },
-            { id: 'tecnico', title: 'Conhecimento Técnico', desc: 'Apto a aplicar a tecnologia e legislação corrente.' },
-            { id: 'pontualidade', title: 'Pontualidade', desc: 'Cumpre horários e compromissos acordados.' }
+        let dbWiki = [
+            { id: 1, title: "Como parametrizar alíquotas no sistema Domínio", author: "João Silva", cat: "Fiscal", likes: 12, date: "24 Jul" },
+            { id: 2, title: "Checklist de fechamento de folha de pagamento", author: "Maria Souza", cat: "Pessoal", likes: 8, date: "20 Jul" }
         ];
+
+        const evaluationCriteria = [ { id: 'qualidade', title: 'Qualidade', desc: 'Desempenha atividades com atenção e sem gerar retrabalho.' }, { id: 'postura', title: 'Postura e Atitude', desc: 'Apresentação adequada e focado no horário de trabalho.' }, { id: 'comunicacao', title: 'Comunicação', desc: 'Expressa ideias de forma clara e respeitosa.' }, { id: 'flexibilidade', title: 'Flexibilidade', desc: 'Ajusta-se a mudanças e lida bem com imprevistos.' }, { id: 'proatividade', title: 'Proatividade', desc: 'Apresenta novas soluções e busca aprender.' }, { id: 'organizacao', title: 'Organização e Planejamento', desc: 'Mantém registros claros e nos sistemas corretos.' }, { id: 'comprometimento', title: 'Comprometimento', desc: 'Garante que os objetivos de prazos sejam cumpridos.' }, { id: 'equipe', title: 'Trabalho em Equipe', desc: 'Interage bem e mantém equilíbrio em conflitos.' }, { id: 'tecnico', title: 'Conhecimento Técnico', desc: 'Apto a aplicar a tecnologia e legislação corrente.' }, { id: 'pontualidade', title: 'Pontualidade', desc: 'Cumpre horários e compromissos acordados.' } ];
         
         let currentEvalScores = {}; let currentEvalUserId = null;
         let mesesNavegacao = ['Maio 2026', 'Junho 2026', 'Julho 2026', 'Agosto 2026', 'Setembro 2026'];
@@ -246,9 +279,10 @@
 
         function switchTab(target) {
             activeTab = target; const defClass = "w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-zinc-400 hover:bg-zinc-800 hover:text-white text-sm font-medium transition";
-            ['btn-home', 'btn-admin-panel', 'btn-social', 'btn-calendar', 'btn-onboarding', 'btn-performance', 'btn-gamification'].forEach(id => { if(document.getElementById(id)) document.getElementById(id).className = defClass; });
+            
+            ['btn-home', 'btn-admin-panel', 'btn-social', 'btn-calendar', 'btn-university', 'btn-wiki', 'btn-performance', 'btn-gamification'].forEach(id => { if(document.getElementById(id)) document.getElementById(id).className = defClass; });
             setores.forEach(s => { if(document.getElementById(`btn-sector-${s}`)) document.getElementById(`btn-sector-${s}`).className = "w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-800 transition text-sm"; });
-            ['tab-home', 'tab-admin-panel', 'tab-social', 'tab-calendar', 'tab-onboarding', 'tab-sector', 'tab-performance', 'tab-gamification'].forEach(id => { if(document.getElementById(id)) document.getElementById(id).classList.add('hidden'); });
+            ['tab-home', 'tab-admin-panel', 'tab-social', 'tab-calendar', 'tab-university', 'tab-wiki', 'tab-sector', 'tab-performance', 'tab-gamification'].forEach(id => { if(document.getElementById(id)) document.getElementById(id).classList.add('hidden'); });
 
             const actClass = "w-full flex items-center space-x-3 px-3 py-2 rounded-lg bg-burgundy text-white text-sm font-medium shadow-md transition";
             const pageTitle = document.getElementById('page-title');
@@ -256,151 +290,114 @@
             if (target === 'home') { document.getElementById('btn-home').className = actClass; pageTitle.innerText = "Dashboard"; document.getElementById('tab-home').classList.remove('hidden'); }
             else if (target === 'performance') { document.getElementById('btn-performance').className = actClass; pageTitle.innerText = "Meu Desempenho"; document.getElementById('tab-performance').classList.remove('hidden'); renderPerformanceTab(); }
             else if (target === 'gamification') { document.getElementById('btn-gamification').className = actClass; pageTitle.innerText = "Gamificação (ADCoins)"; document.getElementById('tab-gamification').classList.remove('hidden'); renderGamification(); }
+            else if (target === 'university') { document.getElementById('btn-university').className = actClass; pageTitle.innerText = "Universidade ADCOL"; document.getElementById('tab-university').classList.remove('hidden'); }
+            else if (target === 'wiki') { document.getElementById('btn-wiki').className = actClass; pageTitle.innerText = "Base de Conhecimento"; document.getElementById('tab-wiki').classList.remove('hidden'); renderWiki(); }
             else if (target === 'admin-panel') { document.getElementById('btn-admin-panel').className = actClass; pageTitle.innerText = "Gestão de Usuários"; document.getElementById('tab-admin-panel').classList.remove('hidden'); renderUsersTable(); }
             else if (target === 'social') { document.getElementById('btn-social').className = actClass; pageTitle.innerText = "Rede Social"; document.getElementById('tab-social').classList.remove('hidden'); }
             else if (target === 'calendar') { document.getElementById('btn-calendar').className = actClass; pageTitle.innerText = "Calendário"; document.getElementById('tab-calendar').classList.remove('hidden'); }
-            else if (target === 'onboarding') { document.getElementById('btn-onboarding').className = actClass; pageTitle.innerText = "Capacitação"; document.getElementById('tab-onboarding').classList.remove('hidden'); }
             else { const btn = document.getElementById(`btn-sector-${target}`); if(btn) btn.className = actClass; pageTitle.innerText = `Setor / ${target}`; document.getElementById('tab-sector').classList.remove('hidden'); }
             try { lucide.createIcons(); } catch(e){}
         }
 
-        // --- SISTEMA DE GAMIFICAÇÃO ---
-        function renderGamification() {
-            // Atualiza Saldo
-            let u = dbUsuarios.find(x => x.id === sessionUser.id);
-            document.getElementById('user-adcoins').innerText = u.adcoins || 0;
-
-            // Preenche Vitrine Dinâmica
-            document.getElementById('rewards-store').innerHTML = dbRecompensas.map(r => `
-                <div class="flex items-center justify-between p-4 border border-zinc-100 rounded-xl bg-white hover:border-yellow-400 hover:shadow-sm transition group">
-                    <div>
-                        <h4 class="font-bold text-sm text-zinc-800">${r.nome}</h4>
-                        <p class="text-xs font-bold text-yellow-600 mt-1">${r.custo} ADCoins</p>
+        // --- SISTEMA WIKI ---
+        function renderWiki() {
+            document.getElementById('wiki-list').innerHTML = dbWiki.map(w => `
+                <div class="p-5 hover:bg-zinc-50 transition cursor-pointer flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div class="flex-1">
+                        <div class="flex items-center space-x-2 mb-1">
+                            <span class="text-[10px] font-bold uppercase tracking-wider text-blue-700 bg-blue-100 px-2 py-0.5 rounded-full">${w.cat}</span>
+                            <span class="text-[10px] text-zinc-400 font-medium">${w.date}</span>
+                        </div>
+                        <h3 class="text-sm font-bold text-zinc-800 mb-1">${w.title}</h3>
+                        <p class="text-xs text-zinc-500 flex items-center"><i data-lucide="user" class="w-3 h-3 mr-1"></i> ${w.author}</p>
                     </div>
-                    <button onclick="redeemReward(${r.id}, ${r.custo})" class="bg-zinc-50 text-zinc-600 border border-zinc-200 hover:bg-yellow-500 hover:border-yellow-500 hover:text-white px-4 py-2 rounded-lg text-xs font-bold transition shadow-sm">Resgatar</button>
+                    <div class="flex items-center space-x-4">
+                        <div class="flex flex-col items-center justify-center p-2 rounded-lg hover:bg-zinc-100 text-zinc-400 hover:text-blue-600 transition">
+                            <i data-lucide="thumbs-up" class="w-4 h-4 mb-1"></i><span class="text-xs font-bold leading-none">${w.likes}</span>
+                        </div>
+                        <button class="bg-white border border-zinc-200 text-zinc-600 hover:bg-zinc-50 hover:text-blue-600 px-4 py-2 rounded-lg text-xs font-bold transition shadow-sm">Ler Artigo</button>
+                    </div>
                 </div>
             `).join('');
-
-            // Habilita Painel Admin APENAS para Diretoria (admin)
-            if(sessionUser.role === 'admin') {
-                document.getElementById('admin-gamification-zone').classList.remove('hidden');
-                let sel = document.getElementById('credit-user');
-                if(sel) {
-                    sel.innerHTML = `<option value="">Selecione um Colaborador...</option>` + 
-                                    dbUsuarios.filter(x => x.id !== sessionUser.id).map(x => `<option value="${x.id}">${x.nome} (${x.setor})</option>`).join('');
-                }
-            } else {
-                document.getElementById('admin-gamification-zone').classList.add('hidden');
-            }
-        }
-
-        function handleAddReward(e) {
-            e.preventDefault();
-            const nome = document.getElementById('reward-name').value;
-            const custo = parseInt(document.getElementById('reward-cost').value);
-            dbRecompensas.push({ id: Date.now(), nome, custo });
-            document.getElementById('reward-name').value = ''; document.getElementById('reward-cost').value = '';
-            renderGamification();
-            alert('Nova recompensa adicionada à vitrine com sucesso!');
-        }
-
-        function handleCreditPoints(e) {
-            e.preventDefault();
-            const uid = parseInt(document.getElementById('credit-user').value);
-            const pts = parseInt(document.getElementById('credit-amount').value);
-            if(!uid || !pts) return;
-            let u = dbUsuarios.find(x => x.id === uid);
-            if(u) {
-                u.adcoins = (u.adcoins || 0) + pts;
-                alert(`${pts} ADCoins creditados para ${u.nome} com sucesso!`);
-                document.getElementById('credit-amount').value = ''; document.getElementById('credit-reason').value = '';
-                renderGamification();
-            }
-        }
-
-        function redeemReward(id, custo) {
-            let u = dbUsuarios.find(x => x.id === sessionUser.id);
-            let saldo = u.adcoins || 0;
-            if(saldo >= custo) {
-                if(confirm(`Deseja gastar ${custo} ADCoins para resgatar este prêmio?`)) {
-                    u.adcoins -= custo;
-                    sessionUser.adcoins = u.adcoins; // atualiza sessao do storage
-                    localStorage.setItem('adcol_user', JSON.stringify(sessionUser));
-                    alert('Pedido de resgate enviado com sucesso ao RH! Parabéns!');
-                    renderGamification();
-                }
-            } else {
-                alert('Você não tem ADCoins suficientes para este prêmio. Cumpra missões para ganhar mais!');
-            }
-        }
-
-        // --- SISTEMA DE DESEMPENHO E ESTRELAS ---
-        function renderPerformanceTab() {
-            if (sessionUser.role === 'admin' || sessionUser.role === 'gestor') {
-                document.getElementById('manager-perf-zone').classList.remove('hidden');
-                let equipe = dbUsuarios.filter(u => u.id !== sessionUser.id && u.role !== 'admin');
-                if (sessionUser.role === 'gestor') equipe = equipe.filter(u => u.setor === sessionUser.setor);
-                document.getElementById('table-team-perf').innerHTML = equipe.map(u => `<tr class="hover:bg-zinc-50 transition"><td class="p-4 font-bold text-zinc-800">${u.nome} <span class="text-[10px] bg-zinc-100 text-zinc-500 px-2 py-0.5 rounded ml-2">${u.setor}</span></td><td class="p-4 text-zinc-500 text-xs">Pendente</td><td class="p-4 text-zinc-500 font-bold">-</td><td class="p-4 text-right"><button onclick="openEvalModal(${u.id}, '${u.nome}')" class="text-xs bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white px-3 py-1.5 rounded-lg font-bold transition">Nova Avaliação</button></td></tr>`).join('');
-            } else { document.getElementById('manager-perf-zone').classList.add('hidden'); }
-            document.getElementById('list-my-evals').innerHTML = `<div class="p-4 border border-zinc-200 rounded-xl bg-zinc-50 flex items-center justify-between hover:border-blue-300 transition group cursor-pointer"><div class="flex items-center space-x-3"><div class="bg-blue-100 text-blue-600 p-2.5 rounded-lg"><i data-lucide="award" class="w-5 h-5"></i></div><div><h4 class="text-sm font-bold text-zinc-800">Avaliação de Período (Jul/2026)</h4><p class="text-[10px] text-zinc-500 uppercase font-bold mt-0.5">Avaliador: Gestor Direto</p></div></div><button class="text-blue-600 hover:text-blue-800 font-bold text-xs flex items-center"><i data-lucide="download" class="w-4 h-4 mr-1"></i> Baixar PDF</button></div>`;
             try { lucide.createIcons(); } catch(e){}
         }
 
-        function openEvalModal(userId, userName) {
-            currentEvalUserId = userId; currentEvalScores = {};
-            document.getElementById('eval-modal-subtitle').innerText = `Avaliando: ${userName}`;
-            document.getElementById('eval-fortes').value = ''; document.getElementById('eval-melhorar').value = '';
-            document.getElementById('criteria-list').innerHTML = evaluationCriteria.map(crit => `<div class="flex flex-col md:flex-row md:items-center justify-between p-3 border-b border-zinc-100 hover:bg-zinc-50 transition rounded-lg"><div class="mb-2 md:mb-0 md:mr-4 flex-1"><h4 class="font-bold text-sm text-zinc-800">${crit.title}</h4><p class="text-[11px] text-zinc-500 leading-tight">${crit.desc}</p></div><div class="flex space-x-1" id="stars-${crit.id}">${[1,2,3,4,5].map(v => `<i data-lucide="star" onclick="setRating('${crit.id}', ${v})" class="w-6 h-6 text-zinc-200 hover:text-yellow-400 cursor-pointer transition-colors" id="star-${crit.id}-${v}"></i>`).join('')}</div></div>`).join('');
-            document.getElementById('eval-modal').classList.remove('hidden'); try { lucide.createIcons(); } catch(e){}
+        function handleCreateWiki(e) {
+            e.preventDefault();
+            const title = document.getElementById('wiki-title').value;
+            const cat = document.getElementById('wiki-cat').value;
+            dbWiki.unshift({ id: Date.now(), title, author: sessionUser.nome, cat, likes: 0, date: "Hoje" });
+            document.getElementById('wiki-title').value = ''; document.getElementById('wiki-content').value = '';
+            document.getElementById('wiki-modal').classList.add('hidden');
+            renderWiki();
+            alert('Seu artigo foi enviado para aprovação. Assim que validado, você receberá suas ADCoins!');
         }
 
-        function setRating(critId, value) {
-            currentEvalScores[critId] = value;
-            for(let i=1; i<=5; i++) {
-                let star = document.getElementById(`star-${critId}-${i}`);
-                if(i <= value) { star.classList.remove('text-zinc-200'); star.classList.add('text-yellow-400', 'fill-yellow-400'); } else { star.classList.add('text-zinc-200'); star.classList.remove('text-yellow-400', 'fill-yellow-400'); }
-            }
+        // --- SISTEMAS ANTERIORES ---
+        function renderGamification() {
+            let u = dbUsuarios.find(x => x.id === sessionUser.id);
+            document.getElementById('user-adcoins').innerText = u.adcoins || 0;
+            document.getElementById('rewards-store').innerHTML = dbRecompensas.map(r => `<div class="flex items-center justify-between p-4 border border-zinc-100 rounded-xl bg-white hover:border-yellow-400 hover:shadow-sm transition group"><div><h4 class="font-bold text-sm text-zinc-800">${r.nome}</h4><p class="text-xs font-bold text-yellow-600 mt-1">${r.custo} ADCoins</p></div><button onclick="redeemReward(${r.id}, ${r.custo})" class="bg-zinc-50 text-zinc-600 border border-zinc-200 hover:bg-yellow-500 hover:border-yellow-500 hover:text-white px-4 py-2 rounded-lg text-xs font-bold transition shadow-sm">Resgatar</button></div>`).join('');
+            if(sessionUser.role === 'admin') { document.getElementById('admin-gamification-zone').classList.remove('hidden'); let sel = document.getElementById('credit-user'); if(sel) { sel.innerHTML = `<option value="">Selecione...</option>` + dbUsuarios.filter(x => x.id !== sessionUser.id).map(x => `<option value="${x.id}">${x.nome} (${x.setor})</option>`).join(''); } } else { document.getElementById('admin-gamification-zone').classList.add('hidden'); }
         }
+        function handleAddReward(e) { e.preventDefault(); const nome = document.getElementById('reward-name').value; const custo = parseInt(document.getElementById('reward-cost').value); dbRecompensas.push({ id: Date.now(), nome, custo }); document.getElementById('reward-name').value = ''; document.getElementById('reward-cost').value = ''; renderGamification(); alert('Nova recompensa adicionada à vitrine com sucesso!'); }
+        function handleCreditPoints(e) { e.preventDefault(); const uid = parseInt(document.getElementById('credit-user').value); const pts = parseInt(document.getElementById('credit-amount').value); if(!uid || !pts) return; let u = dbUsuarios.find(x => x.id === uid); if(u) { u.adcoins = (u.adcoins || 0) + pts; alert(`${pts} ADCoins creditados para ${u.nome} com sucesso!`); document.getElementById('credit-amount').value = ''; document.getElementById('credit-reason').value = ''; renderGamification(); } }
+        function redeemReward(id, custo) { let u = dbUsuarios.find(x => x.id === sessionUser.id); let saldo = u.adcoins || 0; if(saldo >= custo) { if(confirm(`Resgatar por ${custo} ADCoins?`)) { u.adcoins -= custo; sessionUser.adcoins = u.adcoins; localStorage.setItem('adcol_user', JSON.stringify(sessionUser)); alert('Resgate enviado ao RH!'); renderGamification(); } } else { alert('ADCoins insuficientes.'); } }
+
+        function renderPerformanceTab() {
+            if (sessionUser.role === 'admin' || sessionUser.role === 'gestor') { document.getElementById('manager-perf-zone').classList.remove('hidden'); let equipe = dbUsuarios.filter(u => u.id !== sessionUser.id && u.role !== 'admin'); if (sessionUser.role === 'gestor') equipe = equipe.filter(u => u.setor === sessionUser.setor); document.getElementById('table-team-perf').innerHTML = equipe.map(u => `<tr class="hover:bg-zinc-50 transition"><td class="p-4 font-bold text-zinc-800">${u.nome} <span class="text-[10px] bg-zinc-100 text-zinc-500 px-2 py-0.5 rounded ml-2">${u.setor}</span></td><td class="p-4 text-zinc-500 text-xs">Pendente</td><td class="p-4 text-zinc-500 font-bold">-</td><td class="p-4 text-right"><button onclick="openEvalModal(${u.id}, '${u.nome}')" class="text-xs bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white px-3 py-1.5 rounded-lg font-bold transition">Nova Avaliação</button></td></tr>`).join(''); } else { document.getElementById('manager-perf-zone').classList.add('hidden'); }
+            document.getElementById('list-my-evals').innerHTML = `<div class="p-4 border border-zinc-200 rounded-xl bg-zinc-50 flex items-center justify-between hover:border-blue-300 transition group cursor-pointer"><div class="flex items-center space-x-3"><div class="bg-blue-100 text-blue-600 p-2.5 rounded-lg"><i data-lucide="award" class="w-5 h-5"></i></div><div><h4 class="text-sm font-bold text-zinc-800">Avaliação de Período</h4><p class="text-[10px] text-zinc-500 uppercase font-bold mt-0.5">Gestor Direto</p></div></div><button class="text-blue-600 font-bold text-xs"><i data-lucide="download" class="w-4 h-4 mr-1 inline"></i> PDF</button></div>`;
+            try { lucide.createIcons(); } catch(e){}
+        }
+        function openEvalModal(userId, userName) { currentEvalUserId = userId; currentEvalScores = {}; document.getElementById('eval-modal-subtitle').innerText = `Avaliando: ${userName}`; document.getElementById('eval-fortes').value = ''; document.getElementById('eval-melhorar').value = ''; document.getElementById('criteria-list').innerHTML = evaluationCriteria.map(crit => `<div class="flex flex-col md:flex-row md:items-center justify-between p-3 border-b border-zinc-100 hover:bg-zinc-50 transition rounded-lg"><div class="mb-2 md:mb-0 md:mr-4 flex-1"><h4 class="font-bold text-sm text-zinc-800">${crit.title}</h4><p class="text-[11px] text-zinc-500 leading-tight">${crit.desc}</p></div><div class="flex space-x-1" id="stars-${crit.id}">${[1,2,3,4,5].map(v => `<i data-lucide="star" onclick="setRating('${crit.id}', ${v})" class="w-6 h-6 text-zinc-200 hover:text-yellow-400 cursor-pointer transition-colors" id="star-${crit.id}-${v}"></i>`).join('')}</div></div>`).join(''); document.getElementById('eval-modal').classList.remove('hidden'); try { lucide.createIcons(); } catch(e){} }
+        function setRating(critId, value) { currentEvalScores[critId] = value; for(let i=1; i<=5; i++) { let star = document.getElementById(`star-${critId}-${i}`); if(i <= value) { star.classList.remove('text-zinc-200'); star.classList.add('text-yellow-400', 'fill-yellow-400'); } else { star.classList.add('text-zinc-200'); star.classList.remove('text-yellow-400', 'fill-yellow-400'); } } }
         function closeEvalModal() { document.getElementById('eval-modal').classList.add('hidden'); }
-        function saveEvaluation() { if(Object.keys(currentEvalScores).length < evaluationCriteria.length) return alert("Por favor, preencha as notas de todos os critérios antes de concluir."); alert("Avaliação salva com sucesso!"); closeEvalModal(); }
+        function saveEvaluation() { if(Object.keys(currentEvalScores).length < evaluationCriteria.length) return alert("Preencha todas as notas."); alert("Avaliação salva com sucesso!"); closeEvalModal(); }
 
-        // --- SISTEMA BASE E LOGIN ---
+        function renderUsersTable() { 
+            document.getElementById('table-users').innerHTML = dbUsuarios.map(u => {
+                let badgeColor = u.role === 'admin' ? 'bg-red-100 text-red-700' : (u.role === 'gestor' ? 'bg-blue-100 text-blue-700' : (u.role === 'estagiario' ? 'bg-orange-100 text-orange-700' : 'bg-zinc-100 text-zinc-600'));
+                return `<tr class="hover:bg-zinc-50 transition"><td class="p-4 font-bold text-zinc-800"><div class="flex flex-col"><span>${u.nome}</span><span class="text-[10px] text-zinc-400 font-normal">${u.email}</span></div></td><td class="p-4 text-zinc-500 text-xs font-bold uppercase">${u.setor || 'N/A'}</td><td class="p-4"><span class="text-[10px] px-2 py-1 rounded-md font-bold uppercase tracking-wider ${badgeColor}">${u.role}</span></td><td class="p-4 text-right">${u.id === 1 ? '<span class="text-xs text-zinc-400 italic">Protegido</span>' : `<button onclick="handleDeleteUser(${u.id})" class="text-zinc-400 hover:text-red-500 p-2 rounded hover:bg-red-50 transition"><i data-lucide="user-x" class="w-4 h-4"></i></button>`}</td></tr>`
+            }).join(''); 
+            try { lucide.createIcons(); } catch(e){} 
+        }
+
+        function handleCreateUser(e) { 
+            e.preventDefault(); 
+            const nome = document.getElementById('adm-user-name').value; const email = document.getElementById('adm-user-email').value.toLowerCase(); const senha = document.getElementById('adm-user-password').value; const role = document.getElementById('adm-user-role').value; const setor = document.getElementById('adm-user-sector').value;
+            if (dbUsuarios.some(u => u.email === email)) return alert('⚠️ E-mail já cadastrado!'); 
+            dbUsuarios.push({ id: dbUsuarios.length + 1, nome, email, senha, role, setor, adcoins: 0 }); 
+            document.getElementById('adm-user-name').value = ''; document.getElementById('adm-user-email').value = ''; document.getElementById('adm-user-password').value = ''; 
+            renderUsersTable(); alert(`Usuário criado com sucesso no setor ${setor}!`); 
+        }
+
+        function handleDeleteUser(id) { if (confirm('Remover o usuário?')) { dbUsuarios = dbUsuarios.filter(u => u.id !== id); renderUsersTable(); } }
+
         function aplicarLoginUI(user) {
-            document.getElementById('sidebar-user-name').innerText = user.nome; 
-            document.getElementById('greet-name').innerText = user.nome.split(' ')[0];
-            let iniciais = user.nome.substring(0, 2).toUpperCase(); 
-            document.getElementById('user-avatar-initials').innerText = iniciais; 
-            
+            document.getElementById('sidebar-user-name').innerText = user.nome; document.getElementById('greet-name').innerText = user.nome.split(' ')[0]; let iniciais = user.nome.substring(0, 2).toUpperCase(); document.getElementById('user-avatar-initials').innerText = iniciais; 
             const badge = document.getElementById('role-badge');
+            
             if (user.role === 'admin') { 
                 if(badge) { badge.className = "inline-block text-[9px] bg-red-500 text-white px-2 py-0.5 rounded uppercase font-bold tracking-widest shadow-sm"; badge.innerText = "Admin"; } 
                 document.getElementById('admin-menu-section')?.classList.remove('hidden'); 
-            } else if (user.role === 'gestor') {
+            } else if (user.role === 'gestor') { 
                 if(badge) { badge.className = "inline-block text-[9px] bg-blue-500 text-white px-2 py-0.5 rounded uppercase font-bold tracking-widest shadow-sm"; badge.innerText = "Gestor"; } 
+                document.getElementById('admin-menu-section')?.classList.add('hidden'); 
+            } else if (user.role === 'estagiario') { 
+                if(badge) { badge.className = "inline-block text-[9px] bg-orange-500 text-white px-2 py-0.5 rounded uppercase font-bold tracking-widest shadow-sm"; badge.innerText = "Estagiário"; } 
                 document.getElementById('admin-menu-section')?.classList.add('hidden'); 
             } else { 
                 if(badge) { badge.className = "inline-block text-[9px] bg-zinc-700 text-zinc-300 px-2 py-0.5 rounded uppercase font-bold tracking-widest"; badge.innerText = "Colab"; } 
                 document.getElementById('admin-menu-section')?.classList.add('hidden'); 
             }
 
-            let setoresPermitidos = (user.role === 'admin' || user.role === 'gestor') ? setores : [user.setor];
-            document.getElementById('sector-menu-list').innerHTML = setoresPermitidos.map(s => `<button onclick="switchTab('${s}')" id="btn-sector-${s}" class="w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-800 transition text-sm"><i data-lucide="folder" class="w-3.5 h-3.5"></i><span>${s}</span></button>`).join('');
-
-            document.getElementById('login-screen').classList.add('hidden'); 
-            document.getElementById('main-app').classList.remove('hidden');
-            renderEventos(); switchTab('home');
-
-            setTimeout(() => { document.getElementById('mood-modal').classList.remove('hidden'); }, 500);
+            let setoresPermitidos = (user.role === 'admin' || user.role === 'gestor') ? setores : [user.setor]; document.getElementById('sector-menu-list').innerHTML = setoresPermitidos.map(s => `<button onclick="switchTab('${s}')" id="btn-sector-${s}" class="w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-800 transition text-sm"><i data-lucide="folder" class="w-3.5 h-3.5"></i><span>${s}</span></button>`).join('');
+            document.getElementById('login-screen').classList.add('hidden'); document.getElementById('main-app').classList.remove('hidden'); renderEventos(); switchTab('home'); setTimeout(() => { document.getElementById('mood-modal').classList.remove('hidden'); }, 500);
         }
 
-        function handleLogin(e) {
-            e.preventDefault(); const email = document.getElementById('login-email').value.trim().toLowerCase(); const senha = document.getElementById('login-senha').value.trim();
-            const user = dbUsuarios.find(u => u.email.toLowerCase() === email && u.senha === senha);
-            if (user) { localStorage.setItem('adcol_user', JSON.stringify(user)); sessionUser = user; aplicarLoginUI(user); } else alert('⚠️ Acesso Negado!');
-        }
-
+        function handleLogin(e) { e.preventDefault(); const email = document.getElementById('login-email').value.trim().toLowerCase(); const senha = document.getElementById('login-senha').value.trim(); const user = dbUsuarios.find(u => u.email.toLowerCase() === email && u.senha === senha); if (user) { localStorage.setItem('adcol_user', JSON.stringify(user)); sessionUser = user; aplicarLoginUI(user); } else alert('⚠️ Acesso Negado!'); }
         function handleLogout() { localStorage.removeItem('adcol_user'); sessionUser = null; document.getElementById('main-app').classList.add('hidden'); document.getElementById('login-screen').classList.remove('hidden'); }
         function registerMood(mood) { document.getElementById('mood-modal').classList.add('hidden'); }
     </script>
 </body>
-</html> 
+</html>
