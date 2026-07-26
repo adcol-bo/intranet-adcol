@@ -7,6 +7,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <!-- BIBLIOTECA DE PDF DIRETO -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script>
         const SUPABASE_URL = "https://awakbipwvkhaxrehjroh.supabase.co";
@@ -47,15 +49,13 @@
         <!-- OVERLAY MOBILE -->
         <div id="mobile-overlay" onclick="closeMobileMenu()" class="hidden fixed inset-0 bg-zinc-900/60 z-40 md:hidden backdrop-blur-sm transition-opacity"></div>
 
-        <!-- SIDEBAR AJUSTADA COM FLEXBOX INTELIGENTE -->
+        <!-- SIDEBAR COM FLEXBOX INTELIGENTE -->
         <aside id="sidebar" class="w-64 bg-graphite text-white flex flex-col flex-shrink-0 border-r border-zinc-800 fixed md:relative z-50 h-full transition-transform duration-300 -translate-x-full md:translate-x-0">
-            <!-- CABEÇALHO DA SIDEBAR -->
             <div class="h-16 flex-shrink-0 flex items-center justify-between md:justify-center border-b border-zinc-800 px-4">
                 <span class="text-xl font-bold tracking-wide text-white">ADCOL</span>
                 <button onclick="closeMobileMenu()" class="md:hidden text-zinc-400 hover:text-white p-1"><i data-lucide="x" class="w-5 h-5"></i></button>
             </div>
             
-            <!-- MENU COM ROLAGEM INDEPENDENTE -->
             <nav class="flex-1 p-4 space-y-1 overflow-y-auto custom-scrollbar">
                 <p class="text-[10px] uppercase text-zinc-500 font-bold px-3 mb-2 tracking-widest mt-2">Principal</p>
                 <button onclick="switchTab('home')" id="btn-home" class="w-full flex items-center space-x-3 px-3 py-2 rounded-lg bg-burgundy text-white text-sm font-medium transition"><i data-lucide="layout-dashboard" class="w-4 h-4"></i><span>Dashboard</span></button>
@@ -82,7 +82,6 @@
                 <div id="sector-menu-list" class="hidden ml-4 mt-1 border-l border-zinc-700 pl-2 space-y-1"></div>
             </nav>
 
-            <!-- RODAPÉ DA SIDEBAR FIXO -->
             <div class="flex-shrink-0 p-4 border-t border-zinc-800 bg-zinc-900/50">
                 <div class="flex items-center space-x-3 mb-3"><div class="w-9 h-9 rounded-full bg-burgundy flex items-center justify-center text-xs font-bold text-white shadow-inner" id="user-avatar-initials">--</div><div class="overflow-hidden"><p class="text-sm font-bold text-white truncate w-32" id="sidebar-user-name">Usuário</p><span id="role-badge" class="inline-block text-[9px] bg-zinc-700 text-zinc-300 px-1.5 py-0.5 rounded uppercase font-bold tracking-wider">Cargo</span></div></div>
                 <button onclick="handleLogout()" class="w-full flex items-center justify-center space-x-2 text-xs text-zinc-400 hover:text-white bg-zinc-800 hover:bg-red-500/20 py-2 rounded-lg transition"><i data-lucide="log-out" class="w-3.5 h-3.5"></i><span>Sair</span></button>
@@ -368,12 +367,11 @@
             else if (target === 'calendar') { document.getElementById('btn-calendar').className = actClass; pageTitle.innerText = "Calendário"; document.getElementById('tab-calendar').classList.remove('hidden'); renderEventos(); }
             else { const btn = document.getElementById(`btn-sector-${target}`); if(btn) btn.className = actClass; pageTitle.innerText = `Setor / ${target}`; document.getElementById('tab-sector').classList.remove('hidden'); renderSectorContent(target); }
             
-            // Fecha menu no mobile ao clicar em um link
             if (window.innerWidth < 768) { closeMobileMenu(); }
             try { lucide.createIcons(); } catch(e){}
         }
 
-        // --- SISTEMA DESEMPENHO E PDF OFICIAL ADCOL COM LOGO ---
+        // --- SISTEMA DESEMPENHO E PDF DIRETO (html2pdf) ---
         function renderPerformanceTab() {
             if (sessionUser.role === 'admin' || sessionUser.role === 'gestor') { 
                 document.getElementById('manager-perf-zone').classList.remove('hidden'); 
@@ -427,79 +425,58 @@
             const avaliador = dbUsuarios.find(u => u.id === avaliacao.avaliador_id) || {nome: "Sistema ADCOL"};
             const dataAval = new Date(avaliacao.created_at).toLocaleDateString('pt-BR');
 
-            const baseUrl = window.location.href.replace('index.html', '').split('?')[0];
-
-            let htmlContent = `
-                <html>
-                <head>
-                    <title>Avaliação_${avaliado.nome.replace(/ /g, '_')}_${dataAval.replace(/\//g, '_')}</title>
-                    <style>
-                        body { font-family: 'Segoe UI', Arial, sans-serif; padding: 40px; color: #333; max-width: 800px; margin: 0 auto; }
-                        .header { border-bottom: 3px solid #8A151B; padding-bottom: 15px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: flex-end;}
-                        .header-left { display: flex; align-items: center; gap: 15px; }
-                        .header h1 { color: #8A151B; margin: 0; font-size: 24px; text-transform: uppercase; letter-spacing: 1px;}
-                        .header span { font-size: 12px; color: #777; font-weight: bold;}
-                        .logo-print { height: 40px; width: auto; object-fit: contain; }
-                        .info-box { background-color: #f4f4f5; padding: 20px; border-radius: 8px; margin-bottom: 30px; }
-                        .info-box p { margin: 8px 0; font-size: 14px; }
-                        table { width: 100%; border-collapse: collapse; margin-bottom: 30px; }
-                        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; font-size: 14px; }
-                        th { background-color: #8A151B; color: white; text-transform: uppercase; font-size: 12px; letter-spacing: 1px;}
-                        .section { margin-bottom: 25px; page-break-inside: avoid; }
-                        .section h3 { color: #444; border-bottom: 2px solid #eee; padding-bottom: 5px; font-size: 16px; margin-bottom: 15px;}
-                        .section p { font-size: 14px; line-height: 1.6; background-color: #fcfcfc; padding: 15px; border-radius: 6px; border: 1px solid #eee;}
-                        .footer { margin-top: 50px; text-align: center; font-size: 11px; color: #999; border-top: 1px solid #eee; padding-top: 10px;}
-                    </style>
-                </head>
-                <body>
-                    <div class="header">
-                        <div class="header-left">
-                            <img src="${baseUrl}logo.png" alt="Logo ADCOL" class="logo-print" onerror="this.src='https://via.placeholder.com/150x50?text=ADCOL'">
-                            <h1>Relatório de Desempenho</h1>
+            const element = document.createElement('div');
+            element.innerHTML = `
+                <div style="padding: 30px; font-family: Arial, sans-serif; color: #333; max-width: 800px; margin: 0 auto; background: #fff;">
+                    <div style="border-bottom: 3px solid #8A151B; padding-bottom: 15px; margin-bottom: 25px; display: flex; justify-content: space-between; align-items: flex-end;">
+                        <div>
+                            <h1 style="color: #8A151B; margin: 0; font-size: 22px; text-transform: uppercase;">Relatório de Desempenho</h1>
                         </div>
-                        <span>Documento Confidencial</span>
+                        <span style="font-size: 11px; color: #777; font-weight: bold;">ADCOL - Documento Confidencial</span>
                     </div>
                     
-                    <div class="info-box">
-                        <p><strong>Colaborador Avaliado:</strong> ${avaliado.nome} (${avaliado.setor})</p>
-                        <p><strong>Gestor Avaliador:</strong> ${avaliador.nome}</p>
-                        <p><strong>Data da Avaliação:</strong> ${dataAval}</p>
+                    <div style="background-color: #f4f4f5; padding: 15px; border-radius: 8px; margin-bottom: 25px;">
+                        <p style="margin: 6px 0; font-size: 13px;"><strong>Colaborador Avaliado:</strong> ${avaliado.nome} (${avaliado.setor})</p>
+                        <p style="margin: 6px 0; font-size: 13px;"><strong>Gestor Avaliador:</strong> ${avaliador.nome}</p>
+                        <p style="margin: 6px 0; font-size: 13px;"><strong>Data da Avaliação:</strong> ${dataAval}</p>
                     </div>
 
-                    <table>
-                        <tr><th>Critério Analisado</th><th style="width: 120px; text-align: center;">Nota (1 a 5)</th></tr>
+                    <table style="width: 100%; border-collapse: collapse; margin-bottom: 25px;">
+                        <tr>
+                            <th style="background-color: #8A151B; color: white; padding: 10px; text-align: left; font-size: 11px; text-transform: uppercase; border: 1px solid #ddd;">Critério Analisado</th>
+                            <th style="width: 100px; text-align: center; background-color: #8A151B; color: white; padding: 10px; font-size: 11px; text-transform: uppercase; border: 1px solid #ddd;">Nota (1 a 5)</th>
+                        </tr>
                         ${evaluationCriteria.map(c => {
                             let nota = avaliacao.notas[c.id] || 0;
-                            return `<tr><td><strong>${c.title}</strong><br><span style="font-size: 11px; color:#666;">${c.desc}</span></td><td style="text-align: center; font-weight: bold; font-size: 16px;">${nota}</td></tr>`;
+                            return `<tr><td style="border: 1px solid #ddd; padding: 10px;"><strong style="font-size: 13px;">${c.title}</strong><br><span style="font-size: 10px; color:#666;">${c.desc}</span></td><td style="border: 1px solid #ddd; padding: 10px; text-align: center; font-weight: bold; font-size: 15px;">${nota}</td></tr>`;
                         }).join('')}
                     </table>
 
-                    <div class="section">
-                        <h3>Pontos Fortes (Destaques)</h3>
-                        <p>${avaliacao.pontos_fortes ? avaliacao.pontos_fortes.replace(/\n/g, '<br>') : 'Nenhum comentário registrado.'}</p>
+                    <div style="margin-bottom: 20px;">
+                        <h3 style="color: #444; border-bottom: 2px solid #eee; padding-bottom: 4px; font-size: 14px; margin-bottom: 10px;">Pontos Fortes (Destaques)</h3>
+                        <p style="font-size: 13px; line-height: 1.5; background-color: #fcfcfc; padding: 12px; border-radius: 6px; border: 1px solid #eee; margin:0;">${avaliacao.pontos_fortes ? avaliacao.pontos_fortes.replace(/\n/g, '<br>') : 'Nenhum comentário registrado.'}</p>
                     </div>
 
-                    <div class="section">
-                        <h3>Plano de Ação (Pontos a Desenvolver)</h3>
-                        <p>${avaliacao.pontos_melhorar ? avaliacao.pontos_melhorar.replace(/\n/g, '<br>') : 'Nenhum comentário registrado.'}</p>
+                    <div style="margin-bottom: 20px;">
+                        <h3 style="color: #444; border-bottom: 2px solid #eee; padding-bottom: 4px; font-size: 14px; margin-bottom: 10px;">Plano de Ação (Pontos a Desenvolver)</h3>
+                        <p style="font-size: 13px; line-height: 1.5; background-color: #fcfcfc; padding: 12px; border-radius: 6px; border: 1px solid #eee; margin:0;">${avaliacao.pontos_melhorar ? avaliacao.pontos_melhorar.replace(/\n/g, '<br>') : 'Nenhum comentário registrado.'}</p>
                     </div>
 
-                    <div class="footer">
+                    <div style="margin-top: 40px; text-align: center; font-size: 10px; color: #999; border-top: 1px solid #eee; padding-top: 8px;">
                         Gerado automaticamente pelo Digital Workplace ADCOL em ${new Date().toLocaleString('pt-BR')}
                     </div>
-                </body>
-                </html>
+                </div>
             `;
-            
-            let printWindow = window.open('', '_blank', 'width=800,height=600');
-            printWindow.document.write(htmlContent);
-            printWindow.document.close();
-            printWindow.focus();
-            
-            setTimeout(() => { 
-                printWindow.print(); 
-                printWindow.onafterprint = function() { printWindow.close(); };
-            }, 500);
+
+            const options = {
+                margin:       [0.4, 0.4, 0.4, 0.4],
+                filename:     `Avaliacao_${avaliado.nome.replace(/ /g, '_')}_${dataAval.replace(/\//g, '_')}.pdf`,
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2, useCORS: true },
+                jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }
+            };
+
+            html2pdf().set(options).from(element).save();
         }
 
         function openEvalModal(userId, userName) { currentEvalUserId = userId; currentEvalScores = {}; document.getElementById('eval-modal-subtitle').innerText = `Avaliando: ${userName}`; document.getElementById('eval-fortes').value = ''; document.getElementById('eval-melhorar').value = ''; document.getElementById('criteria-list').innerHTML = evaluationCriteria.map(crit => `<div class="flex flex-col md:flex-row md:items-center justify-between p-3 border-b border-zinc-100 hover:bg-zinc-50 transition rounded-lg"><div class="mb-2 md:mb-0 md:mr-4 flex-1"><h4 class="font-bold text-sm text-zinc-800">${crit.title}</h4><p class="text-[11px] text-zinc-500 leading-tight">${crit.desc}</p></div><div class="flex space-x-1" id="stars-${crit.id}">${[1,2,3,4,5].map(v => `<i data-lucide="star" onclick="setRating('${crit.id}', ${v})" class="w-6 h-6 text-zinc-200 hover:text-yellow-400 cursor-pointer transition-colors" id="star-${crit.id}-${v}"></i>`).join('')}</div></div>`).join(''); document.getElementById('eval-modal').classList.remove('hidden'); try { lucide.createIcons(); } catch(e){} }
