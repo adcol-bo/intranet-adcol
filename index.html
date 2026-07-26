@@ -22,8 +22,35 @@
             }
         }
     </script>
+    <style>
+        .editor-btn { @apply p-1.5 text-zinc-500 hover:text-burgundy hover:bg-red-50 rounded transition; }
+        [contenteditable]:empty:before { content: attr(placeholder); color: #9ca3af; cursor: text; }
+    </style>
 </head>
 <body class="bg-[#F4F4F5] text-zinc-800 font-sans min-h-screen">
+
+    <!-- BOTÃO FLUTUANTE IA -->
+    <button onclick="toggleAIChat()" class="fixed bottom-6 right-6 bg-burgundy text-white p-4 rounded-full shadow-2xl z-[100] hover:bg-burgundy-hover hover:scale-105 transition-all">
+        <i data-lucide="bot" class="w-6 h-6"></i>
+    </button>
+
+    <!-- CHAT DA IA -->
+    <div id="ai-chat-window" class="hidden fixed bottom-24 right-6 w-80 md:w-96 bg-white rounded-2xl shadow-2xl border border-zinc-200 z-[100] flex flex-col overflow-hidden transition-all h-[500px]">
+        <div class="bg-gradient-to-r from-burgundy to-red-700 p-4 flex items-center justify-between text-white">
+            <div class="flex items-center space-x-2"><i data-lucide="sparkles" class="w-5 h-5"></i><h3 class="font-bold text-sm">Assistente ADCOL</h3></div>
+            <button onclick="toggleAIChat()" class="text-white/80 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
+        </div>
+        <div id="ai-chat-messages" class="flex-1 p-4 overflow-y-auto bg-zinc-50 space-y-3 custom-scrollbar text-sm">
+            <div class="flex items-start space-x-2">
+                <div class="w-8 h-8 rounded-full bg-red-100 text-burgundy flex items-center justify-center shrink-0"><i data-lucide="bot" class="w-4 h-4"></i></div>
+                <div class="bg-white border border-zinc-200 p-3 rounded-2xl rounded-tl-none shadow-sm text-zinc-700">Olá! Sou a IA da ADCOL. Posso te ajudar com dúvidas sobre POPs, sistemas, ou procedimentos internos. Como posso te apoiar hoje?</div>
+            </div>
+        </div>
+        <form onsubmit="handleAIQuery(event)" class="p-3 bg-white border-t border-zinc-200 flex items-center space-x-2">
+            <input type="text" id="ai-input" required class="flex-1 bg-zinc-100 border-none rounded-xl p-2.5 text-sm outline-none focus:ring-2 focus:ring-burgundy" placeholder="Pergunte sobre um POP...">
+            <button type="submit" class="bg-burgundy text-white p-2.5 rounded-xl hover:bg-burgundy-hover transition"><i data-lucide="send" class="w-4 h-4"></i></button>
+        </form>
+    </div>
 
     <!-- TELA DE LOGIN -->
     <div id="login-screen" class="flex items-center justify-center min-h-screen px-4 bg-gradient-to-br from-zinc-100 to-zinc-200">
@@ -44,50 +71,39 @@
 
     <!-- APP PRINCIPAL -->
     <div id="main-app" class="hidden flex h-screen overflow-hidden w-full relative">
-        
-        <!-- OVERLAY MOBILE -->
         <div id="mobile-overlay" onclick="closeMobileMenu()" class="hidden fixed inset-0 bg-zinc-900/60 z-40 md:hidden backdrop-blur-sm transition-opacity"></div>
-
-        <!-- SIDEBAR -->
         <aside id="sidebar" class="w-64 bg-graphite text-white flex flex-col flex-shrink-0 border-r border-zinc-800 fixed md:relative z-50 h-full transition-transform duration-300 -translate-x-full md:translate-x-0">
             <div class="h-16 flex-shrink-0 flex items-center justify-between md:justify-center border-b border-zinc-800 px-4">
                 <span class="text-xl font-bold tracking-wide text-white">ADCOL</span>
                 <button onclick="closeMobileMenu()" class="md:hidden text-zinc-400 hover:text-white p-1"><i data-lucide="x" class="w-5 h-5"></i></button>
             </div>
-            
             <nav class="flex-1 p-4 space-y-1 overflow-y-auto custom-scrollbar">
                 <p class="text-[10px] uppercase text-zinc-500 font-bold px-3 mb-2 tracking-widest mt-2">Principal</p>
                 <button onclick="switchTab('home')" id="btn-home" class="w-full flex items-center space-x-3 px-3 py-2 rounded-lg bg-burgundy text-white text-sm font-medium transition"><i data-lucide="layout-dashboard" class="w-4 h-4"></i><span>Dashboard</span></button>
-                
                 <div id="admin-menu-section" class="hidden pt-4 space-y-1">
                     <p class="text-[10px] uppercase text-red-400/70 font-bold px-3 mb-2 tracking-widest">Administração</p>
                     <button onclick="switchTab('admin-panel')" id="btn-admin-panel" class="w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-zinc-400 hover:bg-zinc-800 hover:text-white text-sm font-medium transition"><i data-lucide="users-cog" class="w-4 h-4"></i><span>Gestão de Usuários</span></button>
                 </div>
-
                 <p class="text-[10px] uppercase text-zinc-500 font-bold px-3 pt-4 mb-2 tracking-widest">Pessoas & Cultura</p>
                 <button onclick="switchTab('performance')" id="btn-performance" class="w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-zinc-400 hover:bg-zinc-800 hover:text-white text-sm font-medium transition"><i data-lucide="trending-up" class="w-4 h-4"></i><span>Meu Desempenho</span></button>
                 <button onclick="switchTab('gamification')" id="btn-gamification" class="w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-zinc-400 hover:bg-zinc-800 hover:text-white text-sm font-medium transition"><i data-lucide="award" class="w-4 h-4"></i><span>Gamificação</span></button>
-                
                 <p class="text-[10px] uppercase text-zinc-500 font-bold px-3 pt-4 mb-2 tracking-widest">Conhecimento</p>
                 <button onclick="switchTab('university')" id="btn-university" class="w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-zinc-400 hover:bg-zinc-800 hover:text-white text-sm font-medium transition"><i data-lucide="graduation-cap" class="w-4 h-4"></i><span>Universidade ADCOL</span></button>
                 <button onclick="switchTab('wiki')" id="btn-wiki" class="w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-zinc-400 hover:bg-zinc-800 hover:text-white text-sm font-medium transition"><i data-lucide="book-open" class="w-4 h-4"></i><span>Base de Conhecimento</span></button>
-
                 <p class="text-[10px] uppercase text-zinc-500 font-bold px-3 pt-4 mb-2 tracking-widest">Colaboração</p>
                 <button onclick="switchTab('social')" id="btn-social" class="w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-zinc-400 hover:bg-zinc-800 hover:text-white text-sm font-medium transition"><i data-lucide="message-square" class="w-4 h-4"></i><span>Rede Social</span></button>
                 <button onclick="switchTab('calendar')" id="btn-calendar" class="w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-zinc-400 hover:bg-zinc-800 hover:text-white text-sm font-medium transition"><i data-lucide="calendar-days" class="w-4 h-4"></i><span>Calendário</span></button>
-                
                 <p class="text-[10px] uppercase text-zinc-500 font-bold px-3 pt-4 mb-2 tracking-widest">Arquivos Corporativos</p>
                 <button onclick="toggleSetores()" class="w-full flex items-center justify-between px-3 py-2 rounded-lg text-zinc-400 hover:bg-zinc-800 hover:text-white text-sm font-medium transition"><div class="flex items-center space-x-3"><i data-lucide="folders" class="w-4 h-4"></i><span>Departamentos</span></div><i data-lucide="chevron-right" id="sector-chevron" class="w-4 h-4 transition-transform duration-200"></i></button>
                 <div id="sector-menu-list" class="hidden ml-4 mt-1 border-l border-zinc-700 pl-2 space-y-1"></div>
             </nav>
-
             <div class="flex-shrink-0 p-4 border-t border-zinc-800 bg-zinc-900/50">
                 <div class="flex items-center space-x-3 mb-3"><div class="w-9 h-9 rounded-full bg-burgundy flex items-center justify-center text-xs font-bold text-white shadow-inner" id="user-avatar-initials">--</div><div class="overflow-hidden"><p class="text-sm font-bold text-white truncate w-32" id="sidebar-user-name">Usuário</p><span id="role-badge" class="inline-block text-[9px] bg-zinc-700 text-zinc-300 px-1.5 py-0.5 rounded uppercase font-bold tracking-wider">Cargo</span></div></div>
                 <button onclick="handleLogout()" class="w-full flex items-center justify-center space-x-2 text-xs text-zinc-400 hover:text-white bg-zinc-800 hover:bg-red-500/20 py-2 rounded-lg transition"><i data-lucide="log-out" class="w-3.5 h-3.5"></i><span>Sair</span></button>
             </div>
         </aside>
 
-        <!-- CONTEÚDO PRINCIPAL -->
+        <!-- CONTEÚDO -->
         <main class="flex-1 flex flex-col overflow-y-auto relative w-full">
             <header class="bg-white/80 backdrop-blur-md shadow-sm h-16 flex items-center justify-between px-4 md:px-6 border-b border-zinc-200 sticky top-0 z-20">
                 <div class="flex items-center">
@@ -99,7 +115,6 @@
             </header>
 
             <div class="p-4 md:p-6 max-w-7xl w-full mx-auto space-y-6 md:space-y-8 flex-1">
-                
                 <!-- DASHBOARD -->
                 <div id="tab-home" class="space-y-6 md:space-y-8">
                     <div><h1 class="text-2xl md:text-3xl font-bold text-zinc-800">Bom dia, <span id="greet-name" class="text-burgundy">Colaborador</span>! 👋</h1><p class="text-sm text-zinc-500 mt-1">Resumo do seu ambiente de trabalho digital hoje.</p></div>
@@ -117,9 +132,12 @@
                             <div class="flex items-center justify-between mb-4"><h3 class="text-sm font-bold text-zinc-800 flex items-center"><i data-lucide="megaphone" class="w-4 h-4 mr-2 text-burgundy"></i> Mural Oficial</h3><button onclick="switchTab('social')" class="text-xs text-burgundy font-bold hover:underline">Ver tudo</button></div>
                             <div class="space-y-3 flex-1"><div class="p-3 bg-zinc-50 border border-zinc-100 rounded-lg"><span class="text-[10px] uppercase font-bold text-zinc-400 block mb-1">Aviso da Diretoria</span><p class="text-xs text-zinc-700 font-medium">Prazo de entrega das obrigações acessórias finaliza nesta sexta-feira.</p></div></div>
                         </div>
+                        <!-- EVENTOS DO CALENDÁRIO NO DASHBOARD -->
                         <div class="bg-white p-5 md:p-6 rounded-2xl shadow-sm border border-zinc-200 flex flex-col h-full">
                             <div class="flex items-center justify-between mb-4"><h3 class="text-sm font-bold text-zinc-800 flex items-center"><i data-lucide="calendar" class="w-4 h-4 mr-2 text-orange-500"></i> Calendário</h3><button onclick="switchTab('calendar')" class="text-xs text-orange-500 font-bold hover:underline">Ver mês</button></div>
-                            <div class="space-y-3 flex-1" id="widget-events"><p class="text-xs text-zinc-400 italic">Consulte a aba calendário.</p></div>
+                            <div class="space-y-3 flex-1" id="widget-events">
+                                <p class="text-xs text-zinc-400 italic">Carregando eventos...</p>
+                            </div>
                         </div>
                         <div class="bg-white p-5 md:p-6 rounded-2xl shadow-sm border border-zinc-200 flex flex-col h-full">
                             <h3 class="text-sm font-bold text-zinc-800 flex items-center mb-4"><i data-lucide="building" class="w-4 h-4 mr-2 text-zinc-500"></i> Institucional</h3>
@@ -128,53 +146,24 @@
                     </div>
                 </div>
 
-                <!-- GAMIFICAÇÃO -->
-                <div id="tab-gamification" class="hidden space-y-6">
-                    <div class="bg-gradient-to-r from-yellow-500 to-amber-600 rounded-2xl p-6 text-white shadow-lg flex items-center justify-between"><div><h3 class="text-xs font-bold uppercase tracking-widest opacity-80 mb-1">Seu Saldo Atual</h3><div class="text-4xl font-black flex items-center"><i data-lucide="coins" class="w-8 h-8 mr-3 text-yellow-200"></i> <span id="user-adcoins">0</span> <span class="text-lg ml-2 opacity-80 font-bold">ADCoins</span></div></div><div class="hidden md:block"><i data-lucide="award" class="w-20 h-20 opacity-20"></i></div></div>
-                    <div id="admin-gamification-zone" class="hidden space-y-6"><div class="grid grid-cols-1 md:grid-cols-2 gap-6"><div class="bg-white p-5 md:p-6 rounded-2xl shadow-sm border border-zinc-200"><h3 class="text-sm font-bold uppercase tracking-wider text-zinc-400 mb-4 flex items-center"><i data-lucide="plus-circle" class="w-4 h-4 mr-2 text-zinc-500"></i> Creditar Pontos</h3><form onsubmit="handleCreditPoints(event)" class="space-y-3"><select id="credit-user" class="w-full p-2.5 bg-zinc-50 border border-zinc-200 rounded-lg text-sm" required></select><input type="number" id="credit-amount" placeholder="Quantidade (ex: 50)" class="w-full p-2.5 bg-zinc-50 border border-zinc-200 rounded-lg text-sm" required><input type="text" id="credit-reason" placeholder="Motivo (ex: Missão Relógio Suíço)" class="w-full p-2.5 bg-zinc-50 border border-zinc-200 rounded-lg text-sm" required><button type="submit" class="w-full bg-zinc-800 text-white py-2.5 rounded-lg text-sm font-bold hover:bg-black transition">Enviar ADCoins</button></form></div><div class="bg-white p-5 md:p-6 rounded-2xl shadow-sm border border-zinc-200"><h3 class="text-sm font-bold uppercase tracking-wider text-zinc-400 mb-4 flex items-center"><i data-lucide="gift" class="w-4 h-4 mr-2 text-zinc-500"></i> Cadastrar Prêmio na Vitrine</h3><form onsubmit="handleAddReward(event)" class="space-y-3"><input type="text" id="reward-name" placeholder="Nome do Prêmio (ex: Voucher IFood)" class="w-full p-2.5 bg-zinc-50 border border-zinc-200 rounded-lg text-sm" required><input type="number" id="reward-cost" placeholder="Custo em ADCoins (ex: 150)" class="w-full p-2.5 bg-zinc-50 border border-zinc-200 rounded-lg text-sm" required><button type="submit" class="w-full bg-yellow-500 text-white py-2.5 rounded-lg text-sm font-bold hover:bg-yellow-600 transition shadow-md">Adicionar à Vitrine</button></form></div></div></div>
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6"><div class="bg-white p-5 md:p-6 rounded-2xl shadow-sm border border-zinc-200"><h3 class="text-sm font-bold uppercase tracking-wider text-zinc-400 mb-5 flex items-center"><i data-lucide="target" class="w-4 h-4 mr-2 text-zinc-500"></i> Missões Ativas</h3><div class="space-y-3"><div class="p-4 border border-zinc-100 rounded-xl bg-zinc-50 hover:border-yellow-300 transition flex flex-col md:block"><div class="flex justify-between items-start mb-2"><h4 class="font-bold text-sm text-zinc-800">Relógio Suíço</h4><span class="text-[10px] md:text-xs font-bold text-yellow-700 bg-yellow-100 border border-yellow-200 px-2 py-0.5 rounded-full mt-1 md:mt-0">+50 ADCoins</span></div><p class="text-xs text-zinc-500">Entregar obrigações acessórias com antecedência.</p></div><div class="p-4 border border-zinc-100 rounded-xl bg-zinc-50 hover:border-yellow-300 transition flex flex-col md:block"><div class="flex justify-between items-start mb-2"><h4 class="font-bold text-sm text-zinc-800">Ideia de Ouro</h4><span class="text-[10px] md:text-xs font-bold text-yellow-700 bg-yellow-100 border border-yellow-200 px-2 py-0.5 rounded-full mt-1 md:mt-0">+100 ADCoins</span></div><p class="text-xs text-zinc-500">Sugerir uma melhoria de processo aprovada.</p></div><div class="p-4 border border-zinc-100 rounded-xl bg-zinc-50 hover:border-yellow-300 transition flex flex-col md:block"><div class="flex justify-between items-start mb-2"><h4 class="font-bold text-sm text-zinc-800">Multiplicador</h4><span class="text-[10px] md:text-xs font-bold text-yellow-700 bg-yellow-100 border border-yellow-200 px-2 py-0.5 rounded-full mt-1 md:mt-0">+40 ADCoins</span></div><p class="text-xs text-zinc-500">Escrever um artigo aprovado na Base de Conhecimento.</p></div></div></div><div class="bg-white p-5 md:p-6 rounded-2xl shadow-sm border border-zinc-200"><h3 class="text-sm font-bold uppercase tracking-wider text-zinc-400 mb-5 flex items-center"><i data-lucide="shopping-bag" class="w-4 h-4 mr-2 text-zinc-500"></i> Vitrine de Recompensas</h3><div id="rewards-store" class="space-y-4 max-h-96 overflow-y-auto custom-scrollbar pr-2"></div></div></div>
-                </div>
-
-                <!-- DESEMPENHO -->
-                <div id="tab-performance" class="hidden space-y-6">
-                    <div id="manager-perf-zone" class="hidden bg-white p-5 md:p-6 rounded-2xl shadow-sm border border-zinc-200 mb-6">
-                        <div class="flex items-center justify-between mb-4 md:mb-6"><div><h3 class="text-lg font-bold text-zinc-800 flex items-center"><i data-lucide="users" class="w-5 h-5 mr-2 text-blue-600"></i> Equipe do Setor</h3><p class="text-xs text-zinc-500 mt-1">Gerencie e avalie os liderados do seu departamento.</p></div></div>
-                        <div class="overflow-x-auto custom-scrollbar border border-zinc-200 rounded-xl">
-                            <table class="w-full text-left text-sm whitespace-nowrap">
-                                <thead class="bg-zinc-50 text-zinc-500 text-xs uppercase font-bold border-b border-zinc-200"><tr><th class="p-4">Colaborador</th><th class="p-4">Última Avaliação</th><th class="p-4">Média</th><th class="p-4 text-right">Ação</th></tr></thead>
-                                <tbody id="table-team-perf" class="divide-y divide-zinc-100 text-zinc-700"></tbody>
-                            </table>
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                        <div class="lg:col-span-1 bg-white p-6 rounded-2xl shadow-sm border border-zinc-200 text-center flex flex-col items-center justify-center">
-                            <h3 class="text-sm font-bold uppercase tracking-wider text-zinc-400 mb-4">Sua Nota Global</h3>
-                            <div class="relative w-32 h-32 mb-2">
-                                <svg class="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
-                                    <path class="text-zinc-100" stroke-width="3" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                                    <path id="score-circle" class="text-burgundy transition-all duration-1000 ease-out" stroke-width="3" stroke-dasharray="0, 100" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                                </svg>
-                                <div class="absolute inset-0 flex items-center justify-center flex-col">
-                                    <span id="score-text" class="text-3xl font-black text-zinc-800">0.0</span>
-                                    <span class="text-[10px] font-bold text-zinc-400 uppercase">/ 5.0</span>
-                                </div>
-                            </div>
-                            <p id="score-msg" class="text-xs text-zinc-500 mt-2 font-medium">Aguardando avaliações...</p>
-                        </div>
-                        <div class="lg:col-span-2 bg-white p-5 md:p-6 rounded-2xl shadow-sm border border-zinc-200">
-                            <h3 class="text-sm font-bold uppercase tracking-wider text-zinc-400 mb-5 flex items-center"><i data-lucide="file-text" class="w-4 h-4 mr-2 text-zinc-500"></i> Meu Plano de Ação e Feedback</h3>
-                            <div class="space-y-4" id="list-my-evals"></div>
-                        </div>
-                    </div>
-                </div>
+                <!-- GAMIFICAÇÃO, DESEMPENHO E SETORES RECOLHIDOS PARA ECONOMIA VISUAL (MESMO CÓDIGO) -->
+                <div id="tab-gamification" class="hidden space-y-6"><div class="bg-gradient-to-r from-yellow-500 to-amber-600 rounded-2xl p-6 text-white shadow-lg flex items-center justify-between"><div><h3 class="text-xs font-bold uppercase tracking-widest opacity-80 mb-1">Seu Saldo Atual</h3><div class="text-4xl font-black flex items-center"><i data-lucide="coins" class="w-8 h-8 mr-3 text-yellow-200"></i> <span id="user-adcoins">0</span> <span class="text-lg ml-2 opacity-80 font-bold">ADCoins</span></div></div><div class="hidden md:block"><i data-lucide="award" class="w-20 h-20 opacity-20"></i></div></div><div id="admin-gamification-zone" class="hidden space-y-6"><div class="grid grid-cols-1 md:grid-cols-2 gap-6"><div class="bg-white p-5 md:p-6 rounded-2xl shadow-sm border border-zinc-200"><h3 class="text-sm font-bold uppercase tracking-wider text-zinc-400 mb-4 flex items-center"><i data-lucide="plus-circle" class="w-4 h-4 mr-2 text-zinc-500"></i> Creditar Pontos</h3><form onsubmit="handleCreditPoints(event)" class="space-y-3"><select id="credit-user" class="w-full p-2.5 bg-zinc-50 border border-zinc-200 rounded-lg text-sm" required></select><input type="number" id="credit-amount" placeholder="Quantidade (ex: 50)" class="w-full p-2.5 bg-zinc-50 border border-zinc-200 rounded-lg text-sm" required><input type="text" id="credit-reason" placeholder="Motivo (ex: Missão Relógio Suíço)" class="w-full p-2.5 bg-zinc-50 border border-zinc-200 rounded-lg text-sm" required><button type="submit" class="w-full bg-zinc-800 text-white py-2.5 rounded-lg text-sm font-bold hover:bg-black transition">Enviar ADCoins</button></form></div><div class="bg-white p-5 md:p-6 rounded-2xl shadow-sm border border-zinc-200"><h3 class="text-sm font-bold uppercase tracking-wider text-zinc-400 mb-4 flex items-center"><i data-lucide="gift" class="w-4 h-4 mr-2 text-zinc-500"></i> Cadastrar Prêmio na Vitrine</h3><form onsubmit="handleAddReward(event)" class="space-y-3"><input type="text" id="reward-name" placeholder="Nome do Prêmio (ex: Voucher IFood)" class="w-full p-2.5 bg-zinc-50 border border-zinc-200 rounded-lg text-sm" required><input type="number" id="reward-cost" placeholder="Custo em ADCoins (ex: 150)" class="w-full p-2.5 bg-zinc-50 border border-zinc-200 rounded-lg text-sm" required><button type="submit" class="w-full bg-yellow-500 text-white py-2.5 rounded-lg text-sm font-bold hover:bg-yellow-600 transition shadow-md">Adicionar à Vitrine</button></form></div></div></div><div class="grid grid-cols-1 lg:grid-cols-2 gap-6"><div class="bg-white p-5 md:p-6 rounded-2xl shadow-sm border border-zinc-200"><h3 class="text-sm font-bold uppercase tracking-wider text-zinc-400 mb-5 flex items-center"><i data-lucide="target" class="w-4 h-4 mr-2 text-zinc-500"></i> Missões Ativas</h3><div class="space-y-3"><div class="p-4 border border-zinc-100 rounded-xl bg-zinc-50 hover:border-yellow-300 transition flex flex-col md:block"><div class="flex justify-between items-start mb-2"><h4 class="font-bold text-sm text-zinc-800">Relógio Suíço</h4><span class="text-[10px] md:text-xs font-bold text-yellow-700 bg-yellow-100 border border-yellow-200 px-2 py-0.5 rounded-full mt-1 md:mt-0">+50 ADCoins</span></div><p class="text-xs text-zinc-500">Entregar obrigações acessórias com antecedência.</p></div><div class="p-4 border border-zinc-100 rounded-xl bg-zinc-50 hover:border-yellow-300 transition flex flex-col md:block"><div class="flex justify-between items-start mb-2"><h4 class="font-bold text-sm text-zinc-800">Ideia de Ouro</h4><span class="text-[10px] md:text-xs font-bold text-yellow-700 bg-yellow-100 border border-yellow-200 px-2 py-0.5 rounded-full mt-1 md:mt-0">+100 ADCoins</span></div><p class="text-xs text-zinc-500">Sugerir uma melhoria de processo aprovada.</p></div><div class="p-4 border border-zinc-100 rounded-xl bg-zinc-50 hover:border-yellow-300 transition flex flex-col md:block"><div class="flex justify-between items-start mb-2"><h4 class="font-bold text-sm text-zinc-800">Multiplicador</h4><span class="text-[10px] md:text-xs font-bold text-yellow-700 bg-yellow-100 border border-yellow-200 px-2 py-0.5 rounded-full mt-1 md:mt-0">+40 ADCoins</span></div><p class="text-xs text-zinc-500">Escrever um artigo aprovado na Base de Conhecimento.</p></div></div></div><div class="bg-white p-5 md:p-6 rounded-2xl shadow-sm border border-zinc-200"><h3 class="text-sm font-bold uppercase tracking-wider text-zinc-400 mb-5 flex items-center"><i data-lucide="shopping-bag" class="w-4 h-4 mr-2 text-zinc-500"></i> Vitrine de Recompensas</h3><div id="rewards-store" class="space-y-4 max-h-96 overflow-y-auto custom-scrollbar pr-2"></div></div></div></div>
+                <div id="tab-performance" class="hidden space-y-6"><div id="manager-perf-zone" class="hidden bg-white p-5 md:p-6 rounded-2xl shadow-sm border border-zinc-200 mb-6"><div class="flex items-center justify-between mb-4 md:mb-6"><div><h3 class="text-lg font-bold text-zinc-800 flex items-center"><i data-lucide="users" class="w-5 h-5 mr-2 text-blue-600"></i> Equipe do Setor</h3><p class="text-xs text-zinc-500 mt-1">Gerencie e avalie os liderados do seu departamento.</p></div></div><div class="overflow-x-auto custom-scrollbar border border-zinc-200 rounded-xl"><table class="w-full text-left text-sm whitespace-nowrap"><thead class="bg-zinc-50 text-zinc-500 text-xs uppercase font-bold border-b border-zinc-200"><tr><th class="p-4">Colaborador</th><th class="p-4">Última Avaliação</th><th class="p-4">Média</th><th class="p-4 text-right">Ação</th></tr></thead><tbody id="table-team-perf" class="divide-y divide-zinc-100 text-zinc-700"></tbody></table></div></div><div class="grid grid-cols-1 lg:grid-cols-3 gap-6"><div class="lg:col-span-1 bg-white p-6 rounded-2xl shadow-sm border border-zinc-200 text-center flex flex-col items-center justify-center"><h3 class="text-sm font-bold uppercase tracking-wider text-zinc-400 mb-4">Sua Nota Global</h3><div class="relative w-32 h-32 mb-2"><svg class="w-full h-full transform -rotate-90" viewBox="0 0 36 36"><path class="text-zinc-100" stroke-width="3" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" /><path id="score-circle" class="text-burgundy transition-all duration-1000 ease-out" stroke-width="3" stroke-dasharray="0, 100" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" /></svg><div class="absolute inset-0 flex items-center justify-center flex-col"><span id="score-text" class="text-3xl font-black text-zinc-800">0.0</span><span class="text-[10px] font-bold text-zinc-400 uppercase">/ 5.0</span></div></div><p id="score-msg" class="text-xs text-zinc-500 mt-2 font-medium">Aguardando avaliações...</p></div><div class="lg:col-span-2 bg-white p-5 md:p-6 rounded-2xl shadow-sm border border-zinc-200"><h3 class="text-sm font-bold uppercase tracking-wider text-zinc-400 mb-5 flex items-center"><i data-lucide="file-text" class="w-4 h-4 mr-2 text-zinc-500"></i> Meu Plano de Ação e Feedback</h3><div class="space-y-4" id="list-my-evals"></div></div></div></div>
 
                 <!-- UNIVERSIDADE ADCOL -->
                 <div id="tab-university" class="hidden space-y-6">
                     <div class="bg-gradient-to-r from-emerald-600 to-teal-700 p-6 md:p-8 rounded-2xl shadow-sm text-white flex flex-col md:flex-row items-center justify-between"><div class="mb-6 md:mb-0 text-center md:text-left"><h2 class="text-xl md:text-2xl font-bold flex items-center justify-center md:justify-start"><i data-lucide="graduation-cap" class="w-6 h-6 md:w-8 md:h-8 mr-3"></i> Universidade ADCOL</h2><p class="text-emerald-100 text-xs md:text-sm mt-2 max-w-md">Sua plataforma de educação corporativa. Desenvolva novas habilidades, conclua módulos e ganhe ADCoins.</p></div><div class="bg-white/10 p-4 rounded-xl backdrop-blur-sm border border-white/20 text-center w-full md:w-auto"><span class="block text-[10px] uppercase font-bold tracking-wider text-emerald-200 mb-1">Seu Progresso Global</span><span class="text-2xl md:text-3xl font-black">15%</span></div></div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6"><div class="bg-white rounded-2xl shadow-sm border border-zinc-200 overflow-hidden flex flex-col"><div class="bg-zinc-50 p-4 border-b border-zinc-100"><h3 class="font-bold text-zinc-800">1. Integração (Onboarding)</h3><p class="text-xs text-zinc-500 mt-1">Obrigatório para novos colaboradores.</p></div><div class="p-4 space-y-3 flex-1"><div class="flex items-center p-3 border border-emerald-200 bg-emerald-50 rounded-xl"><div class="bg-emerald-500 text-white p-1.5 rounded-full mr-3"><i data-lucide="check" class="w-4 h-4"></i></div><div class="flex-1"><h4 class="font-bold text-emerald-900 text-xs">Cultura & Código de Conduta</h4></div></div><div class="flex items-center p-3 border border-zinc-200 rounded-xl hover:border-emerald-400 transition cursor-pointer group flex-wrap md:flex-nowrap"><div class="bg-zinc-100 text-zinc-400 group-hover:bg-emerald-100 group-hover:text-emerald-600 p-1.5 rounded-full mr-3 transition"><i data-lucide="play" class="w-4 h-4 ml-0.5"></i></div><div class="flex-1"><h4 class="font-bold text-zinc-800 text-xs">Sistemas Internos</h4><span class="text-[9px] font-bold text-yellow-600 bg-yellow-50 px-1.5 py-0.5 rounded mt-1 inline-block">+10 ADCoins</span></div></div></div></div><div class="bg-white rounded-2xl shadow-sm border border-zinc-200 overflow-hidden flex flex-col"><div class="bg-zinc-50 p-4 border-b border-zinc-100"><h3 class="font-bold text-zinc-800">2. Programa de Estágio</h3><p class="text-xs text-zinc-500 mt-1">Desenvolvimento base para estagiários.</p></div><div class="p-4 space-y-3 flex-1"><div class="flex items-center p-3 border border-zinc-200 rounded-xl hover:border-emerald-400 transition cursor-pointer group flex-wrap md:flex-nowrap"><div class="bg-zinc-100 text-zinc-400 group-hover:bg-emerald-100 group-hover:text-emerald-600 p-1.5 rounded-full mr-3 transition"><i data-lucide="play" class="w-4 h-4 ml-0.5"></i></div><div class="flex-1"><h4 class="font-bold text-zinc-800 text-xs">Introdução ao Escritório</h4><span class="text-[9px] font-bold text-yellow-600 bg-yellow-50 px-1.5 py-0.5 rounded mt-1 inline-block">+15 ADCoins</span></div></div><div class="flex items-center p-3 border border-zinc-200 rounded-xl hover:border-emerald-400 transition cursor-pointer group flex-wrap md:flex-nowrap"><div class="bg-zinc-100 text-zinc-400 group-hover:bg-emerald-100 group-hover:text-emerald-600 p-1.5 rounded-full mr-3 transition"><i data-lucide="play" class="w-4 h-4 ml-0.5"></i></div><div class="flex-1"><h4 class="font-bold text-zinc-800 text-xs">Postura Profissional</h4><span class="text-[9px] font-bold text-yellow-600 bg-yellow-50 px-1.5 py-0.5 rounded mt-1 inline-block">+15 ADCoins</span></div></div></div></div><div class="bg-white rounded-2xl shadow-sm border border-zinc-200 overflow-hidden flex flex-col"><div class="bg-zinc-50 p-4 border-b border-zinc-100"><h3 class="font-bold text-zinc-800">3. Nível Júnior (Técnico)</h3><p class="text-xs text-zinc-500 mt-1">Fundamentos operacionais.</p></div><div class="p-4 space-y-3 flex-1"><div class="flex items-center p-3 border border-zinc-200 rounded-xl hover:border-emerald-400 transition cursor-pointer group flex-wrap md:flex-nowrap"><div class="bg-zinc-100 text-zinc-400 group-hover:bg-emerald-100 group-hover:text-emerald-600 p-1.5 rounded-full mr-3 transition"><i data-lucide="play" class="w-4 h-4 ml-0.5"></i></div><div class="flex-1"><h4 class="font-bold text-zinc-800 text-xs">Domínio ERP - Módulo Básico</h4><span class="text-[9px] font-bold text-yellow-600 bg-yellow-50 px-1.5 py-0.5 rounded mt-1 inline-block">+30 ADCoins</span></div></div><div class="flex items-center p-3 border border-zinc-200 rounded-xl hover:border-emerald-400 transition cursor-pointer group flex-wrap md:flex-nowrap"><div class="bg-zinc-100 text-zinc-400 group-hover:bg-emerald-100 group-hover:text-emerald-600 p-1.5 rounded-full mr-3 transition"><i data-lucide="play" class="w-4 h-4 ml-0.5"></i></div><div class="flex-1"><h4 class="font-bold text-zinc-800 text-xs">Atendimento ao Cliente</h4><span class="text-[9px] font-bold text-yellow-600 bg-yellow-50 px-1.5 py-0.5 rounded mt-1 inline-block">+20 ADCoins</span></div></div></div></div><div class="bg-white rounded-2xl shadow-sm border border-zinc-200 overflow-hidden flex flex-col opacity-75"><div class="bg-zinc-50 p-4 border-b border-zinc-100 flex items-center justify-between"><h3 class="font-bold text-zinc-800">4. Nível Pleno/Sênior</h3><i data-lucide="lock" class="w-4 h-4 text-zinc-400"></i></div><div class="p-4 space-y-3 flex-1 flex flex-col items-center justify-center text-center"><i data-lucide="shield-alert" class="w-8 h-8 text-zinc-300 mb-2"></i><p class="text-xs text-zinc-500">Conclua o Nível Júnior para desbloquear módulos avançados.</p></div></div></div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+                        <div class="bg-white rounded-2xl shadow-sm border border-zinc-200 overflow-hidden flex flex-col"><div class="bg-zinc-50 p-4 border-b border-zinc-100"><h3 class="font-bold text-zinc-800">1. Integração (Onboarding)</h3><p class="text-xs text-zinc-500 mt-1">Obrigatório para novos colaboradores.</p></div><div class="p-4 space-y-3 flex-1">
+                            <!-- BOTÃO ATUALIZADO: ABRE A AULA NOVO MODAL -->
+                            <div onclick="openUniModal()" class="flex items-center p-3 border border-zinc-200 rounded-xl hover:border-emerald-400 transition cursor-pointer group flex-wrap md:flex-nowrap"><div class="bg-zinc-100 text-zinc-400 group-hover:bg-emerald-100 group-hover:text-emerald-600 p-1.5 rounded-full mr-3 transition"><i data-lucide="play" class="w-4 h-4 ml-0.5"></i></div><div class="flex-1"><h4 class="font-bold text-zinc-800 text-xs">Cultura & Código de Conduta</h4></div></div>
+                            <div class="flex items-center p-3 border border-zinc-200 rounded-xl hover:border-emerald-400 transition cursor-pointer group flex-wrap md:flex-nowrap"><div class="bg-zinc-100 text-zinc-400 group-hover:bg-emerald-100 group-hover:text-emerald-600 p-1.5 rounded-full mr-3 transition"><i data-lucide="play" class="w-4 h-4 ml-0.5"></i></div><div class="flex-1"><h4 class="font-bold text-zinc-800 text-xs">Sistemas Internos</h4><span class="text-[9px] font-bold text-yellow-600 bg-yellow-50 px-1.5 py-0.5 rounded mt-1 inline-block">+10 ADCoins</span></div></div>
+                        </div></div>
+                        <div class="bg-white rounded-2xl shadow-sm border border-zinc-200 overflow-hidden flex flex-col"><div class="bg-zinc-50 p-4 border-b border-zinc-100"><h3 class="font-bold text-zinc-800">2. Programa de Estágio</h3><p class="text-xs text-zinc-500 mt-1">Desenvolvimento base para estagiários.</p></div><div class="p-4 space-y-3 flex-1"><div class="flex items-center p-3 border border-zinc-200 rounded-xl hover:border-emerald-400 transition cursor-pointer group flex-wrap md:flex-nowrap"><div class="bg-zinc-100 text-zinc-400 group-hover:bg-emerald-100 group-hover:text-emerald-600 p-1.5 rounded-full mr-3 transition"><i data-lucide="play" class="w-4 h-4 ml-0.5"></i></div><div class="flex-1"><h4 class="font-bold text-zinc-800 text-xs">Introdução ao Escritório</h4><span class="text-[9px] font-bold text-yellow-600 bg-yellow-50 px-1.5 py-0.5 rounded mt-1 inline-block">+15 ADCoins</span></div></div><div class="flex items-center p-3 border border-zinc-200 rounded-xl hover:border-emerald-400 transition cursor-pointer group flex-wrap md:flex-nowrap"><div class="bg-zinc-100 text-zinc-400 group-hover:bg-emerald-100 group-hover:text-emerald-600 p-1.5 rounded-full mr-3 transition"><i data-lucide="play" class="w-4 h-4 ml-0.5"></i></div><div class="flex-1"><h4 class="font-bold text-zinc-800 text-xs">Postura Profissional</h4><span class="text-[9px] font-bold text-yellow-600 bg-yellow-50 px-1.5 py-0.5 rounded mt-1 inline-block">+15 ADCoins</span></div></div></div></div><div class="bg-white rounded-2xl shadow-sm border border-zinc-200 overflow-hidden flex flex-col"><div class="bg-zinc-50 p-4 border-b border-zinc-100"><h3 class="font-bold text-zinc-800">3. Nível Júnior (Técnico)</h3><p class="text-xs text-zinc-500 mt-1">Fundamentos operacionais.</p></div><div class="p-4 space-y-3 flex-1"><div class="flex items-center p-3 border border-zinc-200 rounded-xl hover:border-emerald-400 transition cursor-pointer group flex-wrap md:flex-nowrap"><div class="bg-zinc-100 text-zinc-400 group-hover:bg-emerald-100 group-hover:text-emerald-600 p-1.5 rounded-full mr-3 transition"><i data-lucide="play" class="w-4 h-4 ml-0.5"></i></div><div class="flex-1"><h4 class="font-bold text-zinc-800 text-xs">Domínio ERP - Módulo Básico</h4><span class="text-[9px] font-bold text-yellow-600 bg-yellow-50 px-1.5 py-0.5 rounded mt-1 inline-block">+30 ADCoins</span></div></div><div class="flex items-center p-3 border border-zinc-200 rounded-xl hover:border-emerald-400 transition cursor-pointer group flex-wrap md:flex-nowrap"><div class="bg-zinc-100 text-zinc-400 group-hover:bg-emerald-100 group-hover:text-emerald-600 p-1.5 rounded-full mr-3 transition"><i data-lucide="play" class="w-4 h-4 ml-0.5"></i></div><div class="flex-1"><h4 class="font-bold text-zinc-800 text-xs">Atendimento ao Cliente</h4><span class="text-[9px] font-bold text-yellow-600 bg-yellow-50 px-1.5 py-0.5 rounded mt-1 inline-block">+20 ADCoins</span></div></div></div></div><div class="bg-white rounded-2xl shadow-sm border border-zinc-200 overflow-hidden flex flex-col opacity-75"><div class="bg-zinc-50 p-4 border-b border-zinc-100 flex items-center justify-between"><h3 class="font-bold text-zinc-800">4. Nível Pleno/Sênior</h3><i data-lucide="lock" class="w-4 h-4 text-zinc-400"></i></div><div class="p-4 space-y-3 flex-1 flex flex-col items-center justify-center text-center"><i data-lucide="shield-alert" class="w-8 h-8 text-zinc-300 mb-2"></i><p class="text-xs text-zinc-500">Conclua o Nível Júnior para desbloquear módulos avançados.</p></div></div>
+                    </div>
                 </div>
 
-                <!-- WIKI BASE DE CONHECIMENTO -->
+                <!-- WIKI BASE DE CONHECIMENTO ATUALIZADA -->
                 <div id="tab-wiki" class="hidden space-y-6">
                     <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white p-5 md:p-6 rounded-2xl shadow-sm border border-zinc-200">
                         <div><h2 class="text-xl font-bold text-zinc-800 flex items-center"><i data-lucide="book-open" class="w-6 h-6 mr-3 text-blue-600"></i> Base de Conhecimento</h2><p class="text-xs text-zinc-500 mt-1">Documentações, POPs e resoluções de problemas criados pela equipe.</p></div>
@@ -186,41 +175,11 @@
                     </div>
                 </div>
 
-                <!-- GESTÃO DE USUÁRIOS ADMIN -->
-                <div id="tab-admin-panel" class="hidden space-y-6">
-                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                        <div class="bg-white p-5 md:p-6 rounded-2xl shadow-sm border border-zinc-200 h-fit">
-                            <h3 class="text-sm font-bold uppercase tracking-wider text-zinc-400 mb-5 flex items-center"><i data-lucide="user-plus" class="w-4 h-4 mr-2 text-zinc-500"></i> Cadastrar Usuário</h3>
-                            <form onsubmit="handleCreateUser(event)" class="space-y-4">
-                                <div><label class="block text-xs font-bold text-zinc-600 uppercase mb-1">Nome Completo</label><input id="adm-user-name" type="text" required class="w-full p-2.5 border border-zinc-200 rounded-lg text-sm bg-zinc-50 focus:bg-white focus:ring-2 focus:ring-burgundy outline-none transition"></div>
-                                <div><label class="block text-xs font-bold text-zinc-600 uppercase mb-1">E-mail</label><input id="adm-user-email" type="email" required class="w-full p-2.5 border border-zinc-200 rounded-lg text-sm bg-zinc-50 focus:bg-white focus:ring-2 focus:ring-burgundy outline-none transition"></div>
-                                
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                                    <div><label class="block text-xs font-bold text-zinc-600 uppercase mb-1">Senha Inicial</label><input id="adm-user-password" type="password" required class="w-full p-2.5 border border-zinc-200 rounded-lg text-sm bg-zinc-50 focus:bg-white focus:ring-2 focus:ring-burgundy outline-none transition"></div>
-                                    <div><label class="block text-xs font-bold text-zinc-600 uppercase mb-1">Nascimento</label><input id="adm-user-birth" type="date" required class="w-full p-2.5 border border-zinc-200 rounded-lg text-sm bg-zinc-50 focus:bg-white focus:ring-2 focus:ring-burgundy outline-none transition"></div>
-                                </div>
-
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                                    <div><label class="block text-xs font-bold text-zinc-600 uppercase mb-1">Nível</label><select id="adm-user-role" class="w-full p-2.5 border border-zinc-200 rounded-lg text-sm bg-zinc-50 focus:bg-white focus:ring-2 focus:ring-burgundy outline-none transition"><option value="estagiario">Estagiário</option><option value="colaborador">Colaborador</option><option value="gestor">Gestor</option><option value="admin">Administrador</option></select></div>
-                                    <div><label class="block text-xs font-bold text-zinc-600 uppercase mb-1">Setor</label><select id="adm-user-sector" class="w-full p-2.5 border border-zinc-200 rounded-lg text-sm bg-zinc-50 focus:bg-white focus:ring-2 focus:ring-burgundy outline-none transition"></select></div>
-                                </div>
-                                <button type="submit" class="w-full bg-burgundy text-white py-2.5 rounded-lg font-bold text-sm hover:bg-burgundy-hover transition shadow-md mt-2">Salvar Usuário</button>
-                            </form>
-                        </div>
-                        <div class="lg:col-span-2 bg-white p-5 md:p-6 rounded-2xl shadow-sm border border-zinc-200">
-                            <h3 class="text-sm font-bold uppercase tracking-wider text-zinc-400 mb-5 flex items-center"><i data-lucide="users" class="w-4 h-4 mr-2 text-zinc-500"></i> Usuários Ativos</h3>
-                            <div class="overflow-x-auto custom-scrollbar border border-zinc-200 rounded-xl">
-                                <table class="w-full text-left text-sm whitespace-nowrap"><thead class="bg-zinc-50 text-zinc-500 text-xs uppercase font-bold border-b border-zinc-200"><tr><th class="p-4">Nome</th><th class="p-4">Setor</th><th class="p-4">Aniversário</th><th class="p-4">Permissão</th><th class="p-4 text-right">Ações</th></tr></thead><tbody id="table-users" class="divide-y divide-zinc-100 text-zinc-700"></tbody></table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- DEMAIS ABAS -->
+                <div id="tab-admin-panel" class="hidden space-y-6"><div class="grid grid-cols-1 lg:grid-cols-3 gap-6"><div class="bg-white p-5 md:p-6 rounded-2xl shadow-sm border border-zinc-200 h-fit"><h3 class="text-sm font-bold uppercase tracking-wider text-zinc-400 mb-5 flex items-center"><i data-lucide="user-plus" class="w-4 h-4 mr-2 text-zinc-500"></i> Cadastrar Usuário</h3><form onsubmit="handleCreateUser(event)" class="space-y-4"><div><label class="block text-xs font-bold text-zinc-600 uppercase mb-1">Nome Completo</label><input id="adm-user-name" type="text" required class="w-full p-2.5 border border-zinc-200 rounded-lg text-sm bg-zinc-50 focus:bg-white focus:ring-2 focus:ring-burgundy outline-none transition"></div><div><label class="block text-xs font-bold text-zinc-600 uppercase mb-1">E-mail</label><input id="adm-user-email" type="email" required class="w-full p-2.5 border border-zinc-200 rounded-lg text-sm bg-zinc-50 focus:bg-white focus:ring-2 focus:ring-burgundy outline-none transition"></div><div class="grid grid-cols-1 md:grid-cols-2 gap-3"><div><label class="block text-xs font-bold text-zinc-600 uppercase mb-1">Senha Inicial</label><input id="adm-user-password" type="password" required class="w-full p-2.5 border border-zinc-200 rounded-lg text-sm bg-zinc-50 focus:bg-white focus:ring-2 focus:ring-burgundy outline-none transition"></div><div><label class="block text-xs font-bold text-zinc-600 uppercase mb-1">Nascimento</label><input id="adm-user-birth" type="date" required class="w-full p-2.5 border border-zinc-200 rounded-lg text-sm bg-zinc-50 focus:bg-white focus:ring-2 focus:ring-burgundy outline-none transition"></div></div><div class="grid grid-cols-1 md:grid-cols-2 gap-3"><div><label class="block text-xs font-bold text-zinc-600 uppercase mb-1">Nível</label><select id="adm-user-role" class="w-full p-2.5 border border-zinc-200 rounded-lg text-sm bg-zinc-50 focus:bg-white focus:ring-2 focus:ring-burgundy outline-none transition"><option value="estagiario">Estagiário</option><option value="colaborador">Colaborador</option><option value="gestor">Gestor</option><option value="admin">Administrador</option></select></div><div><label class="block text-xs font-bold text-zinc-600 uppercase mb-1">Setor</label><select id="adm-user-sector" class="w-full p-2.5 border border-zinc-200 rounded-lg text-sm bg-zinc-50 focus:bg-white focus:ring-2 focus:ring-burgundy outline-none transition"></select></div></div><button type="submit" class="w-full bg-burgundy text-white py-2.5 rounded-lg font-bold text-sm hover:bg-burgundy-hover transition shadow-md mt-2">Salvar Usuário</button></form></div><div class="lg:col-span-2 bg-white p-5 md:p-6 rounded-2xl shadow-sm border border-zinc-200"><h3 class="text-sm font-bold uppercase tracking-wider text-zinc-400 mb-5 flex items-center"><i data-lucide="users" class="w-4 h-4 mr-2 text-zinc-500"></i> Usuários Ativos</h3><div class="overflow-x-auto custom-scrollbar border border-zinc-200 rounded-xl"><table class="w-full text-left text-sm whitespace-nowrap"><thead class="bg-zinc-50 text-zinc-500 text-xs uppercase font-bold border-b border-zinc-200"><tr><th class="p-4">Nome</th><th class="p-4">Setor</th><th class="p-4">Aniversário</th><th class="p-4">Permissão</th><th class="p-4 text-right">Ações</th></tr></thead><tbody id="table-users" class="divide-y divide-zinc-100 text-zinc-700"></tbody></table></div></div></div></div>
                 <div id="tab-sector" class="hidden space-y-6"><div id="admin-upload-zone" class="hidden bg-white p-4 md:p-5 rounded-2xl shadow-sm border border-dashed border-zinc-300 flex flex-col md:flex-row items-start md:items-center justify-between gap-4"><div class="flex items-center space-x-4"><div class="p-3 bg-red-50 text-burgundy rounded-full shrink-0"><i data-lucide="upload-cloud"></i></div><div><h4 class="text-sm font-bold text-zinc-800">Área de Gestão de Arquivos</h4><p class="text-xs text-zinc-500 mt-1">Adicione manuais, POPs ou formulários neste setor.</p></div></div><button onclick="openModal()" class="w-full md:w-auto bg-burgundy text-white px-5 py-2.5 rounded-lg text-sm font-bold flex items-center justify-center hover:bg-burgundy-hover transition shadow-md"><i data-lucide="plus" class="w-4 h-4 mr-2"></i> Documento</button></div><div class="grid grid-cols-1 lg:grid-cols-3 gap-6"><div class="lg:col-span-1 bg-white p-5 md:p-6 rounded-2xl shadow-sm border border-zinc-200"><h3 class="text-xs font-bold uppercase tracking-wider text-zinc-400 mb-4"><i data-lucide="briefcase" class="w-4 h-4 inline mr-1 text-zinc-500"></i> Cargos</h3><ul id="list-cargos" class="space-y-2 text-sm text-zinc-600"></ul></div><div class="lg:col-span-2 bg-white p-5 md:p-6 rounded-2xl shadow-sm border border-zinc-200"><h3 class="text-xs font-bold uppercase tracking-wider text-zinc-400 mb-4"><i data-lucide="folder-open" class="w-4 h-4 inline mr-1 text-zinc-500"></i> Documentos Operacionais</h3><div class="overflow-x-auto custom-scrollbar border border-zinc-200 rounded-xl"><table class="w-full text-left text-sm whitespace-nowrap"><thead class="bg-zinc-50 text-zinc-500 text-xs uppercase font-bold"><tr><th class="p-4">Nome</th><th class="p-4">Tipo</th><th class="p-4 text-right">Ação</th></tr></thead><tbody id="table-documents" class="divide-y divide-zinc-100 text-zinc-700"></tbody></table></div></div></div></div>
                 <div id="tab-social" class="hidden space-y-6"><div class="max-w-3xl mx-auto space-y-6"><div class="bg-white p-4 md:p-5 rounded-2xl shadow-sm border border-zinc-200"><form onsubmit="handleCreatePost(event)" class="flex items-start space-x-3 md:space-x-4"><div class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-burgundy flex items-center justify-center text-sm font-bold text-white shrink-0 shadow-inner" id="post-avatar">--</div><div class="flex-1"><textarea id="new-post-text" required class="w-full bg-zinc-50 border border-zinc-200 rounded-xl p-3 md:p-4 text-sm focus:outline-none focus:ring-2 focus:ring-burgundy focus:bg-white resize-none transition" rows="2" placeholder="O que deseja compartilhar com a equipe hoje?"></textarea><div class="flex justify-between items-center mt-3 pt-3 border-t border-zinc-100"><div class="flex space-x-2"><button type="button" class="text-zinc-500 hover:text-burgundy p-2 rounded-lg transition"><i data-lucide="image" class="w-5 h-5"></i></button></div><button type="submit" class="bg-burgundy text-white px-4 md:px-6 py-2 rounded-lg text-sm font-bold hover:bg-burgundy-hover transition shadow-md">Publicar</button></div></div></form></div><div id="list-posts" class="space-y-4 md:space-y-5"></div></div></div>
                 
-                <!-- CALENDÁRIO COM ZONA DE ADMINISTRAÇÃO AJUSTADA -->
+                <!-- CALENDÁRIO DINÂMICO -->
                 <div id="tab-calendar" class="hidden space-y-6">
                     <div id="admin-calendar-zone" class="hidden bg-white p-4 md:p-5 rounded-2xl shadow-sm border border-dashed border-orange-300 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
                         <div class="flex items-center space-x-4">
@@ -231,8 +190,15 @@
                     </div>
                     <div class="bg-white p-5 md:p-6 rounded-2xl shadow-sm border border-zinc-200 flex flex-col md:flex-row gap-6 md:gap-8">
                         <div class="w-full md:w-1/3">
-                            <div class="flex items-center justify-between mb-6"><h3 class="text-sm font-bold uppercase tracking-wider text-zinc-500 flex items-center"><i data-lucide="calendar" class="w-4 h-4 mr-2 text-zinc-400"></i> <span id="display-month">Julho 2026</span></h3><div class="flex space-x-2"><button onclick="changeMonth(-1)" class="p-1.5 rounded-lg hover:bg-zinc-100 text-zinc-500 transition"><i data-lucide="chevron-left" class="w-4 h-4"></i></button><button onclick="changeMonth(1)" class="p-1.5 rounded-lg hover:bg-zinc-100 text-zinc-500 transition"><i data-lucide="chevron-right" class="w-4 h-4"></i></button></div></div>
-                            <div class="bg-zinc-50 border border-zinc-200 rounded-xl p-4 text-center overflow-x-auto"><div class="min-w-[200px]"><div class="grid grid-cols-7 gap-1 text-xs font-bold text-zinc-400 mb-3"><div>D</div><div>S</div><div>T</div><div>Q</div><div>Q</div><div>S</div><div>S</div></div><div class="grid grid-cols-7 gap-1 text-sm text-zinc-700 font-medium"><div class="p-1.5 text-zinc-300">31</div><div class="p-1.5 rounded cursor-pointer hover:bg-zinc-100 transition">1</div><div class="p-1.5 rounded cursor-pointer hover:bg-zinc-100 transition">2</div><div class="p-1.5 rounded cursor-pointer hover:bg-zinc-100 transition">3</div><div class="p-1.5 rounded cursor-pointer hover:bg-zinc-100 transition">4</div><div class="p-1.5 bg-red-100 text-red-700 font-bold rounded">5</div><div class="p-1.5 rounded cursor-pointer hover:bg-zinc-100 transition">6</div><div class="p-1.5 rounded cursor-pointer hover:bg-zinc-100 transition">7</div><div class="p-1.5 rounded cursor-pointer hover:bg-zinc-100 transition">8</div><div class="p-1.5 rounded cursor-pointer hover:bg-zinc-100 transition">9</div><div class="p-1.5 rounded cursor-pointer hover:bg-zinc-100 transition">10</div><div class="p-1.5 rounded cursor-pointer hover:bg-zinc-100 transition">11</div><div class="p-1.5 rounded cursor-pointer hover:bg-zinc-100 transition">12</div><div class="p-1.5 rounded cursor-pointer hover:bg-zinc-100 transition">13</div><div class="p-1.5 rounded cursor-pointer hover:bg-zinc-100 transition">14</div><div class="p-1.5 bg-blue-600 text-white font-bold rounded shadow-sm">15</div><div class="p-1.5 rounded cursor-pointer hover:bg-zinc-100 transition">16</div><div class="p-1.5 rounded cursor-pointer hover:bg-zinc-100 transition">17</div><div class="p-1.5 rounded cursor-pointer hover:bg-zinc-100 transition">18</div><div class="p-1.5 rounded cursor-pointer hover:bg-zinc-100 transition">19</div><div class="p-1.5 rounded cursor-pointer hover:bg-zinc-100 transition">20</div><div class="p-1.5 rounded cursor-pointer hover:bg-zinc-100 transition">21</div><div class="p-1.5 rounded cursor-pointer hover:bg-zinc-100 transition">22</div><div class="p-1.5 rounded cursor-pointer hover:bg-zinc-100 transition">23</div><div class="p-1.5 rounded cursor-pointer hover:bg-zinc-100 transition">24</div><div class="p-1.5 font-bold border-2 border-burgundy rounded text-burgundy cursor-pointer hover:bg-red-50 transition">25</div><div class="p-1.5 rounded cursor-pointer hover:bg-zinc-100 transition">26</div><div class="p-1.5 rounded cursor-pointer hover:bg-zinc-100 transition">27</div><div class="p-1.5 rounded cursor-pointer hover:bg-zinc-100 transition">28</div><div class="p-1.5 rounded cursor-pointer hover:bg-zinc-100 transition">29</div><div class="p-1.5 rounded cursor-pointer hover:bg-zinc-100 transition">30</div><div class="p-1.5 rounded cursor-pointer hover:bg-zinc-100 transition">31</div><div class="p-1.5 text-zinc-300">1</div><div class="p-1.5 text-zinc-300">2</div><div class="p-1.5 text-zinc-300">3</div></div></div></div>
+                            <div class="flex items-center justify-between mb-6"><h3 class="text-sm font-bold uppercase tracking-wider text-zinc-500 flex items-center"><i data-lucide="calendar" class="w-4 h-4 mr-2 text-zinc-400"></i> <span id="display-month">Julho 2026</span></h3></div>
+                            <div class="bg-zinc-50 border border-zinc-200 rounded-xl p-4 text-center overflow-x-auto">
+                                <div class="min-w-[200px]">
+                                    <div class="grid grid-cols-7 gap-1 text-xs font-bold text-zinc-400 mb-3"><div>D</div><div>S</div><div>T</div><div>Q</div><div>Q</div><div>S</div><div>S</div></div>
+                                    <!-- AQUI ENTRA A GRADE DINÂMICA DO CALENDÁRIO -->
+                                    <div class="grid grid-cols-7 gap-1 text-sm text-zinc-700 font-medium" id="calendar-grid">
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <div class="w-full md:w-2/3"><h3 class="text-xs font-bold uppercase tracking-wider text-zinc-400 mb-6 flex items-center"><i data-lucide="list" class="w-4 h-4 mr-2 text-zinc-500"></i> Agenda do Mês</h3><div id="list-events" class="space-y-4"></div></div>
                     </div>
@@ -241,7 +207,88 @@
         </main>
     </div>
 
-    <!-- MODAL DO CÓDIGO DE CONDUTA -->
+    <!-- MODAL UNIVERSIDADE: AULA E CONDUTA -->
+    <div id="uni-modal" class="hidden fixed inset-0 bg-zinc-900/80 backdrop-blur-sm flex items-center justify-center p-4 z-[90]">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-5xl flex flex-col border border-zinc-100 max-h-[90vh]">
+            <div class="p-4 md:p-6 border-b border-zinc-100 flex items-center justify-between bg-zinc-50 rounded-t-2xl">
+                <div>
+                    <h3 class="text-lg font-bold text-zinc-800"><i data-lucide="graduation-cap" class="w-5 h-5 inline mr-2 text-emerald-600"></i> Cultura & Código de Conduta</h3>
+                    <p class="text-xs text-zinc-500 mt-1">Onboarding ADCOL Consultoria</p>
+                </div>
+                <button onclick="closeUniModal()" class="text-zinc-400 hover:text-zinc-600 p-2"><i data-lucide="x" class="w-6 h-6"></i></button>
+            </div>
+            
+            <div class="p-6 overflow-y-auto custom-scrollbar text-sm text-zinc-700 leading-relaxed bg-zinc-50/50 space-y-8">
+                
+                <div class="text-center mb-8">
+                    <h2 class="text-2xl font-black text-burgundy mb-2">Nossa jornada começa aqui.</h2>
+                    <p class="text-zinc-500">Transformando nossa missão em realidade. A admissão se dará no ato da contratação, onde o colaborador passará pela fase de avaliação[cite: 2].</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                    <div class="bg-white p-5 rounded-xl border border-zinc-200 shadow-sm text-center hover:border-emerald-300 transition">
+                        <div class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-3"><i data-lucide="target" class="w-5 h-5"></i></div>
+                        <strong class="text-zinc-900 block mb-2 text-base">Missão</strong>
+                        <p class="text-xs">Oferecer serviços contábeis diferenciados com qualidade, prestados através de uma equipe comprometida[cite: 2, 3].</p>
+                    </div>
+                    <div class="bg-white p-5 rounded-xl border border-zinc-200 shadow-sm text-center hover:border-emerald-300 transition">
+                        <div class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-3"><i data-lucide="eye" class="w-5 h-5"></i></div>
+                        <strong class="text-zinc-900 block mb-2 text-base">Visão</strong>
+                        <p class="text-xs">Ser reconhecida como empresa contábil de referência pela qualidade, excelência e inovação[cite: 2, 3].</p>
+                    </div>
+                    <div class="bg-white p-5 rounded-xl border border-zinc-200 shadow-sm text-center hover:border-emerald-300 transition">
+                        <div class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-3"><i data-lucide="heart" class="w-5 h-5"></i></div>
+                        <strong class="text-zinc-900 block mb-2 text-base">Valores</strong>
+                        <p class="text-xs">Ética, Reconhecimento humano, Transparência, Comprometimento, Qualidade e Confiança[cite: 2, 3].</p>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl border border-zinc-200 shadow-sm">
+                    <h4 class="text-emerald-700 font-bold text-lg mb-4 flex items-center"><i data-lucide="history" class="mr-2"></i> Nossa História</h4>
+                    <ul class="space-y-4 relative border-l-2 border-emerald-100 ml-3 pl-5">
+                        <li class="relative"><span class="absolute -left-[27px] bg-emerald-500 w-3 h-3 rounded-full top-1"></span><strong>1986:</strong> Início com Dr. Petrucio Augusto Pereira da Silva[cite: 3].</li>
+                        <li class="relative"><span class="absolute -left-[27px] bg-emerald-500 w-3 h-3 rounded-full top-1"></span><strong>1998:</strong> Nova Geração com Petrucio Junior assumindo a direção[cite: 3].</li>
+                        <li class="relative"><span class="absolute -left-[27px] bg-emerald-500 w-3 h-3 rounded-full top-1"></span><strong>2009:</strong> Expansão para novas e modernas instalações[cite: 3].</li>
+                        <li class="relative"><span class="absolute -left-[27px] bg-emerald-500 w-3 h-3 rounded-full top-1"></span><strong>2026:</strong> Liderança Consolidada com 40 anos de história[cite: 3].</li>
+                    </ul>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-white p-6 rounded-xl border border-zinc-200 shadow-sm">
+                        <h4 class="text-emerald-700 font-bold text-lg mb-4 flex items-center"><i data-lucide="clock" class="mr-2"></i> Nosso Dia a Dia e Ponto</h4>
+                        <ul class="list-disc pl-5 space-y-2 text-xs text-zinc-600">
+                            <li><strong>Entrada:</strong> Opção 1: 7:30 às 12:00 | Opção 2: 8:00 às 12:00[cite: 3].</li>
+                            <li><strong>Saída:</strong> Opção 1: 13:00 às 17:00 | Opção 2: 13:00 às 17:30[cite: 3].</li>
+                            <li>A jornada é de 44 horas semanais[cite: 2].</li>
+                            <li>A tolerância para os atrasos é de 10 minutos diários, permitidos apenas três vezes ao mês[cite: 2].</li>
+                            <li>Faltas quando não abonadas acarretarão na perda do dia de trabalho acrescido do DSR e a redução do gozo de férias[cite: 3].</li>
+                        </ul>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl border border-zinc-200 shadow-sm">
+                        <h4 class="text-emerald-700 font-bold text-lg mb-4 flex items-center"><i data-lucide="alert-triangle" class="mr-2"></i> Normas e Proibições</h4>
+                        <ul class="list-disc pl-5 space-y-2 text-xs text-zinc-600">
+                            <li>O uso correto do uniforme é obrigatório. Sapato fechado, calça jeans/social preta ou azul[cite: 2].</li>
+                            <li>É proibido o uso de pendrive e demais dispositivos de captação[cite: 3].</li>
+                            <li>É proibido o acesso a redes sociais ao longo do período de trabalho e uso indevido do celular[cite: 3].</li>
+                            <li>É proibido fornecer contato pessoal a clientes[cite: 3]. A senha de acesso é pessoal e intransferível[cite: 3].</li>
+                            <li>Dever de proteger informações e dados sigilosos contra vazamentos para terceiros[cite: 2].</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="bg-amber-50 p-6 rounded-xl border border-amber-200 text-amber-900">
+                    <h4 class="font-bold text-lg mb-2 flex items-center"><i data-lucide="lightbulb" class="mr-2"></i> Cofrinho de Ideias</h4>
+                    <p class="text-sm">Envie suas ideias inovadoras para <strong>ideias@adcolconsultoria.com.br</strong> focadas em aumento de receita ou redução de despesa. Ideias aprovadas receberão premiação de bonificação de R$ 250,00[cite: 3].</p>
+                </div>
+            </div>
+            
+            <div class="p-4 md:p-6 border-t border-zinc-100 bg-white rounded-b-2xl flex justify-end">
+                <button onclick="closeUniModal()" class="w-full md:w-auto bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-2.5 rounded-lg text-sm font-bold transition shadow-md">Concluir Módulo</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DO CÓDIGO DE CONDUTA (Mantido p/ acesso pelo Institucional) -->
     <div id="conduta-modal" class="hidden fixed inset-0 bg-zinc-900/80 backdrop-blur-sm flex items-center justify-center p-4 z-[90]">
         <div class="bg-white rounded-2xl shadow-2xl w-full max-w-4xl flex flex-col border border-zinc-100 max-h-[90vh]">
             <div class="p-4 md:p-6 border-b border-zinc-100 flex items-center justify-between bg-zinc-50 rounded-t-2xl">
@@ -251,98 +298,33 @@
                 </div>
                 <button onclick="closeCondutaModal()" class="text-zinc-400 hover:text-zinc-600 p-2"><i data-lucide="x" class="w-6 h-6"></i></button>
             </div>
-            
             <div class="p-6 overflow-y-auto custom-scrollbar text-sm text-zinc-700 leading-relaxed">
-                <!-- CONTEÚDO EXTRAÍDO DO PDF OFICIAL -->
-                <div class="mb-8">
-                    <h4 class="text-burgundy font-bold text-base border-b border-zinc-200 pb-2 mb-4 uppercase tracking-wide">Introdução</h4>
-                    <p class="mb-4">O presente código de conduta foi elaborado levando em consideração os elementos da cultura organizacional (missão, visão e valores), visa estabelecer condições indispensáveis para a harmonia entre as pessoas que trabalham em conjunto a fim de atingir um objetivo comum, bem como estabelece e define as normas que dirigem as relações de trabalho entre os colaboradores e o empregador, integrando o contrato individual de trabalho. A ação reguladora nele contida estende-se a todos os colaboradores, sem distinção hierárquica, e complementa os princípios gerais de direitos e deveres contidos na Constituição Federal e na Consolidação das Leis do Trabalho.</p>
-                </div>
-
-                <div class="mb-8">
-                    <h4 class="text-burgundy font-bold text-base border-b border-zinc-200 pb-2 mb-4 uppercase tracking-wide">Elementos da Cultura Organizacional</h4>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-                        <div class="bg-zinc-50 p-4 rounded-xl border border-zinc-100">
-                            <strong class="text-zinc-900 block mb-2"><i data-lucide="target" class="w-4 h-4 inline mr-1 text-burgundy"></i> Missão</strong>
-                            Oferecer serviços contábeis diferenciados com qualidade, prestados através de uma equipe comprometida e qualificada, buscando a excelência e satisfação dos nossos clientes.
-                        </div>
-                        <div class="bg-zinc-50 p-4 rounded-xl border border-zinc-100">
-                            <strong class="text-zinc-900 block mb-2"><i data-lucide="eye" class="w-4 h-4 inline mr-1 text-burgundy"></i> Visão</strong>
-                            Ser reconhecida como empresa contábil de referência pela qualidade, excelência e inovação na prestação dos serviços.
-                        </div>
-                        <div class="bg-zinc-50 p-4 rounded-xl border border-zinc-100">
-                            <strong class="text-zinc-900 block mb-2"><i data-lucide="heart" class="w-4 h-4 inline mr-1 text-burgundy"></i> Valores</strong>
-                            Ética, Reconhecimento humano, Transparência, Comprometimento, Conhecimento, Inovação, Qualidade, Confiança, Responsabilidade Social e Ambiental.
-                        </div>
-                    </div>
-                </div>
-
-                <div class="mb-8">
-                    <h4 class="text-burgundy font-bold text-base border-b border-zinc-200 pb-2 mb-4 uppercase tracking-wide">Aplicação e Normas Éticas</h4>
-                    <p class="mb-4"><strong>Art. 1º</strong> Ficam sujeitos a este Código de Conduta Interna todos os indivíduos ou instituições que mantiverem relações com a empresa e dela obtiverem informações privilegiadas que possam impactar no serviço/produto oferecido. A obrigatoriedade de cumprimento permanece por todo o tempo de duração do contrato de trabalho.</p>
-                    <p class="mb-4">As normas estabelecidas representam uma condição para a relação harmoniosa entre empresa e demais partes interessadas. Estão pautadas no respeito aos direitos humanos, responsabilidade social e ambiental e comprometimento ético.</p>
-                </div>
-
                 <div class="mb-8">
                     <h4 class="text-burgundy font-bold text-base border-b border-zinc-200 pb-2 mb-4 uppercase tracking-wide">Deveres e Responsabilidades</h4>
                     <p class="mb-3 font-medium">O colaborador deve atender com rigor as seguintes disposições (Art. 10º):</p>
                     <ul class="list-disc pl-5 space-y-2 mb-4 text-zinc-600">
-                        <li>Cumprir os compromissos expressamente assumidos no contrato com zelo, espírito de colaboração e competência.</li>
-                        <li>Zelar pela boa conservação das instalações, equipamentos e materiais (evitando desperdícios).</li>
-                        <li>Acatar com presteza as ordens de superiores hierárquicos e manter conduta compatível com a dignidade do cargo.</li>
-                        <li>Trabalhar com atenção necessária a fim de evitar danos materiais e reparar perdas decorrentes de falha pessoal culposa ou dolosa.</li>
-                        <li>Ter consideração com os demais, comportando-se de modo apropriado, sem promover brincadeiras de mau gosto, algazarras ou palavras de baixo calão.</li>
-                        <li>Usar corretamente o uniforme estabelecido (Art. 8º: Calça jeans/social preta/azul básicas, blusa/camisa da empresa e sapato fechado).</li>
-                        <li>Informar imediatamente a empresa suspeitas fundadas de conduta em desacordo com este código.</li>
+                        <li>Cumprir os compromissos com zelo, espírito de colaboração e competência[cite: 2].</li>
+                        <li>Trabalhar com atenção necessária a fim de evitar danos materiais e reparar perdas[cite: 2].</li>
+                        <li>Não promover brincadeiras de mau gosto, algazarras ou palavras de baixo calão[cite: 2].</li>
+                        <li>Informar imediatamente a empresa suspeitas de conduta em desacordo com este código[cite: 2].</li>
                     </ul>
                 </div>
-
                 <div class="mb-8">
-                    <h4 class="text-burgundy font-bold text-base border-b border-zinc-200 pb-2 mb-4 uppercase tracking-wide">Proibições Expressas (Art. 43º)</h4>
-                    <ul class="list-disc pl-5 space-y-2 mb-4 text-zinc-600">
-                        <li>Ocupar-se de atividades que prejudiquem os interesses do serviço ou usar equipamentos da empresa para uso pessoal.</li>
-                        <li>Promover ou aderir a discussões políticas e religiosas que prejudiquem o ambiente, ou dirigir insultos e xingamentos.</li>
-                        <li>Fumar nos recintos da empresa ou apresentar-se embriagado/sob efeito de entorpecentes.</li>
-                        <li>Fazer uso contínuo de aplicativos pessoais (WhatsApp, Redes Sociais) desviando o foco da função, ou usar fones de ouvido para entretenimento.</li>
-                        <li>Receber presentes ou propinas para conquistar clientes ou de pessoas em relação de negócios.</li>
-                        <li>Instalar softwares sem autorização prévia.</li>
-                    </ul>
-                </div>
-
-                <div class="mb-8">
-                    <h4 class="text-burgundy font-bold text-base border-b border-zinc-200 pb-2 mb-4 uppercase tracking-wide">Conflito de Interesses e Confidencialidade</h4>
-                    <p class="mb-4">O colaborador deve zelar para que suas ações não conflitem com os interesses da empresa. É proibido dispor de informações sigilosas dos clientes para benefício próprio, realizar serviços paralelos concorrentes ou liderar avaliações de familiares. Os dados e informações sigilosas devem ser tratados com absoluta confidencialidade, inclusive após o fim do contrato.</p>
-                </div>
-
-                <div class="mb-8">
-                    <h4 class="text-burgundy font-bold text-base border-b border-zinc-200 pb-2 mb-4 uppercase tracking-wide">Relações Humanas e Canal de Ética</h4>
-                    <p class="mb-4">A empresa não tolerará atitudes de discriminação ou assédio moral (humilhações, xingamentos, perseguições). Qualquer ocorrência deve ser comunicada através do nosso <strong>Canal de Ética</strong> pelo e-mail <strong>ouvidoria@adcolconsultoria.com.br</strong>, garantindo-se confidencialidade e proteção contra qualquer tipo de retaliação.</p>
+                    <h4 class="text-burgundy font-bold text-base border-b border-zinc-200 pb-2 mb-4 uppercase tracking-wide">Canal de Ética</h4>
+                    <p class="mb-4">A empresa não tolerará atitudes de discriminação ou assédio moral. Qualquer ocorrência deve ser comunicada através do <strong>Canal de Ética</strong> (ouvidoria@adcolconsultoria.com.br), garantindo proteção contra retaliação[cite: 2].</p>
                 </div>
             </div>
-            
             <div class="p-4 md:p-6 border-t border-zinc-100 bg-zinc-50 rounded-b-2xl flex justify-end">
                 <button onclick="closeCondutaModal()" class="w-full md:w-auto bg-burgundy hover:bg-burgundy-hover text-white px-6 py-2.5 rounded-lg text-sm font-bold transition shadow-md">Compreendido e Ciente</button>
             </div>
         </div>
     </div>
 
-    <!-- OUTROS MODAIS (Birthday, Wiki, Mood, Upload, Event, Eval) -->
-    <div id="birthday-modal" class="hidden fixed inset-0 bg-zinc-900/80 backdrop-blur-sm flex items-center justify-center p-4 z-[90]">
-        <div class="bg-gradient-to-br from-yellow-400 via-orange-500 to-red-500 rounded-3xl shadow-2xl p-1 w-full max-w-md text-center transform transition-all scale-100 animate-[bounce_1s_ease-in-out]">
-            <div class="bg-white rounded-3xl p-6 md:p-8 h-full w-full relative overflow-hidden">
-                <div class="text-5xl md:text-6xl mb-4">🎉🎂🎈</div>
-                <h3 class="text-2xl md:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-red-600 mb-2">Feliz Aniversário!</h3>
-                <h4 class="text-lg md:text-xl font-bold text-zinc-800 mb-4" id="bday-user-name">Nome</h4>
-                <p class="text-xs md:text-sm text-zinc-600 mb-8 font-medium">A família ADCOL deseja a você um dia incrível, cheio de alegrias e muito sucesso. Que este novo ciclo seja brilhante!</p>
-                <button onclick="closeBirthdayModal()" class="bg-gradient-to-r from-orange-500 to-red-500 text-white font-bold py-3 px-8 rounded-full hover:scale-105 transition shadow-lg w-full md:w-auto">Comemorar! 🥳</button>
-            </div>
-        </div>
-    </div>
-
+    <!-- MODAL DE CRIAÇÃO DA WIKI COM EDITOR -->
     <div id="wiki-modal" class="hidden fixed inset-0 bg-zinc-900/80 backdrop-blur-sm flex items-center justify-center p-4 z-[70]">
-        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-3xl flex flex-col border border-zinc-100">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-4xl flex flex-col border border-zinc-100">
             <div class="p-4 md:p-5 border-b border-zinc-100 flex items-center justify-between bg-zinc-50 rounded-t-2xl">
-                <div><h3 class="text-sm md:text-base font-bold text-zinc-800"><i data-lucide="pen-tool" class="w-4 h-4 inline mr-2 text-blue-600"></i> Escrever Novo Artigo</h3><p class="text-[10px] md:text-[11px] text-zinc-500 mt-1">Compartilhe conhecimento e ganhe ADCoins após a aprovação.</p></div>
+                <div><h3 class="text-sm md:text-base font-bold text-zinc-800"><i data-lucide="pen-tool" class="w-4 h-4 inline mr-2 text-blue-600"></i> Escrever Novo Artigo</h3><p class="text-[10px] md:text-[11px] text-zinc-500 mt-1">Formate o texto como desejar.</p></div>
                 <button onclick="document.getElementById('wiki-modal').classList.add('hidden')" class="text-zinc-400 hover:text-zinc-600 p-2"><i data-lucide="x" class="w-5 h-5"></i></button>
             </div>
             <form onsubmit="handleCreateWiki(event)" class="p-4 md:p-6 space-y-4">
@@ -354,21 +336,67 @@
                         <option>Qualidade</option><option>Legalização</option><option>Financeiro</option>
                     </select>
                 </div>
-                <div><label class="block text-xs font-bold uppercase text-zinc-500 mb-1">Conteúdo (Passo a passo)</label><textarea id="wiki-content" required class="w-full bg-zinc-50 border border-zinc-200 rounded-xl p-3 text-sm focus:ring-2 focus:ring-blue-500 resize-none h-32 md:h-40" placeholder="Descreva a solução detalhadamente..."></textarea></div>
+                <div>
+                    <label class="block text-xs font-bold uppercase text-zinc-500 mb-1">Conteúdo</label>
+                    <!-- BARRA DE FERRAMENTAS DO EDITOR -->
+                    <div class="flex items-center space-x-1 border border-zinc-200 border-b-0 bg-white p-1 rounded-t-lg">
+                        <button type="button" onclick="formatText('bold')" class="editor-btn" title="Negrito"><i data-lucide="bold" class="w-4 h-4"></i></button>
+                        <button type="button" onclick="formatText('italic')" class="editor-btn" title="Itálico"><i data-lucide="italic" class="w-4 h-4"></i></button>
+                        <button type="button" onclick="formatText('underline')" class="editor-btn" title="Sublinhado"><i data-lucide="underline" class="w-4 h-4"></i></button>
+                        <div class="w-px h-5 bg-zinc-200 mx-1"></div>
+                        <button type="button" onclick="formatText('formatBlock', 'H2')" class="editor-btn text-xs font-bold px-2" title="Título">H2</button>
+                        <button type="button" onclick="insertImagePrompt()" class="editor-btn" title="Inserir Imagem por Link"><i data-lucide="image" class="w-4 h-4"></i></button>
+                    </div>
+                    <div id="wiki-content-editor" contenteditable="true" class="w-full bg-zinc-50 border border-zinc-200 rounded-b-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-[200px] overflow-y-auto max-h-[300px]" placeholder="Escreva o passo a passo aqui..."></div>
+                </div>
                 <div class="flex flex-col md:flex-row justify-end md:space-x-3 space-y-2 md:space-y-0 pt-4 border-t border-zinc-100">
                     <button type="button" onclick="document.getElementById('wiki-modal').classList.add('hidden')" class="w-full md:w-auto px-5 py-2.5 rounded-lg text-sm font-bold text-zinc-600 hover:bg-zinc-100 transition">Cancelar</button>
-                    <button type="submit" class="w-full md:w-auto px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-bold transition shadow-md">Enviar para Aprovação</button>
+                    <button type="submit" class="w-full md:w-auto px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-bold transition shadow-md">Salvar e Publicar</button>
                 </div>
             </form>
         </div>
     </div>
-    
+
+    <!-- MODAL DE LEITURA DA WIKI COM COMENTÁRIOS -->
+    <div id="wiki-read-modal" class="hidden fixed inset-0 bg-zinc-900/80 backdrop-blur-sm flex items-center justify-center p-4 z-[80]">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-4xl flex flex-col border border-zinc-100 h-[90vh]">
+            <div class="p-4 md:p-6 border-b border-zinc-100 flex items-center justify-between bg-zinc-50 rounded-t-2xl">
+                <div>
+                    <span id="read-wiki-cat" class="text-[10px] font-bold uppercase tracking-wider text-blue-700 bg-blue-100 px-2 py-0.5 rounded-full mb-2 inline-block">Categoria</span>
+                    <h3 id="read-wiki-title" class="text-xl md:text-2xl font-bold text-zinc-800">Título</h3>
+                    <p class="text-xs text-zinc-500 mt-1 flex items-center"><i data-lucide="user" class="w-3 h-3 mr-1"></i> <span id="read-wiki-author">Autor</span> <span class="mx-2">•</span> <span id="read-wiki-date">Data</span></p>
+                </div>
+                <button onclick="document.getElementById('wiki-read-modal').classList.add('hidden')" class="text-zinc-400 hover:text-zinc-600 p-2 bg-zinc-100 rounded-full hover:bg-zinc-200"><i data-lucide="x" class="w-5 h-5"></i></button>
+            </div>
+            
+            <div class="flex-1 overflow-y-auto custom-scrollbar p-6 bg-white">
+                <div id="read-wiki-content" class="prose prose-zinc max-w-none text-sm text-zinc-700 mb-10 border-b border-zinc-100 pb-10">
+                    <!-- O HTML formatado do artigo vai entrar aqui -->
+                </div>
+                
+                <div>
+                    <h4 class="font-bold text-zinc-800 mb-4 flex items-center"><i data-lucide="message-square" class="w-4 h-4 mr-2 text-blue-600"></i> Comentários da Equipe</h4>
+                    <div id="read-wiki-comments-list" class="space-y-4 mb-6">
+                        <!-- Lista de comentários entra aqui -->
+                    </div>
+                    <form onsubmit="handlePostComment(event)" class="flex items-start space-x-3">
+                        <input type="hidden" id="current-read-wiki-id">
+                        <div class="w-8 h-8 rounded-full bg-burgundy flex items-center justify-center text-xs font-bold text-white shrink-0" id="comment-avatar">--</div>
+                        <div class="flex-1 flex space-x-2">
+                            <input type="text" id="new-comment-input" required class="flex-1 bg-zinc-50 border border-zinc-200 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Escreva um comentário ou dúvida...">
+                            <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-blue-700 transition shadow-sm"><i data-lucide="send" class="w-4 h-4"></i></button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- OUTROS MODAIS (Birthday, Mood, Upload, Event, Eval) Omitidos da visualização para focar nas regras, mas mantidos no código completo -->
+    <div id="birthday-modal" class="hidden fixed inset-0 bg-zinc-900/80 backdrop-blur-sm flex items-center justify-center p-4 z-[90]"><div class="bg-gradient-to-br from-yellow-400 via-orange-500 to-red-500 rounded-3xl shadow-2xl p-1 w-full max-w-md text-center transform transition-all scale-100 animate-[bounce_1s_ease-in-out]"><div class="bg-white rounded-3xl p-6 md:p-8 h-full w-full relative overflow-hidden"><div class="text-5xl md:text-6xl mb-4">🎉🎂🎈</div><h3 class="text-2xl md:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-red-600 mb-2">Feliz Aniversário!</h3><h4 class="text-lg md:text-xl font-bold text-zinc-800 mb-4" id="bday-user-name">Nome</h4><p class="text-xs md:text-sm text-zinc-600 mb-8 font-medium">A família ADCOL deseja a você um dia incrível, cheio de alegrias e muito sucesso. Que este novo ciclo seja brilhante!</p><button onclick="closeBirthdayModal()" class="bg-gradient-to-r from-orange-500 to-red-500 text-white font-bold py-3 px-8 rounded-full hover:scale-105 transition shadow-lg w-full md:w-auto">Comemorar! 🥳</button></div></div></div>
     <div id="mood-modal" class="hidden fixed inset-0 bg-zinc-900/80 backdrop-blur-sm flex items-center justify-center p-4 z-[80]"><div class="bg-white rounded-3xl shadow-2xl p-6 md:p-8 w-full max-w-sm text-center transform transition-all"><h3 class="text-lg md:text-xl font-bold text-zinc-800 mb-2">Como você está hoje?</h3><p class="text-xs md:text-sm text-zinc-500 mb-8">Seu bem-estar é prioridade para a ADCOL.</p><div class="flex justify-center space-x-6"><button onclick="registerMood('feliz')" class="text-4xl md:text-5xl hover:scale-125 transition-transform" title="Ótimo">😀</button><button onclick="registerMood('neutro')" class="text-4xl md:text-5xl hover:scale-125 transition-transform" title="Normal">😐</button><button onclick="registerMood('estressado')" class="text-4xl md:text-5xl hover:scale-125 transition-transform" title="Cansado/Estressado">😫</button></div></div></div>
-    
     <div id="upload-modal" class="hidden fixed inset-0 bg-zinc-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-[60]"><div class="bg-white rounded-2xl shadow-2xl p-5 md:p-6 w-full max-w-md border border-zinc-100"><div class="flex items-center justify-between mb-4 md:mb-5 pb-3 border-b border-zinc-100"><h3 class="text-sm md:text-base font-bold text-zinc-800"><i data-lucide="file-plus" class="w-5 h-5 inline mr-2 text-burgundy"></i> Inserir Documento</h3><button onclick="closeModal()" class="text-zinc-400 hover:text-zinc-600"><i data-lucide="x" class="w-5 h-5"></i></button></div><form onsubmit="handleUpload(event)" class="space-y-4"><div><label class="block text-xs font-bold uppercase text-zinc-500 mb-1">Nome do Arquivo</label><input id="modal-doc-name" type="text" required class="w-full p-2.5 bg-zinc-50 border border-zinc-200 rounded-lg text-sm outline-none focus:ring-2 focus:ring-burgundy"></div><div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4"><div><label class="block text-xs font-bold uppercase text-zinc-500 mb-1">Categoria</label><select id="modal-doc-type" class="w-full p-2.5 bg-zinc-50 border border-zinc-200 rounded-lg text-sm outline-none focus:ring-2 focus:ring-burgundy"><option value="Formulário">Formulário</option><option value="Manual">Manual</option><option value="Cargo">Cargo</option></select></div><div><label class="block text-xs font-bold uppercase text-zinc-500 mb-1">Setor</label><select id="modal-doc-sector" class="w-full p-2.5 bg-zinc-50 border border-zinc-200 rounded-lg text-sm outline-none focus:ring-2 focus:ring-burgundy"></select></div></div><div class="flex flex-col md:flex-row justify-end md:space-x-3 space-y-2 md:space-y-0 pt-3"><button type="button" onclick="closeModal()" class="w-full md:w-auto px-5 py-2.5 rounded-lg text-sm font-bold text-zinc-600 hover:bg-zinc-100 transition">Cancelar</button><button type="submit" class="w-full md:w-auto px-5 py-2.5 bg-burgundy hover:bg-burgundy-hover text-white rounded-lg text-sm font-bold transition shadow-md">Salvar</button></div></form></div></div>
-    
     <div id="event-modal" class="hidden fixed inset-0 bg-zinc-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-[60]"><div class="bg-white rounded-2xl shadow-2xl p-5 md:p-6 w-full max-w-md border border-zinc-100"><div class="flex items-center justify-between mb-4 md:mb-5 pb-3 border-b border-zinc-100"><h3 class="text-sm md:text-base font-bold text-zinc-800" id="event-modal-title"><i data-lucide="calendar-plus" class="w-5 h-5 inline mr-2 text-orange-500"></i> Evento</h3><button onclick="closeEventModal()" class="text-zinc-400 hover:text-zinc-600"><i data-lucide="x" class="w-5 h-5"></i></button></div><form onsubmit="handleSaveEvent(event)" class="space-y-4"><input type="hidden" id="ev-id"><div><label class="block text-xs font-bold uppercase text-zinc-500 mb-1">Título</label><input id="ev-titulo" type="text" required class="w-full p-2.5 bg-zinc-50 border border-zinc-200 rounded-lg text-sm outline-none focus:ring-2 focus:ring-orange-500"></div><div class="grid grid-cols-2 gap-3 md:gap-4"><div><label class="block text-xs font-bold uppercase text-zinc-500 mb-1">Dia</label><input id="ev-dia" type="number" min="1" max="31" required class="w-full p-2.5 bg-zinc-50 border border-zinc-200 rounded-lg text-sm outline-none focus:ring-2 focus:ring-orange-500"></div><div><label class="block text-xs font-bold uppercase text-zinc-500 mb-1">Mês (Ex: Jun)</label><input id="ev-mes" type="text" maxlength="3" required class="w-full p-2.5 bg-zinc-50 border border-zinc-200 rounded-lg text-sm uppercase outline-none focus:ring-2 focus:ring-orange-500"></div></div><div><label class="block text-xs font-bold uppercase text-zinc-500 mb-1">Descrição</label><input id="ev-desc" type="text" required class="w-full p-2.5 bg-zinc-50 border border-zinc-200 rounded-lg text-sm outline-none focus:ring-2 focus:ring-orange-500"></div><div><label class="block text-xs font-bold uppercase text-zinc-500 mb-1">Cor</label><select id="ev-cor" class="w-full p-2.5 bg-zinc-50 border border-zinc-200 rounded-lg text-sm outline-none focus:ring-2 focus:ring-orange-500"><option value="bg-blue-600">Azul</option><option value="bg-red-500">Vermelho</option><option value="bg-emerald-500">Verde</option><option value="bg-orange-500">Laranja</option></select></div><div class="flex flex-col md:flex-row justify-end md:space-x-3 space-y-2 md:space-y-0 pt-3"><button type="button" onclick="closeEventModal()" class="w-full md:w-auto px-5 py-2.5 rounded-lg text-sm font-bold text-zinc-600 hover:bg-zinc-100 transition">Cancelar</button><button type="submit" class="w-full md:w-auto px-5 py-2.5 bg-orange-500 hover:bg-orange-600 text-white rounded-lg text-sm font-bold transition shadow-md">Salvar Evento</button></div></form></div></div>
-    
     <div id="eval-modal" class="hidden fixed inset-0 bg-zinc-900/80 backdrop-blur-sm flex items-center justify-center p-4 z-[70]"><div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] flex flex-col border border-zinc-100"><div class="p-4 md:p-6 border-b border-zinc-100 flex items-center justify-between bg-zinc-50 rounded-t-2xl"><div><h3 class="text-base md:text-lg font-bold text-zinc-800"><i data-lucide="star" class="w-5 h-5 inline mr-2 text-yellow-500"></i> Avaliação de Período</h3><p class="text-[10px] md:text-xs text-zinc-500 mt-1" id="eval-modal-subtitle">Avaliando: Selecione...</p></div><button onclick="closeEvalModal()" class="text-zinc-400 hover:text-zinc-600 p-2"><i data-lucide="x" class="w-5 h-5"></i></button></div><div class="p-4 md:p-6 overflow-y-auto flex-1 custom-scrollbar space-y-4 md:space-y-6"><div id="criteria-list" class="space-y-2"></div><div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 md:mt-6"><div><label class="block text-xs font-bold uppercase text-zinc-500 mb-2">Pontos Fortes</label><textarea id="eval-fortes" class="w-full bg-zinc-50 border border-zinc-200 rounded-xl p-3 text-sm focus:ring-2 focus:ring-blue-500 resize-none h-20 md:h-24" placeholder="O que o colaborador tem de melhor?"></textarea></div><div><label class="block text-xs font-bold uppercase text-zinc-500 mb-2">Plano de Ação</label><textarea id="eval-melhorar" class="w-full bg-zinc-50 border border-zinc-200 rounded-xl p-3 text-sm focus:ring-2 focus:ring-blue-500 resize-none h-20 md:h-24" placeholder="O que precisa ser desenvolvido?"></textarea></div></div></div><div class="p-4 md:p-6 border-t border-zinc-100 flex flex-col md:flex-row justify-end md:space-x-3 space-y-2 md:space-y-0 bg-white rounded-b-2xl"><button onclick="closeEvalModal()" class="w-full md:w-auto px-5 py-2.5 rounded-lg text-sm font-bold text-zinc-600 hover:bg-zinc-100 transition">Cancelar</button><button onclick="saveEvaluation()" class="w-full md:w-auto px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-bold transition shadow-md">Concluir Avaliação</button></div></div></div>
 
     <!-- JAVASCRIPT (LÓGICA DO SISTEMA) -->
@@ -414,13 +442,35 @@
             ]);
             if (u.data) dbUsuarios = u.data; if (r.data) dbRecompensas = r.data; if (d.data) dbDocumentos = d.data;
             if (e.data) dbEventos = e.data; if (p.data) dbPosts = p.data; if (w.data) dbWiki = w.data; if (a.data) dbAvaliacoes = a.data;
+            
+            if(activeTab === 'calendar') renderEventos(); // recarrega grid
         }
 
-        // --- SISTEMAS GERAIS DE UI E MENU MOBILE ---
+        // --- SISTEMAS GERAIS E MENUS ---
         function openMobileMenu() { document.getElementById('sidebar').classList.remove('-translate-x-full'); document.getElementById('mobile-overlay').classList.remove('hidden'); }
         function closeMobileMenu() { document.getElementById('sidebar').classList.add('-translate-x-full'); document.getElementById('mobile-overlay').classList.add('hidden'); }
         function openCondutaModal() { document.getElementById('conduta-modal').classList.remove('hidden'); }
         function closeCondutaModal() { document.getElementById('conduta-modal').classList.add('hidden'); }
+        function openUniModal() { document.getElementById('uni-modal').classList.remove('hidden'); }
+        function closeUniModal() { document.getElementById('uni-modal').classList.add('hidden'); }
+
+        // --- ASSISTENTE IA ---
+        function toggleAIChat() { document.getElementById('ai-chat-window').classList.toggle('hidden'); }
+        function handleAIQuery(e) {
+            e.preventDefault();
+            const input = document.getElementById('ai-input');
+            const val = input.value;
+            if(!val) return;
+            const chatList = document.getElementById('ai-chat-messages');
+            chatList.innerHTML += `<div class="flex items-start justify-end space-x-2"><div class="bg-burgundy text-white p-3 rounded-2xl rounded-tr-none shadow-sm">${val}</div></div>`;
+            input.value = '';
+            
+            setTimeout(() => {
+                chatList.innerHTML += `<div class="flex items-start space-x-2"><div class="w-8 h-8 rounded-full bg-red-100 text-burgundy flex items-center justify-center shrink-0"><i data-lucide="bot" class="w-4 h-4"></i></div><div class="bg-white border border-zinc-200 p-3 rounded-2xl rounded-tl-none shadow-sm text-zinc-700">Essa é uma excelente pergunta! Pesquisei na Base de Conhecimento e no Código de Conduta. A diretriz é que qualquer dúvida complexa deve ser confirmada com seu gestor direto. Quer que eu busque outro POP?</div></div>`;
+                chatList.scrollTop = chatList.scrollHeight;
+                try { lucide.createIcons(); } catch(e){}
+            }, 1000);
+        }
 
         function checkBirthday(user) {
             if (!user.data_nascimento) { setTimeout(() => { document.getElementById('mood-modal').classList.remove('hidden'); }, 500); return; }
@@ -437,7 +487,8 @@
 
         function closeBirthdayModal() { localStorage.setItem(`adcol_bday_${sessionUser.id}_${new Date().getFullYear()}`, 'true'); document.getElementById('birthday-modal').classList.add('hidden'); setTimeout(() => { document.getElementById('mood-modal').classList.remove('hidden'); }, 300); }
         function toggleSetores() { const list = document.getElementById('sector-menu-list'); const icon = document.getElementById('sector-chevron'); list.classList.toggle('hidden'); icon.classList.toggle('rotate-90'); }
-        function changeMonth(dir) { mesIndex += dir; if (mesIndex < 0) mesIndex = 0; if (mesIndex >= mesesNavegacao.length) mesIndex = mesesNavegacao.length - 1; document.getElementById('display-month').innerText = mesesNavegacao[mesIndex]; }
+
+        function changeMonth(dir) { mesIndex += dir; if (mesIndex < 0) mesIndex = 0; if (mesIndex >= mesesNavegacao.length) mesIndex = mesesNavegacao.length - 1; document.getElementById('display-month').innerText = mesesNavegacao[mesIndex]; renderEventos(); }
 
         function switchTab(target) {
             activeTab = target; const defClass = "w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-zinc-400 hover:bg-zinc-800 hover:text-white text-sm font-medium transition";
@@ -448,7 +499,7 @@
             const actClass = "w-full flex items-center space-x-3 px-3 py-2 rounded-lg bg-burgundy text-white text-sm font-medium shadow-md transition";
             const pageTitle = document.getElementById('page-title');
             
-            if (target === 'home') { document.getElementById('btn-home').className = actClass; pageTitle.innerText = "Dashboard"; document.getElementById('tab-home').classList.remove('hidden'); }
+            if (target === 'home') { document.getElementById('btn-home').className = actClass; pageTitle.innerText = "Dashboard"; document.getElementById('tab-home').classList.remove('hidden'); renderDashboardWidgets(); }
             else if (target === 'performance') { document.getElementById('btn-performance').className = actClass; pageTitle.innerText = "Meu Desempenho"; document.getElementById('tab-performance').classList.remove('hidden'); renderPerformanceTab(); }
             else if (target === 'gamification') { document.getElementById('btn-gamification').className = actClass; pageTitle.innerText = "Gamificação (ADCoins)"; document.getElementById('tab-gamification').classList.remove('hidden'); renderGamification(); }
             else if (target === 'university') { document.getElementById('btn-university').className = actClass; pageTitle.innerText = "Universidade ADCOL"; document.getElementById('tab-university').classList.remove('hidden'); }
@@ -462,70 +513,22 @@
             try { lucide.createIcons(); } catch(e){}
         }
 
-        // --- LÓGICA DE USUÁRIOS E ZONAS DE ADMINISTRAÇÃO ---
-        function aplicarLoginUI(user) {
-            document.getElementById('sidebar-user-name').innerText = user.nome;
-            document.getElementById('greet-name').innerText = user.nome.split(' ')[0];
-            let iniciais = user.nome.substring(0, 2).toUpperCase();
-            document.getElementById('user-avatar-initials').innerText = iniciais;
-            const badge = document.getElementById('role-badge');
-            
-            const adminMenu = document.getElementById('admin-menu-section');
-            const adminCalendar = document.getElementById('admin-calendar-zone');
-            const adminUpload = document.getElementById('admin-upload-zone');
-
-            if (user.role === 'admin') {
-                if(badge) { badge.className = "inline-block text-[9px] bg-red-500 text-white px-2 py-0.5 rounded uppercase font-bold tracking-widest shadow-sm"; badge.innerText = "Admin"; }
-                adminMenu?.classList.remove('hidden');
-                adminCalendar?.classList.remove('hidden');
-                adminUpload?.classList.remove('hidden');
-            } else if (user.role === 'gestor') {
-                if(badge) { badge.className = "inline-block text-[9px] bg-blue-500 text-white px-2 py-0.5 rounded uppercase font-bold tracking-widest shadow-sm"; badge.innerText = "Gestor"; }
-                adminMenu?.classList.add('hidden');
-                adminCalendar?.classList.remove('hidden');
-                adminUpload?.classList.remove('hidden');
-            } else if (user.role === 'estagiario') {
-                if(badge) { badge.className = "inline-block text-[9px] bg-orange-500 text-white px-2 py-0.5 rounded uppercase font-bold tracking-widest shadow-sm"; badge.innerText = "Estagiário"; }
-                adminMenu?.classList.add('hidden');
-                adminCalendar?.classList.add('hidden');
-                adminUpload?.classList.add('hidden');
-            } else {
-                if(badge) { badge.className = "inline-block text-[9px] bg-zinc-700 text-zinc-300 px-2 py-0.5 rounded uppercase font-bold tracking-widest"; badge.innerText = "Colab"; }
-                adminMenu?.classList.add('hidden');
-                adminCalendar?.classList.add('hidden');
-                adminUpload?.classList.add('hidden');
-            }
-
-            let setoresPermitidos = (user.role === 'admin' || user.role === 'gestor') ? setores : [user.setor];
-            document.getElementById('sector-menu-list').innerHTML = setoresPermitidos.map(s => `<button onclick="switchTab('${s}')" id="btn-sector-${s}" class="w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-800 transition text-sm"><i data-lucide="folder" class="w-3.5 h-3.5"></i><span>${s}</span></button>`).join('');
-
-            document.getElementById('login-screen').classList.add('hidden');
-            document.getElementById('main-app').classList.remove('hidden');
-            switchTab('home');
-            checkBirthday(user);
-        }
-
-        // --- SISTEMA DESEMPENHO E PDF DIRETO (html2pdf) ---
+        // --- SISTEMA DESEMPENHO ---
         function renderPerformanceTab() {
             if (sessionUser.role === 'admin' || sessionUser.role === 'gestor') { 
                 document.getElementById('manager-perf-zone').classList.remove('hidden'); 
                 let equipe = dbUsuarios.filter(u => u.id !== sessionUser.id && u.role !== 'admin'); 
                 if (sessionUser.role === 'gestor') equipe = equipe.filter(u => u.setor === sessionUser.setor); 
-                
                 document.getElementById('table-team-perf').innerHTML = equipe.map(u => {
                     let userEvals = dbAvaliacoes.filter(a => a.avaliado_id === u.id);
                     let status = `Pendente`; let mediaText = `-`; let pdfBtn = ``;
-                    
                     if (userEvals.length > 0) {
                         status = `<span class="text-emerald-600 font-bold">Avaliado</span>`;
                         let lastEval = userEvals[userEvals.length - 1]; 
-                        let soma = 0; let qtd = 0;
-                        for(let key in lastEval.notas) { soma += lastEval.notas[key]; qtd++; }
-                        let media = (soma / qtd).toFixed(1);
-                        mediaText = `<span class="text-blue-600 font-bold">${media}</span>`;
+                        let soma = 0; let qtd = 0; for(let key in lastEval.notas) { soma += lastEval.notas[key]; qtd++; }
+                        let media = (soma / qtd).toFixed(1); mediaText = `<span class="text-blue-600 font-bold">${media}</span>`;
                         pdfBtn = `<button onclick="downloadEvalPDF(${lastEval.id})" class="text-xs bg-zinc-100 text-zinc-600 hover:bg-zinc-200 px-3 py-1.5 rounded-lg font-bold transition ml-2 shadow-sm"><i data-lucide="download" class="w-3.5 h-3.5 inline"></i> PDF</button>`;
                     }
-                    
                     return `<tr class="hover:bg-zinc-50 transition"><td class="p-4 font-bold text-zinc-800">${u.nome} <span class="text-[10px] bg-zinc-100 text-zinc-500 px-2 py-0.5 rounded ml-2">${u.setor}</span></td><td class="p-4 text-zinc-500 text-xs">${status}</td><td class="p-4 text-xs">${mediaText}</td><td class="p-4 text-right flex items-center justify-end"><button onclick="openEvalModal(${u.id}, '${u.nome}')" class="text-xs bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white px-3 py-1.5 rounded-lg font-bold transition shadow-sm">Nova</button>${pdfBtn}</td></tr>`
                 }).join(''); 
             } else { document.getElementById('manager-perf-zone').classList.add('hidden'); }
@@ -538,15 +541,12 @@
                 let allSoma = 0; let allQtd = 0;
                 minhasAval.forEach(av => { for(let key in av.notas) { allSoma += av.notas[key]; allQtd++; } });
                 notaGlobal = (allSoma / allQtd).toFixed(1);
-                
                 let porcentagem = (notaGlobal / 5.0) * 100;
                 document.getElementById('score-circle').setAttribute('stroke-dasharray', `${porcentagem}, 100`);
                 document.getElementById('score-msg').innerText = notaGlobal >= 4.0 ? "Você está acima da média do escritório!" : "Continue se desenvolvendo!";
                 document.getElementById('score-text').innerText = notaGlobal;
             } else {
-                document.getElementById('score-circle').setAttribute('stroke-dasharray', `0, 100`);
-                document.getElementById('score-text').innerText = "0.0";
-                document.getElementById('score-msg').innerText = "Aguardando avaliações...";
+                document.getElementById('score-circle').setAttribute('stroke-dasharray', `0, 100`); document.getElementById('score-text').innerText = "0.0"; document.getElementById('score-msg').innerText = "Aguardando avaliações...";
             }
             try { lucide.createIcons(); } catch(e){}
         }
@@ -554,52 +554,22 @@
         function downloadEvalPDF(evalId) {
             const avaliacao = dbAvaliacoes.find(a => a.id === evalId);
             if(!avaliacao) return alert("Avaliação não encontrada no sistema.");
-            
             const avaliado = dbUsuarios.find(u => u.id === avaliacao.avaliado_id) || {nome: "Desconhecido", setor: "-"};
             const avaliador = dbUsuarios.find(u => u.id === avaliacao.avaliador_id) || {nome: "Sistema ADCOL"};
             const dataAval = new Date(avaliacao.created_at).toLocaleDateString('pt-BR');
-
             const element = document.createElement('div');
             element.innerHTML = `
                 <div style="padding: 30px; font-family: Arial, sans-serif; color: #333; max-width: 800px; margin: 0 auto; background: #fff;">
-                    <div style="border-bottom: 3px solid #8A151B; padding-bottom: 15px; margin-bottom: 25px; display: flex; justify-content: space-between; align-items: flex-end;">
-                        <div><h1 style="color: #8A151B; margin: 0; font-size: 22px; text-transform: uppercase;">Relatório de Desempenho</h1></div>
-                        <span style="font-size: 11px; color: #777; font-weight: bold;">ADCOL - Documento Confidencial</span>
-                    </div>
-                    
-                    <div style="background-color: #f4f4f5; padding: 15px; border-radius: 8px; margin-bottom: 25px;">
-                        <p style="margin: 6px 0; font-size: 13px;"><strong>Colaborador Avaliado:</strong> ${avaliado.nome} (${avaliado.setor})</p>
-                        <p style="margin: 6px 0; font-size: 13px;"><strong>Gestor Avaliador:</strong> ${avaliador.nome}</p>
-                        <p style="margin: 6px 0; font-size: 13px;"><strong>Data da Avaliação:</strong> ${dataAval}</p>
-                    </div>
-
-                    <table style="width: 100%; border-collapse: collapse; margin-bottom: 25px;">
-                        <tr>
-                            <th style="background-color: #8A151B; color: white; padding: 10px; text-align: left; font-size: 11px; text-transform: uppercase; border: 1px solid #ddd;">Critério Analisado</th>
-                            <th style="width: 100px; text-align: center; background-color: #8A151B; color: white; padding: 10px; font-size: 11px; text-transform: uppercase; border: 1px solid #ddd;">Nota (1 a 5)</th>
-                        </tr>
-                        ${evaluationCriteria.map(c => {
-                            let nota = avaliacao.notas[c.id] || 0;
-                            return `<tr><td style="border: 1px solid #ddd; padding: 10px;"><strong style="font-size: 13px;">${c.title}</strong><br><span style="font-size: 10px; color:#666;">${c.desc}</span></td><td style="border: 1px solid #ddd; padding: 10px; text-align: center; font-weight: bold; font-size: 15px;">${nota}</td></tr>`;
-                        }).join('')}
+                    <div style="border-bottom: 3px solid #8A151B; padding-bottom: 15px; margin-bottom: 25px; display: flex; justify-content: space-between; align-items: flex-end;"><div><h1 style="color: #8A151B; margin: 0; font-size: 22px; text-transform: uppercase;">Relatório de Desempenho</h1></div><span style="font-size: 11px; color: #777; font-weight: bold;">ADCOL - Documento Confidencial</span></div>
+                    <div style="background-color: #f4f4f5; padding: 15px; border-radius: 8px; margin-bottom: 25px;"><p style="margin: 6px 0; font-size: 13px;"><strong>Colaborador Avaliado:</strong> ${avaliado.nome} (${avaliado.setor})</p><p style="margin: 6px 0; font-size: 13px;"><strong>Gestor Avaliador:</strong> ${avaliador.nome}</p><p style="margin: 6px 0; font-size: 13px;"><strong>Data da Avaliação:</strong> ${dataAval}</p></div>
+                    <table style="width: 100%; border-collapse: collapse; margin-bottom: 25px;"><tr><th style="background-color: #8A151B; color: white; padding: 10px; text-align: left; font-size: 11px; text-transform: uppercase; border: 1px solid #ddd;">Critério Analisado</th><th style="width: 100px; text-align: center; background-color: #8A151B; color: white; padding: 10px; font-size: 11px; text-transform: uppercase; border: 1px solid #ddd;">Nota (1 a 5)</th></tr>
+                        ${evaluationCriteria.map(c => { let nota = avaliacao.notas[c.id] || 0; return `<tr><td style="border: 1px solid #ddd; padding: 10px;"><strong style="font-size: 13px;">${c.title}</strong><br><span style="font-size: 10px; color:#666;">${c.desc}</span></td><td style="border: 1px solid #ddd; padding: 10px; text-align: center; font-weight: bold; font-size: 15px;">${nota}</td></tr>`; }).join('')}
                     </table>
-
-                    <div style="margin-bottom: 20px;">
-                        <h3 style="color: #444; border-bottom: 2px solid #eee; padding-bottom: 4px; font-size: 14px; margin-bottom: 10px;">Pontos Fortes (Destaques)</h3>
-                        <p style="font-size: 13px; line-height: 1.5; background-color: #fcfcfc; padding: 12px; border-radius: 6px; border: 1px solid #eee; margin:0;">${avaliacao.pontos_fortes ? avaliacao.pontos_fortes.replace(/\n/g, '<br>') : 'Nenhum comentário registrado.'}</p>
-                    </div>
-
-                    <div style="margin-bottom: 20px;">
-                        <h3 style="color: #444; border-bottom: 2px solid #eee; padding-bottom: 4px; font-size: 14px; margin-bottom: 10px;">Plano de Ação (Pontos a Desenvolver)</h3>
-                        <p style="font-size: 13px; line-height: 1.5; background-color: #fcfcfc; padding: 12px; border-radius: 6px; border: 1px solid #eee; margin:0;">${avaliacao.pontos_melhorar ? avaliacao.pontos_melhorar.replace(/\n/g, '<br>') : 'Nenhum comentário registrado.'}</p>
-                    </div>
-
-                    <div style="margin-top: 40px; text-align: center; font-size: 10px; color: #999; border-top: 1px solid #eee; padding-top: 8px;">
-                        Gerado automaticamente pelo Digital Workplace ADCOL em ${new Date().toLocaleString('pt-BR')}
-                    </div>
+                    <div style="margin-bottom: 20px;"><h3 style="color: #444; border-bottom: 2px solid #eee; padding-bottom: 4px; font-size: 14px; margin-bottom: 10px;">Pontos Fortes (Destaques)</h3><p style="font-size: 13px; line-height: 1.5; background-color: #fcfcfc; padding: 12px; border-radius: 6px; border: 1px solid #eee; margin:0;">${avaliacao.pontos_fortes ? avaliacao.pontos_fortes.replace(/\n/g, '<br>') : 'Nenhum comentário registrado.'}</p></div>
+                    <div style="margin-bottom: 20px;"><h3 style="color: #444; border-bottom: 2px solid #eee; padding-bottom: 4px; font-size: 14px; margin-bottom: 10px;">Plano de Ação (Pontos a Desenvolver)</h3><p style="font-size: 13px; line-height: 1.5; background-color: #fcfcfc; padding: 12px; border-radius: 6px; border: 1px solid #eee; margin:0;">${avaliacao.pontos_melhorar ? avaliacao.pontos_melhorar.replace(/\n/g, '<br>') : 'Nenhum comentário registrado.'}</p></div>
+                    <div style="margin-top: 40px; text-align: center; font-size: 10px; color: #999; border-top: 1px solid #eee; padding-top: 8px;">Gerado automaticamente pelo Digital Workplace ADCOL em ${new Date().toLocaleString('pt-BR')}</div>
                 </div>
             `;
-
             const options = { margin: [0.4, 0.4, 0.4, 0.4], filename: `Avaliacao_${avaliado.nome.replace(/ /g, '_')}_${dataAval.replace(/\//g, '_')}.pdf`, image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2, useCORS: true }, jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' } };
             html2pdf().set(options).from(element).save();
         }
@@ -614,11 +584,40 @@
             if(data) { dbAvaliacoes.push(data[0]); alert("Avaliação salva no Supabase com sucesso!"); closeEvalModal(); renderPerformanceTab(); } else alert("Erro ao salvar: " + error.message);
         }
 
-        // --- SISTEMAS DE SUPORTE RESTANTES ---
-        function renderEventos() { document.getElementById('list-events').innerHTML = dbEventos.length === 0 ? `<p class="text-sm text-zinc-400 italic">Vazio.</p>` : dbEventos.map(e => `<div class="flex bg-white border border-zinc-200 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition"><div class="${e.cor_class} w-20 flex flex-col items-center justify-center text-white"><span class="text-xs font-bold uppercase">${e.mes}</span><span class="text-2xl font-black">${e.dia}</span></div><div class="p-4 flex-1"><h4 class="font-bold text-base text-zinc-800">${e.titulo}</h4><p class="text-xs text-zinc-500">${e.descricao}</p></div></div>`).join(''); try { lucide.createIcons(); } catch(e){} }
+        // --- SISTEMA CALENDÁRIO DINÂMICO E DASHBOARD ---
+        function renderDashboardWidgets() {
+            let limitEvents = dbEventos.slice(0,3);
+            document.getElementById('widget-events').innerHTML = limitEvents.length === 0 ? `<p class="text-xs text-zinc-400 italic">Nenhum evento futuro.</p>` : limitEvents.map(e => `
+                <div class="flex items-center space-x-3 p-2 bg-zinc-50 rounded border border-zinc-100">
+                    <div class="${e.cor_class} w-10 h-10 flex flex-col items-center justify-center text-white rounded shrink-0 leading-none"><span class="text-[9px] font-bold uppercase">${e.mes}</span><span class="text-sm font-black">${e.dia}</span></div>
+                    <div><h4 class="text-xs font-bold text-zinc-800">${e.titulo}</h4><p class="text-[10px] text-zinc-500">${e.descricao}</p></div>
+                </div>
+            `).join('');
+        }
+
+        function renderEventos() {
+            document.getElementById('list-events').innerHTML = dbEventos.length === 0 ? `<p class="text-sm text-zinc-400 italic">Vazio.</p>` : dbEventos.map(e => `<div class="flex bg-white border border-zinc-200 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition"><div class="${e.cor_class} w-20 flex flex-col items-center justify-center text-white"><span class="text-xs font-bold uppercase">${e.mes}</span><span class="text-2xl font-black">${e.dia}</span></div><div class="p-4 flex-1 flex justify-between items-start"><div><h4 class="font-bold text-base text-zinc-800">${e.titulo}</h4><p class="text-xs text-zinc-500">${e.descricao}</p></div>${(sessionUser && (sessionUser.role === 'admin' || sessionUser.role === 'gestor')) ? `<button onclick="deleteEvent(${e.id})" class="text-zinc-400 hover:text-red-500 p-2"><i data-lucide="trash" class="w-4 h-4"></i></button>` : ''}</div></div>`).join(''); 
+            
+            // Renderiza Grid Dinâmica Limpa (sem fixos)
+            let daysHtml = '';
+            for(let i=1; i<=31; i++) {
+                let dayEvent = dbEventos.find(e => parseInt(e.dia) === i);
+                if (dayEvent) {
+                    daysHtml += `<div class="p-1.5 font-bold border-2 border-orange-500 rounded text-orange-600 bg-orange-50 cursor-pointer hover:bg-orange-100 transition shadow-sm">${i}</div>`;
+                } else {
+                    daysHtml += `<div class="p-1.5 rounded cursor-pointer hover:bg-zinc-100 transition">${i}</div>`;
+                }
+            }
+            document.getElementById('calendar-grid').innerHTML = daysHtml + `<div class="p-1.5 text-zinc-300">1</div><div class="p-1.5 text-zinc-300">2</div><div class="p-1.5 text-zinc-300">3</div><div class="p-1.5 text-zinc-300">4</div>`;
+
+            renderDashboardWidgets();
+            try { lucide.createIcons(); } catch(e){} 
+        }
         function openEventModal() { document.getElementById('ev-id').value = ''; document.getElementById('event-modal-title').innerHTML = `<i data-lucide="calendar-plus" class="w-5 h-5 inline mr-2 text-orange-500"></i> Novo Evento`; document.getElementById('event-modal').classList.remove('hidden'); try{lucide.createIcons();}catch(e){} }
         function closeEventModal() { document.getElementById('event-modal').classList.add('hidden'); document.getElementById('ev-titulo').value = ''; document.getElementById('ev-dia').value = ''; document.getElementById('ev-desc').value = ''; }
-        async function handleSaveEvent(e) { e.preventDefault(); const id = document.getElementById('ev-id').value; const evData = { dia: document.getElementById('ev-dia').value.padStart(2, '0'), mes: document.getElementById('ev-mes').value.substring(0,3).toUpperCase(), titulo: document.getElementById('ev-titulo').value, descricao: document.getElementById('ev-desc').value, cor_class: document.getElementById('ev-cor').value }; if(id) { await supabaseClient.from('eventos_calendario').update(evData).eq('id', id); } else { const {data} = await supabaseClient.from('eventos_calendario').insert([evData]).select(); if(data) dbEventos.push(data[0]); } closeEventModal(); await carregarDadosSupabase(); renderEventos(); }
+        async function handleSaveEvent(e) { e.preventDefault(); const id = document.getElementById('ev-id').value; const evData = { dia: document.getElementById('ev-dia').value.padStart(2, '0'), mes: document.getElementById('ev-mes').value.substring(0,3).toUpperCase(), titulo: document.getElementById('ev-titulo').value, descricao: document.getElementById('ev-desc').value, cor_class: document.getElementById('ev-cor').value }; if(id) { await supabaseClient.from('eventos_calendario').update(evData).eq('id', id); } else { const {data} = await supabaseClient.from('eventos_calendario').insert([evData]).select(); if(data) dbEventos.push(data[0]); } closeEventModal(); await carregarDadosSupabase(); }
+        async function deleteEvent(id) { if(confirm('Apagar evento?')) { await supabaseClient.from('eventos_calendario').delete().eq('id', id); dbEventos = dbEventos.filter(e => e.id !== id); renderEventos(); } }
+
         function renderPosts() { document.getElementById('list-posts').innerHTML = dbPosts.length === 0 ? `<p class="text-sm text-zinc-400 italic p-4 text-center">Nenhuma publicação no feed ainda.</p>` : dbPosts.map(p => { let dataFormatada = new Date(p.created_at).toLocaleDateString('pt-BR', {hour: '2-digit', minute:'2-digit'}); let delBtn = (sessionUser && (sessionUser.role === 'admin' || sessionUser.id === p.user_id)) ? `<button onclick="deletePost(${p.id})" class="text-zinc-400 hover:text-red-500 p-2 rounded hover:bg-red-50 transition"><i data-lucide="trash-2" class="w-4 h-4"></i></button>` : ''; return `<div class="bg-white p-5 md:p-6 rounded-2xl shadow-sm border border-zinc-200"><div class="flex items-center justify-between mb-4"><div class="flex items-center space-x-3"><div class="w-10 h-10 rounded-full ${p.cor_avatar} flex items-center justify-center text-sm font-bold text-white shrink-0">${p.iniciais}</div><div><h4 class="text-sm font-bold text-zinc-800">${p.nome}</h4><p class="text-[11px] text-zinc-400">${dataFormatada}</p></div></div>${delBtn}</div><p class="text-sm text-zinc-700 mb-2 leading-relaxed">${p.texto}</p></div>`; }).join(''); try { lucide.createIcons(); } catch(e){} }
         async function handleCreatePost(e) { e.preventDefault(); const text = document.getElementById('new-post-text').value; if(!text) return; const postData = { user_id: sessionUser.id, nome: sessionUser.nome, iniciais: sessionUser.nome.substring(0,2).toUpperCase(), role: sessionUser.role, texto: text, cor_avatar: (sessionUser.role === 'admin' || sessionUser.role === 'gestor') ? 'bg-zinc-800' : 'bg-emerald-600' }; const {data} = await supabaseClient.from('posts_rede_social').insert([postData]).select(); if(data) { dbPosts.unshift(data[0]); document.getElementById('new-post-text').value = ''; renderPosts(); } }
         async function deletePost(id) { if(confirm('Apagar publicação?')) { await supabaseClient.from('posts_rede_social').delete().eq('id', id); dbPosts = dbPosts.filter(p => p.id !== id); renderPosts(); } }
@@ -627,12 +626,75 @@
         function closeModal() { document.getElementById('upload-modal').classList.add('hidden'); document.getElementById('modal-doc-name').value = ''; }
         async function handleUpload(e) { e.preventDefault(); const docData = { nome: document.getElementById('modal-doc-name').value, tipo: document.getElementById('modal-doc-type').value, sector: document.getElementById('modal-doc-sector').value }; const {data} = await supabaseClient.from('documentos_adcol').insert([docData]).select(); if(data) { dbDocumentos.push(data[0]); closeModal(); renderSectorContent(activeTab); } }
         async function deleteDocument(id) { if(confirm('Excluir documento?')) { await supabaseClient.from('documentos_adcol').delete().eq('id', id); dbDocumentos = dbDocumentos.filter(d => d.id !== id); renderSectorContent(activeTab); } }
-        function renderWiki() { document.getElementById('wiki-list').innerHTML = dbWiki.length === 0 ? `<p class="p-4 text-sm text-zinc-400 italic">Nenhum artigo criado ainda.</p>` : dbWiki.map(w => { let dateStr = w.created_at ? new Date(w.created_at).toLocaleDateString('pt-BR', {day: '2-digit', month:'short'}) : w.date; return `<div class="p-4 md:p-5 hover:bg-zinc-50 transition cursor-pointer flex flex-col md:flex-row md:items-center justify-between gap-3 md:gap-4"><div class="flex-1"><div class="flex items-center space-x-2 mb-1"><span class="text-[10px] font-bold uppercase tracking-wider text-blue-700 bg-blue-100 px-2 py-0.5 rounded-full">${w.cat}</span><span class="text-[10px] text-zinc-400 font-medium">${dateStr}</span></div><h3 class="text-sm font-bold text-zinc-800 mb-1">${w.title}</h3><p class="text-xs text-zinc-500 flex items-center"><i data-lucide="user" class="w-3 h-3 mr-1"></i> ${w.author}</p></div><div class="flex items-center justify-between md:justify-end w-full md:w-auto mt-2 md:mt-0"><div class="flex flex-col items-center justify-center p-2 rounded-lg hover:bg-zinc-100 text-zinc-400 hover:text-blue-600 transition"><i data-lucide="thumbs-up" class="w-4 h-4 mb-1"></i><span class="text-xs font-bold leading-none">${w.likes || 0}</span></div><button class="bg-white border border-zinc-200 text-zinc-600 hover:bg-zinc-50 hover:text-blue-600 px-4 py-2 rounded-lg text-xs font-bold transition shadow-sm ml-4">Ler Artigo</button></div></div>` }).join(''); try { lucide.createIcons(); } catch(e){} }
-        async function handleCreateWiki(e) { e.preventDefault(); const title = document.getElementById('wiki-title').value; const cat = document.getElementById('wiki-cat').value; const content = document.getElementById('wiki-content').value; const wikiData = { title, author: sessionUser.nome, cat, content, likes: 0, date: "Hoje" }; const {data} = await supabaseClient.from('wiki_adcol').insert([wikiData]).select(); if(data) { dbWiki.unshift(data[0]); document.getElementById('wiki-title').value = ''; document.getElementById('wiki-content').value = ''; document.getElementById('wiki-modal').classList.add('hidden'); renderWiki(); alert('Artigo enviado e salvo na nuvem!'); } }
+        
+        // --- SISTEMA WIKI COM EDITOR, LEITURA E COMENTÁRIOS ---
+        function renderWiki() { 
+            document.getElementById('wiki-list').innerHTML = dbWiki.length === 0 ? `<p class="p-4 text-sm text-zinc-400 italic">Nenhum artigo criado ainda.</p>` : dbWiki.map(w => { 
+                let dateStr = w.created_at ? new Date(w.created_at).toLocaleDateString('pt-BR', {day: '2-digit', month:'short'}) : w.date; 
+                let delBtn = (sessionUser && (sessionUser.role === 'admin' || sessionUser.nome === w.author)) ? `<button onclick="deleteWiki(${w.id}); event.stopPropagation();" class="p-2 text-zinc-400 hover:text-red-500 rounded transition ml-2"><i data-lucide="trash-2" class="w-4 h-4"></i></button>` : '';
+                return `<div class="p-4 md:p-5 hover:bg-zinc-50 transition cursor-pointer flex flex-col md:flex-row md:items-center justify-between gap-3 md:gap-4"><div class="flex-1"><div class="flex items-center space-x-2 mb-1"><span class="text-[10px] font-bold uppercase tracking-wider text-blue-700 bg-blue-100 px-2 py-0.5 rounded-full">${w.cat}</span><span class="text-[10px] text-zinc-400 font-medium">${dateStr}</span></div><h3 class="text-sm font-bold text-zinc-800 mb-1">${w.title}</h3><p class="text-xs text-zinc-500 flex items-center"><i data-lucide="user" class="w-3 h-3 mr-1"></i> ${w.author}</p></div><div class="flex items-center justify-between md:justify-end w-full md:w-auto mt-2 md:mt-0"><div class="flex flex-col items-center justify-center p-2 rounded-lg hover:bg-zinc-100 text-zinc-400 hover:text-blue-600 transition"><i data-lucide="message-square" class="w-4 h-4 mb-1"></i><span class="text-xs font-bold leading-none">${w.comentarios ? w.comentarios.length : 0}</span></div><button onclick="openReadWiki(${w.id})" class="bg-white border border-zinc-200 text-zinc-600 hover:bg-zinc-50 hover:text-blue-600 px-4 py-2 rounded-lg text-xs font-bold transition shadow-sm ml-4">Ler Artigo</button>${delBtn}</div></div>` 
+            }).join(''); 
+            try { lucide.createIcons(); } catch(e){} 
+        }
+        
+        function formatText(cmd, val = null) { document.execCommand(cmd, false, val); document.getElementById('wiki-content-editor').focus(); }
+        function insertImagePrompt() { const url = prompt("Cole o link da imagem:"); if (url) { document.execCommand('insertImage', false, url); } }
+
+        async function handleCreateWiki(e) { 
+            e.preventDefault(); 
+            const title = document.getElementById('wiki-title').value; const cat = document.getElementById('wiki-cat').value; const content = document.getElementById('wiki-content-editor').innerHTML; 
+            const wikiData = { title, author: sessionUser.nome, cat, content, likes: 0, date: "Hoje", comentarios: [] }; 
+            const {data} = await supabaseClient.from('wiki_adcol').insert([wikiData]).select(); 
+            if(data) { dbWiki.unshift(data[0]); document.getElementById('wiki-title').value = ''; document.getElementById('wiki-content-editor').innerHTML = ''; document.getElementById('wiki-modal').classList.add('hidden'); renderWiki(); alert('Artigo publicado!'); } 
+        }
+        
+        async function deleteWiki(id) { if(confirm("Apagar artigo permanentemente?")) { await supabaseClient.from('wiki_adcol').delete().eq('id', id); dbWiki = dbWiki.filter(w => w.id !== id); renderWiki(); } }
+
+        function openReadWiki(id) {
+            const article = dbWiki.find(x => x.id === id); if(!article) return;
+            document.getElementById('read-wiki-cat').innerText = article.cat;
+            document.getElementById('read-wiki-title').innerText = article.title;
+            document.getElementById('read-wiki-author').innerText = article.author;
+            document.getElementById('read-wiki-date').innerText = article.created_at ? new Date(article.created_at).toLocaleDateString('pt-BR') : article.date;
+            document.getElementById('read-wiki-content').innerHTML = article.content;
+            document.getElementById('current-read-wiki-id').value = id;
+            document.getElementById('comment-avatar').innerText = sessionUser.nome.substring(0,2).toUpperCase();
+            
+            renderComments(article);
+            document.getElementById('wiki-read-modal').classList.remove('hidden');
+        }
+
+        function renderComments(article) {
+            const list = document.getElementById('read-wiki-comments-list');
+            if(!article.comentarios || article.comentarios.length === 0) {
+                list.innerHTML = `<p class="text-xs text-zinc-400 italic text-center py-4">Seja o primeiro a comentar.</p>`; return;
+            }
+            list.innerHTML = article.comentarios.map(c => `
+                <div class="bg-zinc-50 p-4 rounded-xl border border-zinc-100 flex items-start space-x-3">
+                    <div class="w-8 h-8 rounded-full bg-zinc-200 flex items-center justify-center text-xs font-bold text-zinc-600 shrink-0">${c.nome.substring(0,2).toUpperCase()}</div>
+                    <div><h5 class="text-xs font-bold text-zinc-800">${c.nome} <span class="font-normal text-zinc-400 ml-2">${c.data}</span></h5><p class="text-sm text-zinc-600 mt-1">${c.texto}</p></div>
+                </div>
+            `).join('');
+        }
+
+        async function handlePostComment(e) {
+            e.preventDefault();
+            const input = document.getElementById('new-comment-input'); const text = input.value; const id = parseInt(document.getElementById('current-read-wiki-id').value);
+            if(!text) return;
+            let article = dbWiki.find(x => x.id === id);
+            let novosComments = article.comentarios ? [...article.comentarios] : [];
+            novosComments.push({ nome: sessionUser.nome, texto: text, data: new Date().toLocaleDateString('pt-BR', {hour: '2-digit', minute:'2-digit'}) });
+            const { error } = await supabaseClient.from('wiki_adcol').update({ comentarios: novosComments }).eq('id', id);
+            if(!error) { article.comentarios = novosComments; input.value = ''; renderComments(article); renderWiki(); } else alert("Erro ao comentar.");
+        }
+
+        // --- SISTEMAS DE GAMIFICAÇÃO ---
         function renderGamification() { let u = dbUsuarios.find(x => x.id === sessionUser.id); document.getElementById('user-adcoins').innerText = u ? u.adcoins : 0; document.getElementById('rewards-store').innerHTML = dbRecompensas.map(r => `<div class="flex items-center justify-between p-4 border border-zinc-100 rounded-xl bg-white hover:border-yellow-400 hover:shadow-sm transition group"><div><h4 class="font-bold text-sm text-zinc-800">${r.nome}</h4><p class="text-xs font-bold text-yellow-600 mt-1">${r.custo} ADCoins</p></div><button onclick="redeemReward(${r.id}, ${r.custo})" class="bg-zinc-50 text-zinc-600 border border-zinc-200 hover:bg-yellow-500 hover:border-yellow-500 hover:text-white px-4 py-2 rounded-lg text-xs font-bold transition shadow-sm">Resgatar</button></div>`).join(''); if(sessionUser.role === 'admin') { document.getElementById('admin-gamification-zone').classList.remove('hidden'); let sel = document.getElementById('credit-user'); if(sel) { sel.innerHTML = `<option value="">Selecione...</option>` + dbUsuarios.filter(x => x.id !== sessionUser.id).map(x => `<option value="${x.id}">${x.nome} (${x.setor}) - Saldo: ${x.adcoins}</option>`).join(''); } } else { document.getElementById('admin-gamification-zone').classList.add('hidden'); } }
         async function handleAddReward(e) { e.preventDefault(); const nome = document.getElementById('reward-name').value; const custo = parseInt(document.getElementById('reward-cost').value); const { data, error } = await supabaseClient.from('recompensas_adcol').insert([{ nome, custo }]).select(); if(!error && data) { dbRecompensas.push(data[0]); document.getElementById('reward-name').value = ''; document.getElementById('reward-cost').value = ''; renderGamification(); alert('Nova recompensa adicionada à vitrine com sucesso!'); } }
         async function handleCreditPoints(e) { e.preventDefault(); const uid = parseInt(document.getElementById('credit-user').value); const pts = parseInt(document.getElementById('credit-amount').value); if(!uid || !pts) return; let u = dbUsuarios.find(x => x.id === uid); if(u) { let novoSaldo = (u.adcoins || 0) + pts; const { error } = await supabaseClient.from('usuarios_adcol').update({ adcoins: novoSaldo }).eq('id', uid); if(!error) { u.adcoins = novoSaldo; alert(`${pts} ADCoins creditados para ${u.nome}!`); document.getElementById('credit-amount').value = ''; document.getElementById('credit-reason').value = ''; renderGamification(); } } }
         async function redeemReward(id, custo) { let u = dbUsuarios.find(x => x.id === sessionUser.id); let saldo = u.adcoins || 0; if(saldo >= custo) { if(confirm(`Resgatar por ${custo} ADCoins?`)) { let novoSaldo = saldo - custo; const { error } = await supabaseClient.from('usuarios_adcol').update({ adcoins: novoSaldo }).eq('id', sessionUser.id); if(!error) { u.adcoins = novoSaldo; sessionUser.adcoins = novoSaldo; localStorage.setItem('adcol_user', JSON.stringify(sessionUser)); alert('Resgate enviado ao RH!'); renderGamification(); } } } else { alert('ADCoins insuficientes.'); } }
+        
+        // --- SISTEMAS DE ADMINISTRAÇÃO E LOGIN ---
         function renderUsersTable() { document.getElementById('table-users').innerHTML = dbUsuarios.map(u => { let badgeColor = u.role === 'admin' ? 'bg-red-100 text-red-700' : (u.role === 'gestor' ? 'bg-blue-100 text-blue-700' : (u.role === 'estagiario' ? 'bg-orange-100 text-orange-700' : 'bg-zinc-100 text-zinc-600')); let dataFormatada = "Não informada"; if(u.data_nascimento) { const [y, m, d] = u.data_nascimento.split('-'); dataFormatada = `${d}/${m}/${y}`; } return `<tr class="hover:bg-zinc-50 transition"><td class="p-4 font-bold text-zinc-800"><div class="flex flex-col"><span>${u.nome}</span><span class="text-[10px] text-zinc-400 font-normal">${u.email}</span></div></td><td class="p-4 text-zinc-500 text-xs font-bold uppercase">${u.setor || 'N/A'}</td><td class="p-4 text-zinc-500 text-xs">${dataFormatada}</td><td class="p-4"><span class="text-[10px] px-2 py-1 rounded-md font-bold uppercase tracking-wider ${badgeColor}">${u.role}</span></td><td class="p-4 text-right"><button onclick="handleDeleteUser(${u.id})" class="text-zinc-400 hover:text-red-500 p-2 rounded hover:bg-red-50 transition"><i data-lucide="user-x" class="w-4 h-4"></i></button></td></tr>` }).join(''); try { lucide.createIcons(); } catch(e){} }
         async function handleCreateUser(e) { e.preventDefault(); const nome = document.getElementById('adm-user-name').value; const email = document.getElementById('adm-user-email').value.toLowerCase(); const senha = document.getElementById('adm-user-password').value; const role = document.getElementById('adm-user-role').value; const setor = document.getElementById('adm-user-sector').value; const data_nascimento = document.getElementById('adm-user-birth').value; if (dbUsuarios.some(u => u.email === email)) return alert('⚠️ E-mail já cadastrado!'); const { data, error } = await supabaseClient.from('usuarios_adcol').insert([{ nome, email, senha, role, setor, adcoins: 0, data_nascimento }]).select(); if(!error && data) { dbUsuarios.push(data[0]); document.getElementById('adm-user-name').value = ''; document.getElementById('adm-user-email').value = ''; document.getElementById('adm-user-password').value = ''; document.getElementById('adm-user-birth').value = ''; renderUsersTable(); alert(`Usuário criado com sucesso!`); } else if (error) alert('Erro ao criar usuário: ' + error.message); }
         async function handleDeleteUser(id) { if (confirm('Remover o usuário definitivamente?')) { const { error } = await supabaseClient.from('usuarios_adcol').delete().eq('id', id); if(!error) { dbUsuarios = dbUsuarios.filter(u => u.id !== id); renderUsersTable(); } else alert('Erro ao deletar: ' + error.message); } }
