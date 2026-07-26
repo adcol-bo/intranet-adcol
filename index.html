@@ -7,7 +7,6 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-    <!-- BIBLIOTECA DE PDF DIRETO -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script>
@@ -49,7 +48,7 @@
         <!-- OVERLAY MOBILE -->
         <div id="mobile-overlay" onclick="closeMobileMenu()" class="hidden fixed inset-0 bg-zinc-900/60 z-40 md:hidden backdrop-blur-sm transition-opacity"></div>
 
-        <!-- SIDEBAR COM FLEXBOX INTELIGENTE -->
+        <!-- SIDEBAR -->
         <aside id="sidebar" class="w-64 bg-graphite text-white flex flex-col flex-shrink-0 border-r border-zinc-800 fixed md:relative z-50 h-full transition-transform duration-300 -translate-x-full md:translate-x-0">
             <div class="h-16 flex-shrink-0 flex items-center justify-between md:justify-center border-b border-zinc-800 px-4">
                 <span class="text-xl font-bold tracking-wide text-white">ADCOL</span>
@@ -107,9 +106,10 @@
                     <div>
                         <h3 class="text-xs font-bold uppercase tracking-wider text-zinc-400 mb-3">Sistemas Corporativos</h3>
                         <div class="flex space-x-3 md:space-x-4 overflow-x-auto pb-2 custom-scrollbar">
-                            <button class="flex flex-col items-center justify-center p-3 md:p-4 bg-white rounded-xl border border-zinc-200 hover:border-burgundy hover:shadow-md transition w-24 md:w-28 shrink-0"><div class="w-10 h-10 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center mb-2"><i data-lucide="globe"></i></div><span class="text-[11px] md:text-xs font-bold text-zinc-700 text-center">Portal e-CAC</span></button>
-                            <button class="flex flex-col items-center justify-center p-3 md:p-4 bg-white rounded-xl border border-zinc-200 hover:border-burgundy hover:shadow-md transition w-24 md:w-28 shrink-0"><div class="w-10 h-10 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center mb-2"><i data-lucide="pie-chart"></i></div><span class="text-[11px] md:text-xs font-bold text-zinc-700 text-center">ERP Domínio</span></button>
-                            <button class="flex flex-col items-center justify-center p-3 md:p-4 bg-white rounded-xl border border-zinc-200 hover:border-burgundy hover:shadow-md transition w-24 md:w-28 shrink-0"><div class="w-10 h-10 bg-orange-50 text-orange-600 rounded-full flex items-center justify-center mb-2"><i data-lucide="receipt"></i></div><span class="text-[11px] md:text-xs font-bold text-zinc-700 text-center">Emissor NF</span></button>
+                            <!-- BOTÕES DE ATALHO ATUALIZADOS -->
+                            <button onclick="window.open('https://cav.receita.fazenda.gov.br/autenticacao/login', '_blank')" class="flex flex-col items-center justify-center p-3 md:p-4 bg-white rounded-xl border border-zinc-200 hover:border-burgundy hover:shadow-md transition w-24 md:w-28 shrink-0"><div class="w-10 h-10 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center mb-2"><i data-lucide="globe"></i></div><span class="text-[11px] md:text-xs font-bold text-zinc-700 text-center">Portal e-CAC</span></button>
+                            <button onclick="window.open('https://onvio.com.br/login/#/', '_blank')" class="flex flex-col items-center justify-center p-3 md:p-4 bg-white rounded-xl border border-zinc-200 hover:border-burgundy hover:shadow-md transition w-24 md:w-28 shrink-0"><div class="w-10 h-10 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center mb-2"><i data-lucide="pie-chart"></i></div><span class="text-[11px] md:text-xs font-bold text-zinc-700 text-center">Portal Onvio</span></button>
+                            <button onclick="window.open('https://www.econeteditora.com.br/', '_blank')" class="flex flex-col items-center justify-center p-3 md:p-4 bg-white rounded-xl border border-zinc-200 hover:border-burgundy hover:shadow-md transition w-24 md:w-28 shrink-0"><div class="w-10 h-10 bg-orange-50 text-orange-600 rounded-full flex items-center justify-center mb-2"><i data-lucide="receipt"></i></div><span class="text-[11px] md:text-xs font-bold text-zinc-700 text-center">Portal Econet</span></button>
                             <button class="flex flex-col items-center justify-center p-3 md:p-4 bg-white rounded-xl border border-zinc-200 hover:border-burgundy hover:shadow-md transition w-24 md:w-28 shrink-0"><div class="w-10 h-10 bg-purple-50 text-purple-600 rounded-full flex items-center justify-center mb-2"><i data-lucide="mail"></i></div><span class="text-[11px] md:text-xs font-bold text-zinc-700 text-center">Webmail</span></button>
                         </div>
                     </div>
@@ -124,7 +124,8 @@
                         </div>
                         <div class="bg-white p-5 md:p-6 rounded-2xl shadow-sm border border-zinc-200 flex flex-col h-full">
                             <h3 class="text-sm font-bold text-zinc-800 flex items-center mb-4"><i data-lucide="building" class="w-4 h-4 mr-2 text-zinc-500"></i> Institucional</h3>
-                            <div class="space-y-3 flex-1"><a href="#" class="flex items-center p-3 border border-zinc-100 rounded-lg hover:border-burgundy hover:bg-red-50 transition group"><div class="bg-zinc-100 group-hover:bg-burgundy text-zinc-500 group-hover:text-white p-2 rounded-lg transition mr-3"><i data-lucide="shield-check" class="w-4 h-4"></i></div><div><h4 class="text-xs font-bold text-zinc-800">Código de Conduta</h4><p class="text-[10px] text-zinc-500">Diretrizes éticas ADCOL</p></div></a></div>
+                            <!-- BOTÃO CÓDIGO DE CONDUTA ATUALIZADO -->
+                            <div class="space-y-3 flex-1"><a href="javascript:void(0)" onclick="openCondutaModal()" class="flex items-center p-3 border border-zinc-100 rounded-lg hover:border-burgundy hover:bg-red-50 transition group"><div class="bg-zinc-100 group-hover:bg-burgundy text-zinc-500 group-hover:text-white p-2 rounded-lg transition mr-3"><i data-lucide="shield-check" class="w-4 h-4"></i></div><div><h4 class="text-xs font-bold text-zinc-800">Código de Conduta</h4><p class="text-[10px] text-zinc-500">Diretrizes éticas ADCOL</p></div></a></div>
                         </div>
                     </div>
                 </div>
@@ -136,7 +137,7 @@
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6"><div class="bg-white p-5 md:p-6 rounded-2xl shadow-sm border border-zinc-200"><h3 class="text-sm font-bold uppercase tracking-wider text-zinc-400 mb-5 flex items-center"><i data-lucide="target" class="w-4 h-4 mr-2 text-zinc-500"></i> Missões Ativas</h3><div class="space-y-3"><div class="p-4 border border-zinc-100 rounded-xl bg-zinc-50 hover:border-yellow-300 transition flex flex-col md:block"><div class="flex justify-between items-start mb-2"><h4 class="font-bold text-sm text-zinc-800">Relógio Suíço</h4><span class="text-[10px] md:text-xs font-bold text-yellow-700 bg-yellow-100 border border-yellow-200 px-2 py-0.5 rounded-full mt-1 md:mt-0">+50 ADCoins</span></div><p class="text-xs text-zinc-500">Entregar obrigações acessórias com antecedência.</p></div><div class="p-4 border border-zinc-100 rounded-xl bg-zinc-50 hover:border-yellow-300 transition flex flex-col md:block"><div class="flex justify-between items-start mb-2"><h4 class="font-bold text-sm text-zinc-800">Ideia de Ouro</h4><span class="text-[10px] md:text-xs font-bold text-yellow-700 bg-yellow-100 border border-yellow-200 px-2 py-0.5 rounded-full mt-1 md:mt-0">+100 ADCoins</span></div><p class="text-xs text-zinc-500">Sugerir uma melhoria de processo aprovada.</p></div><div class="p-4 border border-zinc-100 rounded-xl bg-zinc-50 hover:border-yellow-300 transition flex flex-col md:block"><div class="flex justify-between items-start mb-2"><h4 class="font-bold text-sm text-zinc-800">Multiplicador</h4><span class="text-[10px] md:text-xs font-bold text-yellow-700 bg-yellow-100 border border-yellow-200 px-2 py-0.5 rounded-full mt-1 md:mt-0">+40 ADCoins</span></div><p class="text-xs text-zinc-500">Escrever um artigo aprovado na Base de Conhecimento.</p></div></div></div><div class="bg-white p-5 md:p-6 rounded-2xl shadow-sm border border-zinc-200"><h3 class="text-sm font-bold uppercase tracking-wider text-zinc-400 mb-5 flex items-center"><i data-lucide="shopping-bag" class="w-4 h-4 mr-2 text-zinc-500"></i> Vitrine de Recompensas</h3><div id="rewards-store" class="space-y-4 max-h-96 overflow-y-auto custom-scrollbar pr-2"></div></div></div>
                 </div>
 
-                <!-- DESEMPENHO E PDF -->
+                <!-- DESEMPENHO -->
                 <div id="tab-performance" class="hidden space-y-6">
                     <div id="manager-perf-zone" class="hidden bg-white p-5 md:p-6 rounded-2xl shadow-sm border border-zinc-200 mb-6">
                         <div class="flex items-center justify-between mb-4 md:mb-6"><div><h3 class="text-lg font-bold text-zinc-800 flex items-center"><i data-lucide="users" class="w-5 h-5 mr-2 text-blue-600"></i> Equipe do Setor</h3><p class="text-xs text-zinc-500 mt-1">Gerencie e avalie os liderados do seu departamento.</p></div></div>
@@ -226,7 +227,92 @@
         </main>
     </div>
 
-    <!-- MODAIS -->
+    <!-- MODAL DO CÓDIGO DE CONDUTA -->
+    <div id="conduta-modal" class="hidden fixed inset-0 bg-zinc-900/80 backdrop-blur-sm flex items-center justify-center p-4 z-[90]">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-4xl flex flex-col border border-zinc-100 max-h-[90vh]">
+            <div class="p-4 md:p-6 border-b border-zinc-100 flex items-center justify-between bg-zinc-50 rounded-t-2xl">
+                <div>
+                    <h3 class="text-lg font-bold text-zinc-800"><i data-lucide="shield-check" class="w-5 h-5 inline mr-2 text-burgundy"></i> Código de Conduta Interna</h3>
+                    <p class="text-xs text-zinc-500 mt-1">Diretrizes Éticas e Cultura Organizacional ADCOL</p>
+                </div>
+                <button onclick="closeCondutaModal()" class="text-zinc-400 hover:text-zinc-600 p-2"><i data-lucide="x" class="w-6 h-6"></i></button>
+            </div>
+            
+            <div class="p-6 overflow-y-auto custom-scrollbar text-sm text-zinc-700 leading-relaxed">
+                <!-- CONTEÚDO EXTRAÍDO DO PDF OFICIAL -->
+                <div class="mb-8">
+                    <h4 class="text-burgundy font-bold text-base border-b border-zinc-200 pb-2 mb-4 uppercase tracking-wide">Introdução</h4>
+                    <p class="mb-4">O presente código de conduta foi elaborado levando em consideração os elementos da cultura organizacional (missão, visão e valores), visa estabelecer condições indispensáveis para a harmonia entre as pessoas que trabalham em conjunto a fim de atingir um objetivo comum, bem como estabelece e define as normas que dirigem as relações de trabalho entre os colaboradores e o empregador, integrando o contrato individual de trabalho. A ação reguladora nele contida estende-se a todos os colaboradores, sem distinção hierárquica, e complementa os princípios gerais de direitos e deveres contidos na Constituição Federal e na Consolidação das Leis do Trabalho.</p>
+                </div>
+
+                <div class="mb-8">
+                    <h4 class="text-burgundy font-bold text-base border-b border-zinc-200 pb-2 mb-4 uppercase tracking-wide">Elementos da Cultura Organizacional</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                        <div class="bg-zinc-50 p-4 rounded-xl border border-zinc-100">
+                            <strong class="text-zinc-900 block mb-2"><i data-lucide="target" class="w-4 h-4 inline mr-1 text-burgundy"></i> Missão</strong>
+                            Oferecer serviços contábeis diferenciados com qualidade, prestados através de uma equipe comprometida e qualificada, buscando a excelência e satisfação dos nossos clientes.
+                        </div>
+                        <div class="bg-zinc-50 p-4 rounded-xl border border-zinc-100">
+                            <strong class="text-zinc-900 block mb-2"><i data-lucide="eye" class="w-4 h-4 inline mr-1 text-burgundy"></i> Visão</strong>
+                            Ser reconhecida como empresa contábil de referência pela qualidade, excelência e inovação na prestação dos serviços.
+                        </div>
+                        <div class="bg-zinc-50 p-4 rounded-xl border border-zinc-100">
+                            <strong class="text-zinc-900 block mb-2"><i data-lucide="heart" class="w-4 h-4 inline mr-1 text-burgundy"></i> Valores</strong>
+                            Ética, Reconhecimento humano, Transparência, Comprometimento, Conhecimento, Inovação, Qualidade, Confiança, Responsabilidade Social e Ambiental.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-8">
+                    <h4 class="text-burgundy font-bold text-base border-b border-zinc-200 pb-2 mb-4 uppercase tracking-wide">Aplicação e Normas Éticas</h4>
+                    <p class="mb-4"><strong>Art. 1º</strong> Ficam sujeitos a este Código de Conduta Interna todos os indivíduos ou instituições que mantiverem relações com a empresa e dela obtiverem informações privilegiadas que possam impactar no serviço/produto oferecido. A obrigatoriedade de cumprimento permanece por todo o tempo de duração do contrato de trabalho.</p>
+                    <p class="mb-4">As normas estabelecidas representam uma condição para a relação harmoniosa entre empresa e demais partes interessadas. Estão pautadas no respeito aos direitos humanos, responsabilidade social e ambiental e comprometimento ético.</p>
+                </div>
+
+                <div class="mb-8">
+                    <h4 class="text-burgundy font-bold text-base border-b border-zinc-200 pb-2 mb-4 uppercase tracking-wide">Deveres e Responsabilidades</h4>
+                    <p class="mb-3 font-medium">O colaborador deve atender com rigor as seguintes disposições (Art. 10º):</p>
+                    <ul class="list-disc pl-5 space-y-2 mb-4 text-zinc-600">
+                        <li>Cumprir os compromissos expressamente assumidos no contrato com zelo, espírito de colaboração e competência.</li>
+                        <li>Zelar pela boa conservação das instalações, equipamentos e materiais (evitando desperdícios).</li>
+                        <li>Acatar com presteza as ordens de superiores hierárquicos e manter conduta compatível com a dignidade do cargo.</li>
+                        <li>Trabalhar com atenção necessária a fim de evitar danos materiais e reparar perdas decorrentes de falha pessoal culposa ou dolosa.</li>
+                        <li>Ter consideração com os demais, comportando-se de modo apropriado, sem promover brincadeiras de mau gosto, algazarras ou palavras de baixo calão.</li>
+                        <li>Usar corretamente o uniforme estabelecido (Art. 8º: Calça jeans/social preta/azul básicas, blusa/camisa da empresa e sapato fechado).</li>
+                        <li>Informar imediatamente a empresa suspeitas fundadas de conduta em desacordo com este código.</li>
+                    </ul>
+                </div>
+
+                <div class="mb-8">
+                    <h4 class="text-burgundy font-bold text-base border-b border-zinc-200 pb-2 mb-4 uppercase tracking-wide">Proibições Expressas (Art. 43º)</h4>
+                    <ul class="list-disc pl-5 space-y-2 mb-4 text-zinc-600">
+                        <li>Ocupar-se de atividades que prejudiquem os interesses do serviço ou usar equipamentos da empresa para uso pessoal.</li>
+                        <li>Promover ou aderir a discussões políticas e religiosas que prejudiquem o ambiente, ou dirigir insultos e xingamentos.</li>
+                        <li>Fumar nos recintos da empresa ou apresentar-se embriagado/sob efeito de entorpecentes.</li>
+                        <li>Fazer uso contínuo de aplicativos pessoais (WhatsApp, Redes Sociais) desviando o foco da função, ou usar fones de ouvido para entretenimento.</li>
+                        <li>Receber presentes ou propinas para conquistar clientes ou de pessoas em relação de negócios.</li>
+                        <li>Instalar softwares sem autorização prévia.</li>
+                    </ul>
+                </div>
+
+                <div class="mb-8">
+                    <h4 class="text-burgundy font-bold text-base border-b border-zinc-200 pb-2 mb-4 uppercase tracking-wide">Conflito de Interesses e Confidencialidade</h4>
+                    <p class="mb-4">O colaborador deve zelar para que suas ações não conflitem com os interesses da empresa. É proibido dispor de informações sigilosas dos clientes para benefício próprio, realizar serviços paralelos concorrentes ou liderar avaliações de familiares. Os dados e informações sigilosas devem ser tratados com absoluta confidencialidade, inclusive após o fim do contrato.</p>
+                </div>
+
+                <div class="mb-8">
+                    <h4 class="text-burgundy font-bold text-base border-b border-zinc-200 pb-2 mb-4 uppercase tracking-wide">Relações Humanas e Canal de Ética</h4>
+                    <p class="mb-4">A empresa não tolerará atitudes de discriminação ou assédio moral (humilhações, xingamentos, perseguições). Qualquer ocorrência deve ser comunicada através do nosso <strong>Canal de Ética</strong> pelo e-mail <strong>ouvidoria@adcolconsultoria.com.br</strong>, garantindo-se confidencialidade e proteção contra qualquer tipo de retaliação.</p>
+                </div>
+            </div>
+            
+            <div class="p-4 md:p-6 border-t border-zinc-100 bg-zinc-50 rounded-b-2xl flex justify-end">
+                <button onclick="closeCondutaModal()" class="w-full md:w-auto bg-burgundy hover:bg-burgundy-hover text-white px-6 py-2.5 rounded-lg text-sm font-bold transition shadow-md">Compreendido e Ciente</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- OUTROS MODAIS (Birthday, Wiki, Mood, Upload, Event, Eval) -->
     <div id="birthday-modal" class="hidden fixed inset-0 bg-zinc-900/80 backdrop-blur-sm flex items-center justify-center p-4 z-[90]">
         <div class="bg-gradient-to-br from-yellow-400 via-orange-500 to-red-500 rounded-3xl shadow-2xl p-1 w-full max-w-md text-center transform transition-all scale-100 animate-[bounce_1s_ease-in-out]">
             <div class="bg-white rounded-3xl p-6 md:p-8 h-full w-full relative overflow-hidden">
@@ -317,14 +403,10 @@
         }
 
         // --- SISTEMAS GERAIS DE UI E MENU MOBILE ---
-        function openMobileMenu() { 
-            document.getElementById('sidebar').classList.remove('-translate-x-full'); 
-            document.getElementById('mobile-overlay').classList.remove('hidden'); 
-        }
-        function closeMobileMenu() { 
-            document.getElementById('sidebar').classList.add('-translate-x-full'); 
-            document.getElementById('mobile-overlay').classList.add('hidden'); 
-        }
+        function openMobileMenu() { document.getElementById('sidebar').classList.remove('-translate-x-full'); document.getElementById('mobile-overlay').classList.remove('hidden'); }
+        function closeMobileMenu() { document.getElementById('sidebar').classList.add('-translate-x-full'); document.getElementById('mobile-overlay').classList.add('hidden'); }
+        function openCondutaModal() { document.getElementById('conduta-modal').classList.remove('hidden'); }
+        function closeCondutaModal() { document.getElementById('conduta-modal').classList.add('hidden'); }
 
         function checkBirthday(user) {
             if (!user.data_nascimento) { setTimeout(() => { document.getElementById('mood-modal').classList.remove('hidden'); }, 500); return; }
@@ -339,12 +421,7 @@
             setTimeout(() => { document.getElementById('mood-modal').classList.remove('hidden'); }, 500);
         }
 
-        function closeBirthdayModal() {
-            localStorage.setItem(`adcol_bday_${sessionUser.id}_${new Date().getFullYear()}`, 'true');
-            document.getElementById('birthday-modal').classList.add('hidden');
-            setTimeout(() => { document.getElementById('mood-modal').classList.remove('hidden'); }, 300);
-        }
-
+        function closeBirthdayModal() { localStorage.setItem(`adcol_bday_${sessionUser.id}_${new Date().getFullYear()}`, 'true'); document.getElementById('birthday-modal').classList.add('hidden'); setTimeout(() => { document.getElementById('mood-modal').classList.remove('hidden'); }, 300); }
         function toggleSetores() { const list = document.getElementById('sector-menu-list'); const icon = document.getElementById('sector-chevron'); list.classList.toggle('hidden'); icon.classList.toggle('rotate-90'); }
         function changeMonth(dir) { mesIndex += dir; if (mesIndex < 0) mesIndex = 0; if (mesIndex >= mesesNavegacao.length) mesIndex = mesesNavegacao.length - 1; document.getElementById('display-month').innerText = mesesNavegacao[mesIndex]; }
 
@@ -468,14 +545,7 @@
                 </div>
             `;
 
-            const options = {
-                margin:       [0.4, 0.4, 0.4, 0.4],
-                filename:     `Avaliacao_${avaliado.nome.replace(/ /g, '_')}_${dataAval.replace(/\//g, '_')}.pdf`,
-                image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2, useCORS: true },
-                jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }
-            };
-
+            const options = { margin: [0.4, 0.4, 0.4, 0.4], filename: `Avaliacao_${avaliado.nome.replace(/ /g, '_')}_${dataAval.replace(/\//g, '_')}.pdf`, image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2, useCORS: true }, jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' } };
             html2pdf().set(options).from(element).save();
         }
 
