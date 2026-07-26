@@ -9,7 +9,6 @@
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script>
-        // CONFIGURAÇÕES DO SUPABASE - COLOQUE SUAS CHAVES AQUI:
         const SUPABASE_URL = "https://awakbipwvkhaxrehjroh.supabase.co";
         const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF3YWtiaXB3dmtoYXhyZWhqcm9oIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMwOTY1NTUsImV4cCI6MjA5ODY3MjU1NX0.Pk-7KloBNucxQ7WzukmMtUec_M9pWvxBaZY2KFDsxa4";
         
@@ -28,8 +27,9 @@
     <div id="login-screen" class="flex items-center justify-center min-h-screen px-4 bg-gradient-to-br from-zinc-100 to-zinc-200">
         <div class="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-md border border-zinc-100 text-center">
             <div class="flex flex-col items-center mb-6">
-                <div class="w-16 h-16 bg-burgundy rounded-2xl flex items-center justify-center shadow-lg shadow-burgundy/30 mb-4 text-white font-serif text-2xl font-bold">A</div>
-                <h1 class="text-2xl font-bold text-burgundy tracking-wide">ADCOL</h1>
+                <!-- Logomarca ADCOL Substituindo a Letra 'A' -->
+                <img src="Logo PNG.png" alt="Logo ADCOL" class="w-32 h-auto mb-4 drop-shadow-md">
+                <h1 class="text-2xl font-bold text-burgundy tracking-wide mt-2">ADCOL</h1>
                 <p class="text-[10px] uppercase tracking-widest text-zinc-400 font-bold mt-1">Digital Workplace</p>
             </div>
             <h2 class="text-lg font-semibold text-zinc-700 mb-2">Bem-vindo(a)</h2>
@@ -59,6 +59,7 @@
                     <button onclick="switchTab('onboarding')" id="btn-onboarding" class="w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-zinc-400 hover:bg-zinc-800 hover:text-white text-sm font-medium transition"><i data-lucide="graduation-cap" class="w-4 h-4"></i><span>Trilha de Capacitação</span></button>
                     <p class="text-[10px] uppercase text-zinc-500 font-bold px-3 pt-4 mb-2 tracking-widest">Arquivos Corporativos</p>
                     <button onclick="toggleSetores()" class="w-full flex items-center justify-between px-3 py-2 rounded-lg text-zinc-400 hover:bg-zinc-800 hover:text-white text-sm font-medium transition"><div class="flex items-center space-x-3"><i data-lucide="folders" class="w-4 h-4"></i><span>Departamentos</span></div><i data-lucide="chevron-right" id="sector-chevron" class="w-4 h-4 transition-transform duration-200"></i></button>
+                    <!-- Os setores agora são injetados pelo JS baseado no cargo do usuário -->
                     <div id="sector-menu-list" class="hidden ml-4 mt-1 border-l border-zinc-700 pl-2 space-y-1"></div>
                 </nav>
             </div>
@@ -110,20 +111,37 @@
                                 <div><label class="block text-xs font-bold text-zinc-600 uppercase mb-1">Nome Completo</label><input id="adm-user-name" type="text" required class="w-full p-2.5 border border-zinc-200 rounded-lg text-sm bg-zinc-50 focus:bg-white focus:ring-2 focus:ring-burgundy outline-none transition"></div>
                                 <div><label class="block text-xs font-bold text-zinc-600 uppercase mb-1">E-mail</label><input id="adm-user-email" type="email" required class="w-full p-2.5 border border-zinc-200 rounded-lg text-sm bg-zinc-50 focus:bg-white focus:ring-2 focus:ring-burgundy outline-none transition"></div>
                                 <div><label class="block text-xs font-bold text-zinc-600 uppercase mb-1">Senha Inicial</label><input id="adm-user-password" type="password" required class="w-full p-2.5 border border-zinc-200 rounded-lg text-sm bg-zinc-50 focus:bg-white focus:ring-2 focus:ring-burgundy outline-none transition"></div>
-                                <div><label class="block text-xs font-bold text-zinc-600 uppercase mb-1">Nível</label><select id="adm-user-role" class="w-full p-2.5 border border-zinc-200 rounded-lg text-sm bg-zinc-50 focus:bg-white focus:ring-2 focus:ring-burgundy outline-none transition"><option value="colaborador">Colaborador</option><option value="admin">Administrador</option></select></div>
-                                <button type="submit" class="w-full bg-burgundy text-white py-2.5 rounded-lg font-bold text-sm hover:bg-burgundy-hover transition">Salvar Usuário</button>
+                                
+                                <div class="grid grid-cols-2 gap-3">
+                                    <div>
+                                        <label class="block text-xs font-bold text-zinc-600 uppercase mb-1">Nível</label>
+                                        <select id="adm-user-role" class="w-full p-2.5 border border-zinc-200 rounded-lg text-sm bg-zinc-50 focus:bg-white focus:ring-2 focus:ring-burgundy outline-none transition">
+                                            <option value="colaborador">Colaborador</option>
+                                            <option value="gestor">Gestor</option>
+                                            <option value="admin">Administrador</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-bold text-zinc-600 uppercase mb-1">Setor</label>
+                                        <select id="adm-user-sector" class="w-full p-2.5 border border-zinc-200 rounded-lg text-sm bg-zinc-50 focus:bg-white focus:ring-2 focus:ring-burgundy outline-none transition">
+                                            <!-- Opções preenchidas via JavaScript -->
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <button type="submit" class="w-full bg-burgundy text-white py-2.5 rounded-lg font-bold text-sm hover:bg-burgundy-hover transition shadow-md">Salvar Usuário</button>
                             </form>
                         </div>
                         <div class="lg:col-span-2 bg-white p-6 rounded-2xl shadow-sm border border-zinc-200">
                             <h3 class="text-sm font-bold uppercase tracking-wider text-zinc-400 mb-5 flex items-center"><i data-lucide="users" class="w-4 h-4 mr-2 text-zinc-500"></i> Usuários Ativos</h3>
-                            <div class="overflow-hidden border border-zinc-200 rounded-xl"><table class="w-full text-left text-sm"><thead class="bg-zinc-50 text-zinc-500 text-xs uppercase font-bold border-b border-zinc-200"><tr><th class="p-4">Nome</th><th class="p-4">E-mail</th><th class="p-4">Permissão</th><th class="p-4 text-right">Ações</th></tr></thead><tbody id="table-users" class="divide-y divide-zinc-100 text-zinc-700"></tbody></table></div>
+                            <div class="overflow-hidden border border-zinc-200 rounded-xl"><table class="w-full text-left text-sm"><thead class="bg-zinc-50 text-zinc-500 text-xs uppercase font-bold border-b border-zinc-200"><tr><th class="p-4">Nome</th><th class="p-4">Setor</th><th class="p-4">Permissão</th><th class="p-4 text-right">Ações</th></tr></thead><tbody id="table-users" class="divide-y divide-zinc-100 text-zinc-700"></tbody></table></div>
                         </div>
                     </div>
                 </div>
 
                 <div id="tab-sector" class="hidden space-y-6">
                     <div id="admin-upload-zone" class="hidden bg-white p-5 rounded-2xl shadow-sm border border-dashed border-zinc-300 flex items-center justify-between">
-                        <div class="flex items-center space-x-4"><div class="p-3 bg-red-50 text-burgundy rounded-full"><i data-lucide="upload-cloud"></i></div><div><h4 class="text-sm font-bold text-zinc-800">Área do Administrador</h4><p class="text-xs text-zinc-500 mt-1">Adicione manuais, POPs ou formulários neste setor.</p></div></div>
+                        <div class="flex items-center space-x-4"><div class="p-3 bg-red-50 text-burgundy rounded-full"><i data-lucide="upload-cloud"></i></div><div><h4 class="text-sm font-bold text-zinc-800">Área de Gestão de Arquivos</h4><p class="text-xs text-zinc-500 mt-1">Adicione manuais, POPs ou formulários neste setor.</p></div></div>
                         <button onclick="openModal()" class="bg-burgundy text-white px-5 py-2.5 rounded-lg text-sm font-bold flex items-center hover:bg-burgundy-hover transition shadow-md"><i data-lucide="plus" class="w-4 h-4 mr-2"></i> Adicionar Documento</button>
                     </div>
                     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -197,7 +215,7 @@
             <div class="p-3 bg-white border-t border-zinc-100 flex items-center"><input type="text" class="flex-1 bg-zinc-100 p-2.5 rounded-lg outline-none text-sm focus:ring-2 focus:ring-blue-500 transition" placeholder="Pergunte algo..."><button class="ml-2 p-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition shadow-md"><i data-lucide="send" class="w-4 h-4"></i></button></div>
         </div>
     </div>
-   <!-- Modais e Lógica -->
+    <!-- Modais e Lógica -->
     <div id="upload-modal" class="hidden fixed inset-0 bg-zinc-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-[60]">
         <div class="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-md border border-zinc-100">
             <div class="flex items-center justify-between mb-5 pb-3 border-b border-zinc-100"><h3 class="text-base font-bold text-zinc-800"><i data-lucide="file-plus" class="w-5 h-5 inline mr-2 text-burgundy"></i> Inserir Documento</h3><button onclick="closeModal()" class="text-zinc-400 hover:text-zinc-600"><i data-lucide="x" class="w-5 h-5"></i></button></div>
@@ -237,7 +255,11 @@
         const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         const setores = ["Diretoria", "Pessoal", "Fiscal", "Contábil", "TI", "Legalização"];
-        let dbUsuarios = [{ id: 1, nome: "Diretoria ADCOL", email: "admin@adcol.com.br", senha: "123", role: "admin" }, { id: 2, nome: "João Silva", email: "user@adcol.com.br", senha: "123", role: "colaborador" }];
+        let dbUsuarios = [
+            { id: 1, nome: "Diretoria ADCOL", email: "admin@adcol.com.br", senha: "123", role: "admin", setor: "Diretoria" }, 
+            { id: 2, nome: "João Silva", email: "user@adcol.com.br", senha: "123", role: "colaborador", setor: "Fiscal" }
+        ];
+        
         let dbDocumentos = [{ id: 1, nome: "Planejamento Anual", tipo: "Manual", sector: "Diretoria" }, { id: 2, nome: "Atribuições", tipo: "Cargo", sector: "Diretoria" }, { id: 3, nome: "Checklist DCTFWeb", tipo: "Formulário", sector: "Fiscal" }];
         
         let dbEventos = [];
@@ -248,11 +270,13 @@
         let sessionUser = null; let activeTab = 'home'; 
 
         document.addEventListener("DOMContentLoaded", () => {
-            document.getElementById('sector-menu-list').innerHTML = setores.map(s => `<button onclick="switchTab('${s}')" id="btn-sector-${s}" class="w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-800 transition text-sm"><i data-lucide="folder" class="w-3.5 h-3.5"></i><span>${s}</span></button>`).join('');
+            // Preenche opções de setor nos selects
             document.getElementById('modal-doc-sector').innerHTML = setores.map(s => `<option value="${s}">${s}</option>`).join('');
+            if(document.getElementById('adm-user-sector')) {
+                document.getElementById('adm-user-sector').innerHTML = setores.map(s => `<option value="${s}">${s}</option>`).join('');
+            }
             document.getElementById('current-date').innerText = new Date().toLocaleDateString('pt-BR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
             
-            // VERIFICA SE O USUÁRIO JÁ ESTAVA LOGADO (O CARTÃO DE MEMÓRIA)
             const usuarioSalvo = localStorage.getItem('adcol_user');
             if(usuarioSalvo) {
                 sessionUser = JSON.parse(usuarioSalvo);
@@ -281,7 +305,7 @@
             const { data, error } = await supabaseClient.from('eventos_calendario').select('*').order('dia', { ascending: true });
             if (!error && data) dbEventos = data;
             document.getElementById('list-events').innerHTML = dbEventos.length === 0 ? `<p class="text-sm text-zinc-400 italic">Nenhum evento cadastrado.</p>` : dbEventos.map(e => {
-                let adminBtns = (sessionUser && sessionUser.role === 'admin') ? `<div class="flex flex-col border-l border-zinc-100 bg-zinc-50"><button onclick="editEvent(${e.id})" class="p-3 text-zinc-400 hover:text-blue-600 border-b border-zinc-100 transition"><i data-lucide="edit-2" class="w-4 h-4"></i></button><button onclick="deleteEvent(${e.id})" class="p-3 text-zinc-400 hover:text-red-600 transition"><i data-lucide="trash" class="w-4 h-4"></i></button></div>` : '';
+                let adminBtns = (sessionUser && (sessionUser.role === 'admin' || sessionUser.role === 'gestor')) ? `<div class="flex flex-col border-l border-zinc-100 bg-zinc-50"><button onclick="editEvent(${e.id})" class="p-3 text-zinc-400 hover:text-blue-600 border-b border-zinc-100 transition"><i data-lucide="edit-2" class="w-4 h-4"></i></button><button onclick="deleteEvent(${e.id})" class="p-3 text-zinc-400 hover:text-red-600 transition"><i data-lucide="trash" class="w-4 h-4"></i></button></div>` : '';
                 return `<div class="flex bg-white border border-zinc-200 rounded-xl overflow-hidden shadow-sm hover:shadow-md hover:border-zinc-300 transition group"><div class="${e.cor_class} w-20 flex flex-col items-center justify-center text-white shrink-0"><span class="text-xs font-bold uppercase tracking-widest">${e.mes}</span><span class="text-2xl font-black">${e.dia}</span></div><div class="p-4 flex-1"><h4 class="font-bold text-base text-zinc-800">${e.titulo}</h4><p class="text-xs text-zinc-500 mt-1">${e.descricao}</p></div>${adminBtns}</div>`;
             }).join('');
             renderWidgetEvents();
@@ -314,7 +338,7 @@
             const { data, error } = await supabaseClient.from('posts_rede_social').select('*').order('created_at', { ascending: false });
             if(!error && data) dbPosts = data;
             document.getElementById('list-posts').innerHTML = dbPosts.length === 0 ? `<p class="text-sm text-zinc-400 italic p-4 text-center">Nenhuma publicação no feed ainda.</p>` : dbPosts.map(p => {
-                let delBtn = (sessionUser && (sessionUser.role === 'admin' || sessionUser.id === p.user_id)) ? `<button onclick="deletePost(${p.id})" class="text-zinc-400 hover:text-red-500 p-2 rounded hover:bg-red-50 transition"><i data-lucide="trash-2" class="w-4 h-4"></i></button>` : '';
+                let delBtn = (sessionUser && (sessionUser.role === 'admin' || sessionUser.role === 'gestor' || sessionUser.id === p.user_id)) ? `<button onclick="deletePost(${p.id})" class="text-zinc-400 hover:text-red-500 p-2 rounded hover:bg-red-50 transition"><i data-lucide="trash-2" class="w-4 h-4"></i></button>` : '';
                 let dataFormatada = new Date(p.created_at).toLocaleDateString('pt-BR', {hour: '2-digit', minute:'2-digit'});
                 return `<div class="bg-white p-6 rounded-2xl shadow-sm border border-zinc-200"><div class="flex items-center justify-between mb-4"><div class="flex items-center space-x-3"><div class="w-10 h-10 rounded-full ${p.cor_avatar} flex items-center justify-center text-sm font-bold text-white shrink-0">${p.iniciais}</div><div><h4 class="text-sm font-bold text-zinc-800">${p.nome}</h4><p class="text-[11px] text-zinc-400">${dataFormatada}</p></div></div>${delBtn}</div><p class="text-sm text-zinc-700 mb-2 leading-relaxed">${p.texto}</p></div>`;
             }).join('');
@@ -323,7 +347,7 @@
 
         async function handleCreatePost(e) {
             e.preventDefault(); const text = document.getElementById('new-post-text').value; if(!text) return;
-            const postData = { user_id: sessionUser.id, nome: sessionUser.nome, iniciais: sessionUser.nome.substring(0,2).toUpperCase(), role: sessionUser.role, texto: text, cor_avatar: sessionUser.role === 'admin' ? 'bg-zinc-800' : 'bg-emerald-600' };
+            const postData = { user_id: sessionUser.id, nome: sessionUser.nome, iniciais: sessionUser.nome.substring(0,2).toUpperCase(), role: sessionUser.role, texto: text, cor_avatar: (sessionUser.role === 'admin' || sessionUser.role === 'gestor') ? 'bg-zinc-800' : 'bg-emerald-600' };
             await supabaseClient.from('posts_rede_social').insert([postData]); document.getElementById('new-post-text').value = ''; renderPosts();
         }
         async function deletePost(id) { if(confirm('Apagar publicação?')) { await supabaseClient.from('posts_rede_social').delete().eq('id', id); renderPosts(); } }
@@ -351,22 +375,47 @@
             document.getElementById('list-cargos').innerHTML = cargosList.length === 0 ? `<li class="text-xs text-zinc-400 italic">Vazio.</li>` : cargosList.map(c => `<li class="flex items-center space-x-2 p-2 hover:bg-zinc-50 rounded-lg border border-transparent hover:border-zinc-200 transition cursor-pointer"><i data-lucide="file-text" class="w-4 h-4 text-zinc-400"></i><span class="font-medium">${c.nome}</span></li>`).join('');
             const docsTabela = docsSetor.filter(d => d.tipo !== 'Cargo');
             document.getElementById('table-documents').innerHTML = docsTabela.length === 0 ? `<tr><td colspan="3" class="p-4 text-center text-xs text-zinc-400 italic">Vazio.</td></tr>` : docsTabela.map(d => {
-                let delBtn = (sessionUser && sessionUser.role === 'admin') ? `<button onclick="deleteDocument(${d.id})" class="text-zinc-400 hover:text-red-600 p-2 rounded-lg hover:bg-red-50 transition ml-2" title="Excluir"><i data-lucide="trash" class="w-4 h-4"></i></button>` : '';
+                let delBtn = (sessionUser && (sessionUser.role === 'admin' || sessionUser.role === 'gestor')) ? `<button onclick="deleteDocument(${d.id})" class="text-zinc-400 hover:text-red-600 p-2 rounded-lg hover:bg-red-50 transition ml-2" title="Excluir"><i data-lucide="trash" class="w-4 h-4"></i></button>` : '';
                 return `<tr class="hover:bg-zinc-50 transition"><td class="p-4 font-medium text-zinc-800">${d.nome}</td><td class="p-4"><span class="inline-block text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded-md ${d.tipo === 'Formulário' ? 'bg-blue-50 text-blue-700' : 'bg-emerald-50 text-emerald-700'}">${d.tipo}</span></td><td class="p-4 text-right flex justify-end items-center"><button class="text-zinc-400 hover:text-burgundy p-2 rounded-lg hover:bg-red-50 transition"><i data-lucide="download" class="w-4 h-4"></i></button>${delBtn}</td></tr>`;
             }).join('');
             try { lucide.createIcons(); } catch(e){}
         }
 
-        // FUNÇÃO QUE APLICA OS DADOS NA TELA (Evita repetir código)
+        // LÓGICA DE APLICAÇÃO VISUAL POR PERMISSÃO E SETOR
         function aplicarLoginUI(user) {
             let primeironome = user.nome.split(' ')[0];
-            document.getElementById('sidebar-user-name').innerText = user.nome; document.getElementById('greet-name').innerText = primeironome;
-            let iniciais = user.nome.substring(0, 2).toUpperCase(); document.getElementById('user-avatar-initials').innerText = iniciais; document.getElementById('post-avatar').innerText = iniciais;
-            document.getElementById('post-avatar').className = `w-12 h-12 rounded-full ${user.role === 'admin' ? 'bg-zinc-800' : 'bg-emerald-600'} flex items-center justify-center text-sm font-bold text-white shrink-0 shadow-inner`;
+            document.getElementById('sidebar-user-name').innerText = user.nome; 
+            document.getElementById('greet-name').innerText = primeironome;
+            let iniciais = user.nome.substring(0, 2).toUpperCase(); 
+            document.getElementById('user-avatar-initials').innerText = iniciais; 
+            document.getElementById('post-avatar').innerText = iniciais;
+            document.getElementById('post-avatar').className = `w-12 h-12 rounded-full ${user.role === 'admin' ? 'bg-zinc-800' : (user.role === 'gestor' ? 'bg-blue-600' : 'bg-emerald-600')} flex items-center justify-center text-sm font-bold text-white shrink-0 shadow-inner`;
+            
             const badge = document.getElementById('role-badge');
-            if (user.role === 'admin') { if(badge) { badge.className = "inline-block text-[9px] bg-red-500 text-white px-2 py-0.5 rounded uppercase font-bold tracking-widest shadow-sm"; badge.innerText = "Admin"; } document.getElementById('admin-upload-zone')?.classList.remove('hidden'); document.getElementById('admin-menu-section')?.classList.remove('hidden'); document.getElementById('admin-calendar-zone')?.classList.remove('hidden'); } 
-            else { if(badge) { badge.className = "inline-block text-[9px] bg-zinc-700 text-zinc-300 px-2 py-0.5 rounded uppercase font-bold tracking-widest"; badge.innerText = "Colab"; } document.getElementById('admin-upload-zone')?.classList.add('hidden'); document.getElementById('admin-menu-section')?.classList.add('hidden'); document.getElementById('admin-calendar-zone')?.classList.add('hidden'); }
-            document.getElementById('login-screen').classList.add('hidden'); document.getElementById('main-app').classList.remove('hidden');
+            
+            if (user.role === 'admin') { 
+                if(badge) { badge.className = "inline-block text-[9px] bg-red-500 text-white px-2 py-0.5 rounded uppercase font-bold tracking-widest shadow-sm"; badge.innerText = "Admin"; } 
+                document.getElementById('admin-upload-zone')?.classList.remove('hidden'); 
+                document.getElementById('admin-menu-section')?.classList.remove('hidden'); 
+                document.getElementById('admin-calendar-zone')?.classList.remove('hidden'); 
+            } else if (user.role === 'gestor') {
+                if(badge) { badge.className = "inline-block text-[9px] bg-blue-500 text-white px-2 py-0.5 rounded uppercase font-bold tracking-widest shadow-sm"; badge.innerText = "Gestor"; } 
+                document.getElementById('admin-upload-zone')?.classList.remove('hidden'); 
+                document.getElementById('admin-menu-section')?.classList.add('hidden'); // Gestor não cria usuário
+                document.getElementById('admin-calendar-zone')?.classList.remove('hidden'); 
+            } else { 
+                if(badge) { badge.className = "inline-block text-[9px] bg-zinc-700 text-zinc-300 px-2 py-0.5 rounded uppercase font-bold tracking-widest"; badge.innerText = "Colab"; } 
+                document.getElementById('admin-upload-zone')?.classList.add('hidden'); 
+                document.getElementById('admin-menu-section')?.classList.add('hidden'); 
+                document.getElementById('admin-calendar-zone')?.classList.add('hidden'); 
+            }
+
+            // A Mágica de bloquear os setores no menu lateral:
+            let setoresPermitidos = (user.role === 'admin' || user.role === 'gestor') ? setores : [user.setor];
+            document.getElementById('sector-menu-list').innerHTML = setoresPermitidos.map(s => `<button onclick="switchTab('${s}')" id="btn-sector-${s}" class="w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-800 transition text-sm"><i data-lucide="folder" class="w-3.5 h-3.5"></i><span>${s}</span></button>`).join('');
+
+            document.getElementById('login-screen').classList.add('hidden'); 
+            document.getElementById('main-app').classList.remove('hidden');
             renderEventos(); renderPosts(); switchTab('home');
         }
 
@@ -374,7 +423,6 @@
             e.preventDefault(); const email = document.getElementById('login-email').value.trim().toLowerCase(); const senha = document.getElementById('login-senha').value.trim();
             const user = dbUsuarios.find(u => u.email.toLowerCase() === email && u.senha === senha);
             if (user) {
-                // SALVA O USUÁRIO NO CARTÃO DE MEMÓRIA DO NAVEGADOR
                 localStorage.setItem('adcol_user', JSON.stringify(user));
                 sessionUser = user;
                 aplicarLoginUI(user);
@@ -382,7 +430,6 @@
             } else alert('⚠️ Acesso Negado!');
         }
 
-        // LIMPA O CARTÃO DE MEMÓRIA AO SAIR
         function handleLogout() { 
             localStorage.removeItem('adcol_user');
             sessionUser = null; 
@@ -390,15 +437,46 @@
             document.getElementById('login-screen').classList.remove('hidden'); 
         }
 
-        function renderUsersTable() { document.getElementById('table-users').innerHTML = dbUsuarios.map(u => `<tr class="hover:bg-zinc-50 transition"><td class="p-4 font-bold text-zinc-800">${u.nome}</td><td class="p-4 text-zinc-500 font-mono text-xs">${u.email}</td><td class="p-4"><span class="text-[10px] px-2 py-1 rounded-md font-bold uppercase tracking-wider ${u.role === 'admin' ? 'bg-red-100 text-red-700' : 'bg-zinc-100 text-zinc-600'}">${u.role}</span></td><td class="p-4 text-right">${u.id === 1 ? '<span class="text-xs text-zinc-400 italic">Protegido</span>' : `<button onclick="handleDeleteUser(${u.id})" class="text-zinc-400 hover:text-red-500 p-2 rounded hover:bg-red-50 transition"><i data-lucide="user-x" class="w-4 h-4"></i></button>`}</td></tr>`).join(''); try { lucide.createIcons(); } catch(e){} }
-        function handleCreateUser(e) { e.preventDefault(); const nome = document.getElementById('adm-user-name').value; const email = document.getElementById('adm-user-email').value.toLowerCase(); const senha = document.getElementById('adm-user-password').value; const role = document.getElementById('adm-user-role').value; if (dbUsuarios.some(u => u.email === email)) return alert('⚠️ E-mail já cadastrado!'); dbUsuarios.push({ id: dbUsuarios.length + 1, nome, email, senha, role }); document.getElementById('adm-user-name').value = ''; document.getElementById('adm-user-email').value = ''; document.getElementById('adm-user-password').value = ''; renderUsersTable(); alert(`Usuário criado!`); }
+        function renderUsersTable() { 
+            document.getElementById('table-users').innerHTML = dbUsuarios.map(u => {
+                let badgeColor = u.role === 'admin' ? 'bg-red-100 text-red-700' : (u.role === 'gestor' ? 'bg-blue-100 text-blue-700' : 'bg-zinc-100 text-zinc-600');
+                return `<tr class="hover:bg-zinc-50 transition"><td class="p-4 font-bold text-zinc-800"><div class="flex flex-col"><span>${u.nome}</span><span class="text-[10px] text-zinc-400 font-normal">${u.email}</span></div></td><td class="p-4 text-zinc-500 text-xs font-bold uppercase">${u.setor || 'N/A'}</td><td class="p-4"><span class="text-[10px] px-2 py-1 rounded-md font-bold uppercase tracking-wider ${badgeColor}">${u.role}</span></td><td class="p-4 text-right">${u.id === 1 ? '<span class="text-xs text-zinc-400 italic">Protegido</span>' : `<button onclick="handleDeleteUser(${u.id})" class="text-zinc-400 hover:text-red-500 p-2 rounded hover:bg-red-50 transition"><i data-lucide="user-x" class="w-4 h-4"></i></button>`}</td></tr>`
+            }).join(''); 
+            try { lucide.createIcons(); } catch(e){} 
+        }
+
+        function handleCreateUser(e) { 
+            e.preventDefault(); 
+            const nome = document.getElementById('adm-user-name').value; 
+            const email = document.getElementById('adm-user-email').value.toLowerCase(); 
+            const senha = document.getElementById('adm-user-password').value; 
+            const role = document.getElementById('adm-user-role').value; 
+            const setor = document.getElementById('adm-user-sector').value;
+            
+            if (dbUsuarios.some(u => u.email === email)) return alert('⚠️ E-mail já cadastrado!'); 
+            dbUsuarios.push({ id: dbUsuarios.length + 1, nome, email, senha, role, setor }); 
+            
+            document.getElementById('adm-user-name').value = ''; 
+            document.getElementById('adm-user-email').value = ''; 
+            document.getElementById('adm-user-password').value = ''; 
+            renderUsersTable(); 
+            alert(`Usuário criado com sucesso no setor ${setor}!`); 
+        }
+
         function handleDeleteUser(id) { if (confirm('Remover o usuário?')) { dbUsuarios = dbUsuarios.filter(u => u.id !== id); renderUsersTable(); } }
         function openModal() { document.getElementById('modal-doc-sector').value = activeTab; document.getElementById('upload-modal').classList.remove('hidden'); }
         function closeModal() { document.getElementById('upload-modal').classList.add('hidden'); document.getElementById('modal-doc-name').value = ''; }
-        function handleUpload(e) { e.preventDefault(); dbDocumentos.push({ id: Date.now(), nome: document.getElementById('modal-doc-name').value, tipo: document.getElementById('modal-doc-type').value, sector: document.getElementById('modal-doc-sector').value }); closeModal(); if(activeTab === document.getElementById('modal-doc-sector').value) renderSectorContent(activeTab); else switchTab(document.getElementById('modal-doc-sector').value); }
+        
+        function handleUpload(e) { 
+            e.preventDefault(); 
+            dbDocumentos.push({ id: Date.now(), nome: document.getElementById('modal-doc-name').value, tipo: document.getElementById('modal-doc-type').value, sector: document.getElementById('modal-doc-sector').value }); 
+            closeModal(); 
+            if(activeTab === document.getElementById('modal-doc-sector').value) renderSectorContent(activeTab); else switchTab(document.getElementById('modal-doc-sector').value); 
+        }
+        
         function deleteDocument(id) { if(confirm('Excluir documento?')) { dbDocumentos = dbDocumentos.filter(d => d.id !== id); renderSectorContent(activeTab); } }
         function openEventModal() { document.getElementById('ev-id').value = ''; document.getElementById('event-modal-title').innerHTML = `<i data-lucide="calendar-plus" class="w-5 h-5 inline mr-2 text-orange-500"></i> Novo Evento`; document.getElementById('event-modal').classList.remove('hidden'); try{lucide.createIcons();}catch(e){} }
         function closeEventModal() { document.getElementById('event-modal').classList.add('hidden'); document.getElementById('ev-titulo').value = ''; document.getElementById('ev-dia').value = ''; document.getElementById('ev-desc').value = ''; }
     </script>
 </body>
-</html>
+</html> 
