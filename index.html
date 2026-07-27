@@ -27,11 +27,9 @@
     </script>
     <style>
         /* CSS Limpo - Sem erros no VS Code */
-        [contenteditable]:empty:before { 
-            content: attr(placeholder); 
-            color: #9ca3af; 
-            cursor: text; 
-        }
+        .editor-btn { padding: 0.375rem; color: #71717a; border-radius: 0.25rem; transition: all 0.2s; }
+        .editor-btn:hover { color: #8A151B; background-color: #fef2f2; }
+        [contenteditable]:empty:before { content: attr(placeholder); color: #9ca3af; cursor: text; }
     </style>
 </head>
 <body class="bg-[#F4F4F5] text-zinc-800 font-sans min-h-screen">
@@ -46,8 +44,9 @@
             <h2 class="text-lg font-semibold text-zinc-700 mb-2">Bem-vindo(a)</h2>
             <p class="text-xs text-zinc-500 mb-6">Acesse seu ambiente de trabalho digital.</p>
             
+            <!-- AVISO DE ERRO VISUAL NO LOGIN -->
             <div id="login-error" class="hidden bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-xl mb-5 text-xs font-bold text-center"></div>
-            
+
             <form onsubmit="handleLogin(event)" class="space-y-4 text-left">
                 <div>
                     <label class="block text-xs font-bold text-zinc-500 uppercase mb-1">E-mail Corporativo</label>
@@ -127,15 +126,14 @@
             </div>
         </aside>
 
-        <!-- ÁREA DE CONTEÚDO PRINCIPAL -->
         <main class="flex-1 flex flex-col overflow-y-auto relative w-full">
+            <!-- HEADER COM O SINO DE NOTIFICAÇÕES E BUSCA GLOBAL -->
             <header class="bg-white/80 backdrop-blur-md shadow-sm h-16 flex items-center justify-between px-4 md:px-6 border-b border-zinc-200 sticky top-0 z-20">
                 <div class="flex items-center">
                     <button onclick="openMobileMenu()" class="md:hidden text-zinc-500 hover:text-burgundy mr-3 p-1 rounded-lg hover:bg-zinc-100 transition"><i data-lucide="menu" class="w-6 h-6"></i></button>
                     <h2 id="page-title" class="text-base md:text-lg font-bold text-zinc-800 truncate max-w-[120px] md:max-w-none">Dashboard</h2>
                 </div>
                 
-                <!-- BARRA DE PESQUISA GLOBAL (SPOTLIGHT) -->
                 <div class="flex-1 max-w-xl ml-2 md:ml-8 mr-2 md:mr-4 relative">
                     <div class="flex items-center bg-zinc-100 px-3 md:px-4 py-2 rounded-full border border-transparent focus-within:border-burgundy focus-within:bg-white focus-within:shadow-sm transition-all">
                         <i data-lucide="search" class="w-4 h-4 text-zinc-400"></i>
@@ -147,7 +145,6 @@
                 <div class="flex items-center space-x-2 md:space-x-4">
                     <div class="text-xs font-bold text-zinc-400 hidden lg:block mr-2" id="current-date"></div>
                     
-                    <!-- NOTIFICAÇÕES (SINO) -->
                     <div class="relative">
                         <button id="notif-btn" onclick="toggleNotifications()" class="text-zinc-400 hover:text-burgundy transition relative p-1">
                             <i data-lucide="bell" class="w-5 h-5"></i>
@@ -159,7 +156,7 @@
                                 <button onclick="clearNotifications()" class="text-[10px] text-zinc-500 hover:text-burgundy font-bold uppercase tracking-wider transition">Limpar</button>
                             </div>
                             <div id="notif-list" class="max-h-80 overflow-y-auto custom-scrollbar divide-y divide-zinc-50">
-                                <!-- Notificações injetadas pelo JS -->
+                                <!-- Notificações dinâmicas -->
                             </div>
                         </div>
                     </div>
@@ -350,7 +347,7 @@
         </main>
     </div>
 
-    <!-- MODAL UNIVERSIDADE: AULA E CONDUTA -->
+    <!-- ================= MODAIS (AULA E CONDUTA) ================= -->
     <div id="uni-modal" class="hidden fixed inset-0 bg-zinc-900/80 backdrop-blur-sm flex items-center justify-center p-4 z-[90]">
         <div class="bg-white rounded-2xl shadow-2xl w-full max-w-5xl flex flex-col border border-zinc-100 max-h-[90vh]">
             <div class="p-4 md:p-6 border-b border-zinc-100 flex items-center justify-between bg-zinc-50 rounded-t-2xl">
@@ -362,30 +359,15 @@
             </div>
             
             <div class="p-6 overflow-y-auto custom-scrollbar text-sm text-zinc-700 leading-relaxed bg-zinc-50/50 space-y-8">
-                
                 <div class="text-center mb-8">
                     <h2 class="text-2xl font-black text-burgundy mb-2">Nossa jornada começa aqui.</h2>
                     <p class="text-zinc-500">Transformando nossa missão em realidade. A admissão se dará no ato da contratação, onde o colaborador passará pela fase de avaliação.</p>
                 </div>
-
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-                    <div class="bg-white p-5 rounded-xl border border-zinc-200 shadow-sm text-center hover:border-emerald-300 transition">
-                        <div class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-3"><i data-lucide="target" class="w-5 h-5"></i></div>
-                        <strong class="text-zinc-900 block mb-2 text-base">Missão</strong>
-                        <p class="text-xs">Oferecer serviços contábeis diferenciados com qualidade, prestados através de uma equipe comprometida e qualificada.</p>
-                    </div>
-                    <div class="bg-white p-5 rounded-xl border border-zinc-200 shadow-sm text-center hover:border-emerald-300 transition">
-                        <div class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-3"><i data-lucide="eye" class="w-5 h-5"></i></div>
-                        <strong class="text-zinc-900 block mb-2 text-base">Visão</strong>
-                        <p class="text-xs">Ser reconhecida como empresa contábil de referência pela qualidade, excelência e inovação na prestação dos serviços.</p>
-                    </div>
-                    <div class="bg-white p-5 rounded-xl border border-zinc-200 shadow-sm text-center hover:border-emerald-300 transition">
-                        <div class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-3"><i data-lucide="heart" class="w-5 h-5"></i></div>
-                        <strong class="text-zinc-900 block mb-2 text-base">Valores</strong>
-                        <p class="text-xs">Ética, Reconhecimento humano, Transparência, Comprometimento, Qualidade, Confiança, Responsabilidade Social e Ambiental.</p>
-                    </div>
+                    <div class="bg-white p-5 rounded-xl border border-zinc-200 shadow-sm text-center hover:border-emerald-300 transition"><div class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-3"><i data-lucide="target" class="w-5 h-5"></i></div><strong class="text-zinc-900 block mb-2 text-base">Missão</strong><p class="text-xs">Oferecer serviços contábeis diferenciados com qualidade, prestados através de uma equipe comprometida e qualificada.</p></div>
+                    <div class="bg-white p-5 rounded-xl border border-zinc-200 shadow-sm text-center hover:border-emerald-300 transition"><div class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-3"><i data-lucide="eye" class="w-5 h-5"></i></div><strong class="text-zinc-900 block mb-2 text-base">Visão</strong><p class="text-xs">Ser reconhecida como empresa contábil de referência pela qualidade, excelência e inovação na prestação dos serviços.</p></div>
+                    <div class="bg-white p-5 rounded-xl border border-zinc-200 shadow-sm text-center hover:border-emerald-300 transition"><div class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-3"><i data-lucide="heart" class="w-5 h-5"></i></div><strong class="text-zinc-900 block mb-2 text-base">Valores</strong><p class="text-xs">Ética, Reconhecimento humano, Transparência, Comprometimento, Qualidade, Confiança, Responsabilidade Social e Ambiental.</p></div>
                 </div>
-
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     <div class="bg-white p-6 rounded-xl border border-zinc-200 shadow-sm">
                         <h4 class="text-emerald-700 font-bold text-lg mb-4 flex items-center"><i data-lucide="users" class="mr-2"></i> Nossa Liderança</h4>
@@ -398,7 +380,6 @@
                             <div class="bg-zinc-50 p-2 rounded border border-zinc-100"><strong class="block text-zinc-800">Andressa Alves</strong> Gestora Contábil</div>
                         </div>
                     </div>
-                    
                     <div class="bg-white p-6 rounded-xl border border-zinc-200 shadow-sm">
                         <h4 class="text-emerald-700 font-bold text-lg mb-4 flex items-center"><i data-lucide="monitor" class="mr-2"></i> Sistemas & Comunicação</h4>
                         <ul class="list-disc pl-5 space-y-2 text-xs text-zinc-600 mb-4">
@@ -408,7 +389,6 @@
                         </ul>
                     </div>
                 </div>
-
                 <div class="bg-white p-6 rounded-xl border border-zinc-200 shadow-sm">
                     <h4 class="text-emerald-700 font-bold text-lg mb-4 flex items-center"><i data-lucide="clock" class="mr-2"></i> Relógio, Ponto e Faltas</h4>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -428,7 +408,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="bg-white p-6 rounded-xl border border-zinc-200 shadow-sm">
                         <h4 class="text-emerald-700 font-bold text-lg mb-4 flex items-center"><i data-lucide="shield" class="mr-2"></i> O que esperamos e Proibições</h4>
@@ -438,7 +417,6 @@
                             <li><strong>Proibido:</strong> Fones de ouvido para entretenimento, consumo de alimentos nas estações de trabalho e acesso a redes sociais (Instagram/WhatsApp pessoal) em horário de trabalho.</li>
                         </ul>
                     </div>
-
                     <div class="bg-white p-6 rounded-xl border border-zinc-200 shadow-sm">
                         <h4 class="text-emerald-700 font-bold text-lg mb-4 flex items-center"><i data-lucide="file-text" class="mr-2"></i> Termos Essenciais</h4>
                         <ul class="space-y-3 text-xs text-zinc-600">
@@ -448,7 +426,6 @@
                         </ul>
                     </div>
                 </div>
-
                 <div class="bg-amber-50 p-6 rounded-xl border border-amber-200 text-amber-900">
                     <h4 class="font-bold text-lg mb-2 flex items-center"><i data-lucide="lightbulb" class="mr-2"></i> Cofrinho de Ideias</h4>
                     <p class="text-sm">Envie suas ideias para <strong>ideias@adcolconsultoria.com.br</strong> focadas em aumento de receita ou redução de despesa. Ideias aprovadas recebem bônus de R$ 250,00.</p>
@@ -461,7 +438,6 @@
         </div>
     </div>
 
-    <!-- MODAL DO CÓDIGO DE CONDUTA INSTITUCIONAL -->
     <div id="conduta-modal" class="hidden fixed inset-0 bg-zinc-900/80 backdrop-blur-sm flex items-center justify-center p-4 z-[90]">
         <div class="bg-white rounded-2xl shadow-2xl w-full max-w-4xl flex flex-col border border-zinc-100 max-h-[90vh]">
             <div class="p-4 md:p-6 border-b border-zinc-100 flex items-center justify-between bg-zinc-50 rounded-t-2xl">
@@ -493,7 +469,6 @@
         </div>
     </div>
 
-    <!-- MODAL WIKI: ESCREVER ARTIGO (COM EDITOR) -->
     <div id="wiki-modal" class="hidden fixed inset-0 bg-zinc-900/80 backdrop-blur-sm flex items-center justify-center p-4 z-[70]">
         <div class="bg-white rounded-2xl shadow-2xl w-full max-w-4xl flex flex-col border border-zinc-100">
             <div class="p-4 md:p-5 border-b border-zinc-100 flex items-center justify-between bg-zinc-50 rounded-t-2xl">
@@ -529,7 +504,6 @@
         </div>
     </div>
 
-    <!-- MODAL WIKI: LER ARTIGO COM COMENTÁRIOS -->
     <div id="wiki-read-modal" class="hidden fixed inset-0 bg-zinc-900/80 backdrop-blur-sm flex items-center justify-center p-4 z-[80]">
         <div class="bg-white rounded-2xl shadow-2xl w-full max-w-4xl flex flex-col border border-zinc-100 h-[90vh]">
             <div class="p-4 md:p-6 border-b border-zinc-100 flex items-center justify-between bg-zinc-50 rounded-t-2xl">
@@ -540,17 +514,13 @@
                 </div>
                 <button onclick="document.getElementById('wiki-read-modal').classList.add('hidden')" class="text-zinc-400 hover:text-zinc-600 p-2 bg-zinc-100 rounded-full hover:bg-zinc-200"><i data-lucide="x" class="w-5 h-5"></i></button>
             </div>
-            
             <div class="flex-1 overflow-y-auto custom-scrollbar p-6 bg-white">
                 <div id="read-wiki-content" class="prose prose-zinc max-w-none text-sm text-zinc-700 mb-10 border-b border-zinc-100 pb-10">
                     <!-- Conteúdo entra aqui -->
                 </div>
-                
                 <div>
                     <h4 class="font-bold text-zinc-800 mb-4 flex items-center"><i data-lucide="message-square" class="w-4 h-4 mr-2 text-blue-600"></i> Comentários da Equipe</h4>
-                    <div id="read-wiki-comments-list" class="space-y-4 mb-6">
-                        <!-- Lista de comentários -->
-                    </div>
+                    <div id="read-wiki-comments-list" class="space-y-4 mb-6"></div>
                     <form onsubmit="handlePostComment(event)" class="flex items-start space-x-3">
                         <input type="hidden" id="current-read-wiki-id">
                         <div class="w-8 h-8 rounded-full bg-burgundy flex items-center justify-center text-xs font-bold text-white shrink-0" id="comment-avatar">--</div>
@@ -564,7 +534,7 @@
         </div>
     </div>
 
-    <!-- Modais Restantes -->
+    <!-- Modais Genéricos -->
     <div id="birthday-modal" class="hidden fixed inset-0 bg-zinc-900/80 backdrop-blur-sm flex items-center justify-center p-4 z-[90]">
         <div class="bg-gradient-to-br from-yellow-400 via-orange-500 to-red-500 rounded-3xl shadow-2xl p-1 w-full max-w-md text-center transform transition-all scale-100 animate-[bounce_1s_ease-in-out]">
             <div class="bg-white rounded-3xl p-6 md:p-8 h-full w-full relative overflow-hidden">
@@ -660,12 +630,237 @@
         </div>
     </div>
 
-    <!-- JAVASCRIPT: LÓGICA DE BUSCA GLOBAL ATUALIZADA -->
+    <!-- JAVASCRIPT GERAL -->
     <script>
-        function removeAccents(str) {
-            return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        const setores = ["Diretoria", "Pessoal", "Fiscal", "Contábil", "TI", "Legalização", "Financeiro", "Qualidade"];
+        
+        let dbUsuarios = []; let dbRecompensas = []; let dbDocumentos = []; let dbEventos = []; let dbPosts = []; let dbWiki = []; let dbAvaliacoes = [];
+
+        const evaluationCriteria = [ { id: 'qualidade', title: 'Qualidade', desc: 'Desempenha atividades com atenção e sem gerar retrabalho.' }, { id: 'postura', title: 'Postura e Atitude', desc: 'Apresentação adequada e focado no horário de trabalho.' }, { id: 'comunicacao', title: 'Comunicação', desc: 'Expressa ideias de forma clara e respeitosa.' }, { id: 'flexibilidade', title: 'Flexibilidade', desc: 'Ajusta-se a mudanças e lida bem com imprevistos.' }, { id: 'proatividade', title: 'Proatividade', desc: 'Apresenta novas soluções e busca aprender.' }, { id: 'organizacao', title: 'Organização e Planejamento', desc: 'Mantém registros claros e nos sistemas corretos.' }, { id: 'comprometimento', title: 'Comprometimento', desc: 'Garante que os objetivos de prazos sejam cumpridos.' }, { id: 'equipe', title: 'Trabalho em Equipe', desc: 'Interage bem e mantém equilíbrio em conflitos.' }, { id: 'tecnico', title: 'Conhecimento Técnico', desc: 'Apto a aplicar a tecnologia e legislação corrente.' }, { id: 'pontualidade', title: 'Pontualidade', desc: 'Cumpre horários e compromissos acordados.' } ];
+        
+        let currentEvalScores = {}; let currentEvalUserId = null;
+        let mesesNavegacao = ['Maio 2026', 'Junho 2026', 'Julho 2026', 'Agosto 2026', 'Setembro 2026'];
+        let mesIndex = 2; let sessionUser = null; let activeTab = 'home'; 
+
+        document.addEventListener("DOMContentLoaded", async () => {
+            document.getElementById('modal-doc-sector').innerHTML = setores.map(s => `<option value="${s}">${s}</option>`).join('');
+            if(document.getElementById('adm-user-sector')) document.getElementById('adm-user-sector').innerHTML = setores.map(s => `<option value="${s}">${s}</option>`).join('');
+            document.getElementById('current-date').innerText = new Date().toLocaleDateString('pt-BR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+            
+            await carregarDadosSupabase();
+
+            const usuarioSalvo = localStorage.getItem('adcol_user');
+            if(usuarioSalvo) { 
+                let userStorage = JSON.parse(usuarioSalvo);
+                let userLive = dbUsuarios.find(u => u.id === userStorage.id);
+                if (userLive) {
+                    sessionUser = userLive; localStorage.setItem('adcol_user', JSON.stringify(userLive)); aplicarLoginUI(userLive); 
+                } else { handleLogout(); }
+            }
+            try { lucide.createIcons(); } catch(e) {}
+        });
+
+        async function carregarDadosSupabase() {
+            try {
+                const [u, r, d, e, p, w, a] = await Promise.all([
+                    supabaseClient.from('usuarios_adcol').select('*').order('nome', { ascending: true }),
+                    supabaseClient.from('recompensas_adcol').select('*').order('custo', { ascending: true }),
+                    supabaseClient.from('documentos_adcol').select('*'),
+                    supabaseClient.from('eventos_calendario').select('*').order('dia', { ascending: true }),
+                    supabaseClient.from('posts_rede_social').select('*').order('created_at', { ascending: false }),
+                    supabaseClient.from('wiki_adcol').select('*').order('created_at', { ascending: false }),
+                    supabaseClient.from('avaliacoes_desempenho').select('*').order('created_at', { ascending: true })
+                ]);
+                if (u.data) dbUsuarios = u.data; if (r.data) dbRecompensas = r.data; if (d.data) dbDocumentos = d.data;
+                if (e.data) dbEventos = e.data; if (p.data) dbPosts = p.data; if (w.data) dbWiki = w.data; if (a.data) dbAvaliacoes = a.data;
+                
+                if(activeTab === 'calendar') renderEventos(); 
+                
+                renderNotifications();
+            } catch(err) { console.error("Erro na conexão", err); }
         }
 
+        // --- SISTEMA DE NOTIFICAÇÕES (SININHO) ---
+        function toggleNotifications() {
+            const dropdown = document.getElementById('notif-dropdown');
+            dropdown.classList.toggle('hidden');
+            document.getElementById('notif-badge').classList.add('hidden');
+        }
+        
+        function renderNotifications() {
+            const list = document.getElementById('notif-list');
+            let notifs = [];
+            
+            if (dbPosts && dbPosts.length > 0) {
+                notifs.push({ icone: 'message-square', cor: 'text-blue-500', bg: 'bg-blue-50', titulo: 'Nova publicação no Mural', desc: `${dbPosts[0].nome} postou na Rede Social.`, tempo: 'Recente' });
+            }
+            if (dbWiki && dbWiki.length > 0) {
+                notifs.push({ icone: 'book-open', cor: 'text-emerald-500', bg: 'bg-emerald-50', titulo: 'Novo Artigo na Wiki', desc: `${dbWiki[0].author} publicou um artigo.`, tempo: 'Recente' });
+            }
+            if (sessionUser && dbAvaliacoes.some(a => a.avaliado_id === sessionUser.id)) {
+                notifs.push({ icone: 'star', cor: 'text-yellow-500', bg: 'bg-yellow-50', titulo: 'Avaliação Recebida', desc: 'Seu desempenho foi atualizado pelo gestor.', tempo: 'Recente' });
+            }
+            
+            if (notifs.length === 0) {
+                list.innerHTML = `<div class="p-6 text-center text-xs text-zinc-400 italic">Nenhuma notificação nova.</div>`;
+                const badge = document.getElementById('notif-badge');
+                if(badge) badge.classList.add('hidden');
+            } else {
+                list.innerHTML = notifs.map(n => `
+                    <div class="p-4 hover:bg-zinc-50 transition cursor-pointer flex items-start space-x-3">
+                        <div class="p-2 rounded-lg ${n.bg} ${n.cor} shrink-0"><i data-lucide="${n.icone}" class="w-4 h-4"></i></div>
+                        <div><h4 class="text-xs font-bold text-zinc-800">${n.titulo}</h4><p class="text-[11px] text-zinc-500 mt-0.5 leading-tight">${n.desc}</p></div>
+                    </div>
+                `).join('');
+                const badge = document.getElementById('notif-badge');
+                if(badge) badge.classList.remove('hidden');
+            }
+            try { lucide.createIcons(); } catch(e){}
+        }
+
+        function clearNotifications() {
+            document.getElementById('notif-list').innerHTML = `<div class="p-6 text-center text-xs text-zinc-400 italic">Nenhuma notificação nova.</div>`;
+            document.getElementById('notif-badge').classList.add('hidden');
+            document.getElementById('notif-dropdown').classList.add('hidden');
+        }
+
+        // --- SISTEMAS DE ADMINISTRAÇÃO E LÓGICA DE LOGIN ---
+        function aplicarLoginUI(user) {
+            document.getElementById('sidebar-user-name').innerText = user.nome;
+            document.getElementById('greet-name').innerText = user.nome.split(' ')[0];
+            document.getElementById('user-avatar-initials').innerText = user.nome.substring(0, 2).toUpperCase();
+            
+            const badge = document.getElementById('role-badge');
+            const adminMenu = document.getElementById('admin-menu-section');
+            const adminCalendar = document.getElementById('admin-calendar-zone');
+            const adminUpload = document.getElementById('admin-upload-zone');
+            const adminGamification = document.getElementById('admin-gamification-zone');
+
+            if (user.role === 'admin') {
+                if(badge) { badge.className = "inline-block text-[9px] bg-red-500 text-white px-2 py-0.5 rounded uppercase font-bold tracking-widest shadow-sm"; badge.innerText = "Admin"; }
+                adminMenu?.classList.remove('hidden');
+                adminCalendar?.classList.remove('hidden');
+                adminUpload?.classList.remove('hidden');
+                adminGamification?.classList.remove('hidden');
+            } else if (user.role === 'gestor') {
+                if(badge) { badge.className = "inline-block text-[9px] bg-blue-500 text-white px-2 py-0.5 rounded uppercase font-bold tracking-widest shadow-sm"; badge.innerText = "Gestor"; }
+                adminMenu?.classList.add('hidden');
+                adminCalendar?.classList.remove('hidden');
+                adminUpload?.classList.remove('hidden');
+                adminGamification?.classList.add('hidden');
+            } else if (user.role === 'estagiario') {
+                if(badge) { badge.className = "inline-block text-[9px] bg-orange-500 text-white px-2 py-0.5 rounded uppercase font-bold tracking-widest shadow-sm"; badge.innerText = "Estagiário"; }
+                adminMenu?.classList.add('hidden');
+                adminCalendar?.classList.add('hidden');
+                adminUpload?.classList.add('hidden');
+                adminGamification?.classList.add('hidden');
+            } else {
+                if(badge) { badge.className = "inline-block text-[9px] bg-zinc-700 text-zinc-300 px-2 py-0.5 rounded uppercase font-bold tracking-widest"; badge.innerText = "Colab"; }
+                adminMenu?.classList.add('hidden');
+                adminCalendar?.classList.add('hidden');
+                adminUpload?.classList.add('hidden');
+                adminGamification?.classList.add('hidden');
+            }
+
+            let setoresPermitidos = (user.role === 'admin' || user.role === 'gestor') ? setores : [user.setor];
+            document.getElementById('sector-menu-list').innerHTML = setoresPermitidos.map(s => `<button onclick="switchTab('${s}')" id="btn-sector-${s}" class="w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-800 transition text-sm"><i data-lucide="folder" class="w-3.5 h-3.5"></i><span>${s}</span></button>`).join('');
+            
+            document.getElementById('login-screen').classList.add('hidden');
+            const mainApp = document.getElementById('main-app');
+            mainApp.classList.remove('hidden');
+            mainApp.style.display = 'flex';
+            
+            renderNotifications();
+            switchTab('home');
+            checkBirthday(user);
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const errorDiv = document.getElementById('login-error');
+            errorDiv.classList.add('hidden');
+
+            if (dbUsuarios.length === 0) {
+                errorDiv.innerText = "⚠️ Conectando ao banco de dados. Aguarde alguns segundos e clique em Entrar novamente.";
+                errorDiv.classList.remove('hidden');
+                carregarDadosSupabase();
+                return;
+            }
+
+            const email = document.getElementById('login-email').value.trim().toLowerCase();
+            const senha = document.getElementById('login-senha').value.trim();
+
+            const user = dbUsuarios.find(u => u.email.toLowerCase() === email && u.senha === senha);
+
+            if (user) { 
+                localStorage.setItem('adcol_user', JSON.stringify(user)); 
+                sessionUser = user; 
+                aplicarLoginUI(user); 
+            } else { 
+                errorDiv.innerText = "⚠️ E-mail ou senha incorretos!";
+                errorDiv.classList.remove('hidden');
+            }
+        }
+
+        function handleLogout() {
+            localStorage.removeItem('adcol_user');
+            sessionUser = null;
+            const mainApp = document.getElementById('main-app');
+            mainApp.style.display = 'none';
+            mainApp.classList.add('hidden');
+            document.getElementById('login-screen').classList.remove('hidden');
+        }
+
+        async function handleCSVImport(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = async function(e) {
+                const text = e.target.result;
+                const lines = text.split('\n').filter(line => line.trim() !== '');
+                let newUsers = [];
+                
+                for (let i = 1; i < lines.length; i++) {
+                    let cols = lines[i].split(',');
+                    if (cols.length < 6) cols = lines[i].split(';'); 
+                    if (cols.length >= 6) {
+                        let email = cols[1].trim().toLowerCase();
+                        if (!dbUsuarios.some(u => u.email === email) && !newUsers.some(u => u.email === email)) {
+                            newUsers.push({
+                                nome: cols[0].trim(),
+                                email: email,
+                                senha: cols[2].trim(),
+                                data_nascimento: cols[3].trim(),
+                                role: cols[4].trim().toLowerCase(),
+                                setor: cols[5].trim(),
+                                adcoins: 0
+                            });
+                        }
+                    }
+                }
+
+                if (newUsers.length > 0) {
+                    const { data, error } = await supabaseClient.from('usuarios_adcol').insert(newUsers).select();
+                    if (data) {
+                        dbUsuarios = [...dbUsuarios, ...data];
+                        renderUsersTable();
+                        alert(`${data.length} usuários importados com sucesso!`);
+                    } else {
+                        alert('Erro ao importar para o banco: ' + error.message);
+                    }
+                } else {
+                    alert('Nenhum usuário novo e válido encontrado no arquivo. Verifique se os e-mails já existem ou se o formato está correto.');
+                }
+                event.target.value = ''; 
+            };
+            reader.readAsText(file);
+        }
+
+        // --- SISTEMAS DE SUPORTE RESTANTES ---
+        function removeAccents(str) { return str.normalize("NFD").replace(/[\u0300-\u036f]/g, ""); }
+        
         function handleGlobalSearch(e) {
             const rawQuery = e.target.value;
             const query = removeAccents(rawQuery.toLowerCase());
@@ -678,7 +873,6 @@
 
             let html = '';
 
-            // 1. Institucional (Modais Estáticos)
             const staticLinks = [
                 { title: "Código de Conduta", desc: "Diretrizes éticas ADCOL", icon: "shield-check", action: "openCondutaModal(); document.getElementById('global-search-results').classList.add('hidden'); document.getElementById('global-search-input').value='';" },
                 { title: "Universidade ADCOL (Integração)", desc: "Aulas e Onboarding Institucional", icon: "graduation-cap", action: "openUniModal(); document.getElementById('global-search-results').classList.add('hidden'); document.getElementById('global-search-input').value='';" }
@@ -692,7 +886,6 @@
                 });
             }
 
-            // 2. Base de Conhecimento (Wiki)
             const resWiki = dbWiki.filter(w => {
                 const t = removeAccents(w.title.toLowerCase());
                 const c = removeAccents(w.cat.toLowerCase());
@@ -706,7 +899,6 @@
                 });
             }
 
-            // 3. Documentos e Arquivos
             const resDocs = dbDocumentos.filter(d => removeAccents(d.nome.toLowerCase()).includes(query));
             if (resDocs.length > 0) {
                 html += `<div class="p-2 bg-zinc-50 text-[10px] font-bold uppercase text-zinc-400">Arquivos & Manuais</div>`;
@@ -715,7 +907,6 @@
                 });
             }
 
-            // 4. Colaboradores
             const resUsers = dbUsuarios.filter(u => {
                 const n = removeAccents(u.nome.toLowerCase());
                 const s = removeAccents(u.setor.toLowerCase());
@@ -735,6 +926,80 @@
             resultsBox.classList.remove('hidden');
             try { lucide.createIcons(); } catch(e){}
         }
+
+        document.addEventListener('click', function(event) {
+            const dropdown = document.getElementById('notif-dropdown');
+            const btn = document.getElementById('notif-btn');
+            if (dropdown && !dropdown.contains(event.target) && btn && !btn.contains(event.target)) {
+                dropdown.classList.add('hidden');
+            }
+
+            const searchBox = document.getElementById('global-search-results');
+            const searchInput = document.getElementById('global-search-input');
+            if (searchBox && !searchBox.contains(event.target) && searchInput && event.target !== searchInput) {
+                searchBox.classList.add('hidden');
+            }
+        });
+
+        function formatText(cmd, val = null) { document.execCommand(cmd, false, val); document.getElementById('wiki-content-editor').focus(); }
+        function insertImagePrompt() { const url = prompt("Cole o link da imagem:"); if (url) { document.execCommand('insertImage', false, url); } }
+        function openMobileMenu() { document.getElementById('sidebar').classList.remove('-translate-x-full'); document.getElementById('mobile-overlay').classList.remove('hidden'); }
+        function closeMobileMenu() { document.getElementById('sidebar').classList.add('-translate-x-full'); document.getElementById('mobile-overlay').classList.add('hidden'); }
+        function openCondutaModal() { document.getElementById('conduta-modal').classList.remove('hidden'); }
+        function closeCondutaModal() { document.getElementById('conduta-modal').classList.add('hidden'); }
+        function openUniModal() { document.getElementById('uni-modal').classList.remove('hidden'); }
+        function closeUniModal() { document.getElementById('uni-modal').classList.add('hidden'); }
+        function toggleAIChat() { document.getElementById('ai-chat-window').classList.toggle('hidden'); }
+        
+        function checkBirthday(user) { if (!user.data_nascimento) { setTimeout(() => { document.getElementById('mood-modal').classList.remove('hidden'); }, 500); return; } const today = new Date(); const currentYear = today.getFullYear(); const [bYear, bMonth, bDay] = user.data_nascimento.split('-'); const bdayThisYear = new Date(currentYear, parseInt(bMonth) - 1, parseInt(bDay)); const diffTime = today.getTime() - bdayThisYear.getTime(); const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)); if (diffDays >= 0 && diffDays <= 15) { const seenKey = `adcol_bday_${user.id}_${currentYear}`; if (!localStorage.getItem(seenKey)) { document.getElementById('bday-user-name').innerText = user.nome; document.getElementById('birthday-modal').classList.remove('hidden'); return; } } setTimeout(() => { document.getElementById('mood-modal').classList.remove('hidden'); }, 500); }
+        function closeBirthdayModal() { localStorage.setItem(`adcol_bday_${sessionUser.id}_${new Date().getFullYear()}`, 'true'); document.getElementById('birthday-modal').classList.add('hidden'); setTimeout(() => { document.getElementById('mood-modal').classList.remove('hidden'); }, 300); }
+        function toggleSetores() { const list = document.getElementById('sector-menu-list'); const icon = document.getElementById('sector-chevron'); list.classList.toggle('hidden'); icon.classList.toggle('rotate-90'); }
+        function changeMonth(dir) { mesIndex += dir; if (mesIndex < 0) mesIndex = 0; if (mesIndex >= mesesNavegacao.length) mesIndex = mesesNavegacao.length - 1; document.getElementById('display-month').innerText = mesesNavegacao[mesIndex]; renderEventos(); }
+        
+        function switchTab(target) { activeTab = target; const defClass = "w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-zinc-400 hover:bg-zinc-800 hover:text-white text-sm font-medium transition"; ['btn-home', 'btn-admin-panel', 'btn-social', 'btn-calendar', 'btn-university', 'btn-wiki', 'btn-performance', 'btn-gamification'].forEach(id => { if(document.getElementById(id)) document.getElementById(id).className = defClass; }); setores.forEach(s => { if(document.getElementById(`btn-sector-${s}`)) document.getElementById(`btn-sector-${s}`).className = "w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-800 transition text-sm"; }); ['tab-home', 'tab-admin-panel', 'tab-social', 'tab-calendar', 'tab-university', 'tab-wiki', 'tab-sector', 'tab-performance', 'tab-gamification'].forEach(id => { if(document.getElementById(id)) document.getElementById(id).classList.add('hidden'); }); const actClass = "w-full flex items-center space-x-3 px-3 py-2 rounded-lg bg-burgundy text-white text-sm font-medium shadow-md transition"; const pageTitle = document.getElementById('page-title'); if (target === 'home') { document.getElementById('btn-home').className = actClass; pageTitle.innerText = "Dashboard"; document.getElementById('tab-home').classList.remove('hidden'); renderDashboardWidgets(); } else if (target === 'performance') { document.getElementById('btn-performance').className = actClass; pageTitle.innerText = "Meu Desempenho"; document.getElementById('tab-performance').classList.remove('hidden'); renderPerformanceTab(); } else if (target === 'gamification') { document.getElementById('btn-gamification').className = actClass; pageTitle.innerText = "Gamificação (ADCoins)"; document.getElementById('tab-gamification').classList.remove('hidden'); renderGamification(); } else if (target === 'university') { document.getElementById('btn-university').className = actClass; pageTitle.innerText = "Universidade ADCOL"; document.getElementById('tab-university').classList.remove('hidden'); } else if (target === 'wiki') { document.getElementById('btn-wiki').className = actClass; pageTitle.innerText = "Base de Conhecimento"; document.getElementById('tab-wiki').classList.remove('hidden'); renderWiki(); } else if (target === 'admin-panel') { document.getElementById('btn-admin-panel').className = actClass; pageTitle.innerText = "Gestão de Usuários"; document.getElementById('tab-admin-panel').classList.remove('hidden'); renderUsersTable(); } else if (target === 'social') { document.getElementById('btn-social').className = actClass; pageTitle.innerText = "Rede Social"; document.getElementById('tab-social').classList.remove('hidden'); renderPosts(); } else if (target === 'calendar') { document.getElementById('btn-calendar').className = actClass; pageTitle.innerText = "Calendário"; document.getElementById('tab-calendar').classList.remove('hidden'); renderEventos(); } else { const btn = document.getElementById(`btn-sector-${target}`); if(btn) btn.className = actClass; pageTitle.innerText = `Setor / ${target}`; document.getElementById('tab-sector').classList.remove('hidden'); renderSectorContent(target); } if (window.innerWidth < 768) { closeMobileMenu(); } try { lucide.createIcons(); } catch(e){} }
+
+        function handleAIQuery(e) { e.preventDefault(); const input = document.getElementById('ai-input'); const val = input.value.trim(); if(!val) return; const chatList = document.getElementById('ai-chat-messages'); chatList.innerHTML += `<div class="flex items-start justify-end space-x-2"><div class="bg-burgundy text-white p-3 rounded-2xl rounded-tr-none shadow-sm">${val}</div></div>`; input.value = ''; let valLower = val.toLowerCase(); let respostaIA = "Excelente pergunta! Pesquisei na nossa Base de Conhecimento e Políticas. Como a orientação pode variar, o ideal é confirmar os detalhes com seu gestor direto. Quer que eu busque outro POP?"; if(valLower.includes('missão') || valLower.includes('missao')) { respostaIA = "A missão da ADCOL é: Oferecer serviços contábeis diferenciados com qualidade, prestados através de uma equipe comprometida e qualificada, buscando a excelência e satisfação dos nossos clientes."; } else if(valLower.includes('visão') || valLower.includes('visao')) { respostaIA = "A visão da empresa é: Ser reconhecida como empresa contábil de referência pela qualidade, excelência e inovação na prestação dos serviços."; } else if(valLower.includes('valor') || valLower.includes('valores')) { respostaIA = "Nossos valores são: Ética, Reconhecimento humano, Transparência, Comprometimento, Conhecimento, Inovação, Qualidade, Confiança, Responsabilidade Social e Ambiental."; } else if(valLower.includes('horário') || valLower.includes('horario') || valLower.includes('ponto')) { respostaIA = "Temos duas opções de entrada (7:30 às 12:00 ou 8:00 às 12:00) e saída (13:00 às 17:00 ou 13:00 às 17:30). O almoço é de 1 hora. A tolerância de atraso é de 10 minutos (máx 3x ao mês)."; } else if(valLower.includes('benefício') || valLower.includes('beneficio') || valLower.includes('benefícios')) { respostaIA = "Nossos benefícios incluem: Bônus por indicação de novos clientes, Bônus por ideias inovadoras, Folga no dia do aniversário e Treinamento/desenvolvimento."; } else if(valLower.includes('falta') || valLower.includes('atestado')) { respostaIA = "As faltas não abonadas acarretarão na perda do dia de trabalho, DSR e redução nas férias. Faltas justificadas com atestado (como casamento ou doação de sangue) não geram penalidades se enviadas ao RH em até 2 dias úteis."; } else if(valLower.includes('atestado')) { respostaIA = "Atestados médicos (até 15 dias) e declarações devem ser entregues ao RH em até 2 dias úteis após o início da ausência."; } setTimeout(() => { chatList.innerHTML += `<div class="flex items-start space-x-2"><div class="w-8 h-8 rounded-full bg-red-100 text-burgundy flex items-center justify-center shrink-0"><i data-lucide="bot" class="w-4 h-4"></i></div><div class="bg-white border border-zinc-200 p-3 rounded-2xl rounded-tl-none shadow-sm text-zinc-700">${respostaIA}</div></div>`; chatList.scrollTop = chatList.scrollHeight; try { lucide.createIcons(); } catch(e){} }, 800); }
+
+        function renderDashboardWidgets() { let limitEvents = dbEventos.slice(0,3); document.getElementById('widget-events').innerHTML = limitEvents.length === 0 ? `<p class="text-xs text-zinc-400 italic">Nenhum evento futuro.</p>` : limitEvents.map(e => ` <div class="flex items-center space-x-3 p-2 bg-zinc-50 rounded border border-zinc-100"> <div class="${e.cor_class} w-10 h-10 flex flex-col items-center justify-center text-white rounded shrink-0 leading-none"><span class="text-[9px] font-bold uppercase">${e.mes}</span><span class="text-sm font-black">${e.dia}</span></div> <div><h4 class="text-xs font-bold text-zinc-800">${e.titulo}</h4><p class="text-[10px] text-zinc-500">${e.descricao}</p></div> </div> `).join(''); }
+        function renderEventos() { document.getElementById('list-events').innerHTML = dbEventos.length === 0 ? `<p class="text-sm text-zinc-400 italic">Vazio.</p>` : dbEventos.map(e => `<div class="flex bg-white border border-zinc-200 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition"><div class="${e.cor_class} w-20 flex flex-col items-center justify-center text-white"><span class="text-xs font-bold uppercase">${e.mes}</span><span class="text-2xl font-black">${e.dia}</span></div><div class="p-4 flex-1 flex justify-between items-start"><div><h4 class="font-bold text-base text-zinc-800">${e.titulo}</h4><p class="text-xs text-zinc-500">${e.descricao}</p></div>${(sessionUser && (sessionUser.role === 'admin' || sessionUser.role === 'gestor')) ? `<button onclick="deleteEvent(${e.id})" class="text-zinc-400 hover:text-red-500 p-2"><i data-lucide="trash" class="w-4 h-4"></i></button>` : ''}</div></div>`).join(''); let daysHtml = ''; for(let i=1; i<=31; i++) { let dayEvent = dbEventos.find(e => parseInt(e.dia) === i); if (dayEvent) { daysHtml += `<div class="p-1.5 font-bold border-2 border-orange-500 rounded text-orange-600 bg-orange-50 cursor-pointer hover:bg-orange-100 transition shadow-sm">${i}</div>`; } else { daysHtml += `<div class="p-1.5 rounded cursor-pointer hover:bg-zinc-100 transition">${i}</div>`; } } document.getElementById('calendar-grid').innerHTML = daysHtml + `<div class="p-1.5 text-zinc-300">1</div><div class="p-1.5 text-zinc-300">2</div><div class="p-1.5 text-zinc-300">3</div><div class="p-1.5 text-zinc-300">4</div>`; renderDashboardWidgets(); try { lucide.createIcons(); } catch(e){} }
+        function openEventModal() { document.getElementById('ev-id').value = ''; document.getElementById('event-modal-title').innerHTML = `<i data-lucide="calendar-plus" class="w-5 h-5 inline mr-2 text-orange-500"></i> Novo Evento`; document.getElementById('event-modal').classList.remove('hidden'); try{lucide.createIcons();}catch(e){} }
+        function closeEventModal() { document.getElementById('event-modal').classList.add('hidden'); document.getElementById('ev-titulo').value = ''; document.getElementById('ev-dia').value = ''; document.getElementById('ev-desc').value = ''; }
+        async function handleSaveEvent(e) { e.preventDefault(); const id = document.getElementById('ev-id').value; const evData = { dia: document.getElementById('ev-dia').value.padStart(2, '0'), mes: document.getElementById('ev-mes').value.substring(0,3).toUpperCase(), titulo: document.getElementById('ev-titulo').value, descricao: document.getElementById('ev-desc').value, cor_class: document.getElementById('ev-cor').value }; if(id) { await supabaseClient.from('eventos_calendario').update(evData).eq('id', id); } else { const {data} = await supabaseClient.from('eventos_calendario').insert([evData]).select(); if(data) dbEventos.push(data[0]); } closeEventModal(); await carregarDadosSupabase(); }
+        async function deleteEvent(id) { if(confirm('Apagar evento?')) { await supabaseClient.from('eventos_calendario').delete().eq('id', id); dbEventos = dbEventos.filter(e => e.id !== id); renderEventos(); } }
+        
+        function renderWiki() { document.getElementById('wiki-list').innerHTML = dbWiki.length === 0 ? `<p class="p-4 text-sm text-zinc-400 italic">Nenhum artigo criado ainda.</p>` : dbWiki.map(w => { let dateStr = w.created_at ? new Date(w.created_at).toLocaleDateString('pt-BR', {day: '2-digit', month:'short'}) : w.date; let delBtn = (sessionUser && (sessionUser.role === 'admin' || sessionUser.nome === w.author)) ? `<button onclick="deleteWiki(${w.id}); event.stopPropagation();" class="p-2 text-zinc-400 hover:text-red-500 rounded transition ml-2"><i data-lucide="trash-2" class="w-4 h-4"></i></button>` : ''; let numComments = w.comentarios ? w.comentarios.length : 0; return `<div class="p-4 md:p-5 hover:bg-zinc-50 transition cursor-pointer flex flex-col md:flex-row md:items-center justify-between gap-3 md:gap-4"><div class="flex-1"><div class="flex items-center space-x-2 mb-1"><span class="text-[10px] font-bold uppercase tracking-wider text-blue-700 bg-blue-100 px-2 py-0.5 rounded-full">${w.cat}</span><span class="text-[10px] text-zinc-400 font-medium">${dateStr}</span></div><h3 class="text-sm font-bold text-zinc-800 mb-1">${w.title}</h3><p class="text-xs text-zinc-500 flex items-center"><i data-lucide="user" class="w-3 h-3 mr-1"></i> ${w.author}</p></div><div class="flex items-center justify-between md:justify-end w-full md:w-auto mt-2 md:mt-0"><div class="flex flex-col items-center justify-center p-2 rounded-lg hover:bg-zinc-100 text-zinc-400 hover:text-blue-600 transition"><i data-lucide="message-square" class="w-4 h-4 mb-1"></i><span class="text-xs font-bold leading-none">${numComments}</span></div><button onclick="openReadWiki(${w.id})" class="bg-white border border-zinc-200 text-zinc-600 hover:bg-zinc-50 hover:text-blue-600 px-4 py-2 rounded-lg text-xs font-bold transition shadow-sm ml-4">Ler Artigo</button>${delBtn}</div></div>` }).join(''); try { lucide.createIcons(); } catch(e){} }
+        async function handleCreateWiki(e) { e.preventDefault(); const title = document.getElementById('wiki-title').value; const cat = document.getElementById('wiki-cat').value; const content = document.getElementById('wiki-content-editor').innerHTML; const wikiData = { title, author: sessionUser.nome, cat, content, likes: 0, date: "Hoje", comentarios: [] }; const {data, error} = await supabaseClient.from('wiki_adcol').insert([wikiData]).select(); if(data) { dbWiki.unshift(data[0]); document.getElementById('wiki-title').value = ''; document.getElementById('wiki-content-editor').innerHTML = ''; document.getElementById('wiki-modal').classList.add('hidden'); renderWiki(); alert('Artigo publicado!'); } else { alert("Erro ao publicar."); } }
+        async function deleteWiki(id) { if(confirm("Apagar artigo permanentemente?")) { await supabaseClient.from('wiki_adcol').delete().eq('id', id); dbWiki = dbWiki.filter(w => w.id !== id); renderWiki(); } }
+        function openReadWiki(id) { const article = dbWiki.find(x => x.id === id); if(!article) return; document.getElementById('read-wiki-cat').innerText = article.cat; document.getElementById('read-wiki-title').innerText = article.title; document.getElementById('read-wiki-author').innerText = article.author; document.getElementById('read-wiki-date').innerText = article.created_at ? new Date(article.created_at).toLocaleDateString('pt-BR') : article.date; document.getElementById('read-wiki-content').innerHTML = article.content; document.getElementById('current-read-wiki-id').value = id; document.getElementById('comment-avatar').innerText = sessionUser.nome.substring(0,2).toUpperCase(); renderComments(article); document.getElementById('wiki-read-modal').classList.remove('hidden'); }
+        function renderComments(article) { const list = document.getElementById('read-wiki-comments-list'); if(!article.comentarios || article.comentarios.length === 0) { list.innerHTML = `<p class="text-xs text-zinc-400 italic text-center py-4">Seja o primeiro a comentar.</p>`; return; } list.innerHTML = article.comentarios.map(c => ` <div class="bg-zinc-50 p-4 rounded-xl border border-zinc-100 flex items-start space-x-3"> <div class="w-8 h-8 rounded-full bg-zinc-200 flex items-center justify-center text-xs font-bold text-zinc-600 shrink-0">${c.nome.substring(0,2).toUpperCase()}</div> <div><h5 class="text-xs font-bold text-zinc-800">${c.nome} <span class="font-normal text-zinc-400 ml-2">${c.data}</span></h5><p class="text-sm text-zinc-600 mt-1">${c.texto}</p></div> </div> `).join(''); }
+        async function handlePostComment(e) { e.preventDefault(); const input = document.getElementById('new-comment-input'); const text = input.value; const id = parseInt(document.getElementById('current-read-wiki-id').value); if(!text) return; let article = dbWiki.find(x => x.id === id); let novosComments = article.comentarios ? [...article.comentarios] : []; novosComments.push({ nome: sessionUser.nome, texto: text, data: new Date().toLocaleDateString('pt-BR', {hour: '2-digit', minute:'2-digit'}) }); const { error } = await supabaseClient.from('wiki_adcol').update({ comentarios: novosComments }).eq('id', id); if(!error) { article.comentarios = novosComments; input.value = ''; renderComments(article); renderWiki(); } else alert("Erro ao comentar."); }
+
+        function renderPerformanceTab() { if (sessionUser.role === 'admin' || sessionUser.role === 'gestor') { document.getElementById('manager-perf-zone').classList.remove('hidden'); let equipe = dbUsuarios.filter(u => u.id !== sessionUser.id && u.role !== 'admin'); if (sessionUser.role === 'gestor') equipe = equipe.filter(u => u.setor === sessionUser.setor); document.getElementById('table-team-perf').innerHTML = equipe.map(u => { let userEvals = dbAvaliacoes.filter(a => a.avaliado_id === u.id); let status = `Pendente`; let mediaText = `-`; let pdfBtn = ``; if (userEvals.length > 0) { status = `<span class="text-emerald-600 font-bold">Avaliado</span>`; let lastEval = userEvals[userEvals.length - 1]; let soma = 0; let qtd = 0; for(let key in lastEval.notas) { soma += lastEval.notas[key]; qtd++; } let media = (soma / qtd).toFixed(1); mediaText = `<span class="text-blue-600 font-bold">${media}</span>`; pdfBtn = `<button onclick="downloadEvalPDF(${lastEval.id})" class="text-xs bg-zinc-100 text-zinc-600 hover:bg-zinc-200 px-3 py-1.5 rounded-lg font-bold transition ml-2 shadow-sm"><i data-lucide="download" class="w-3.5 h-3.5 inline"></i> PDF</button>`; } return `<tr class="hover:bg-zinc-50 transition"><td class="p-4 font-bold text-zinc-800">${u.nome} <span class="text-[10px] bg-zinc-100 text-zinc-500 px-2 py-0.5 rounded ml-2">${u.setor}</span></td><td class="p-4 text-zinc-500 text-xs">${status}</td><td class="p-4 text-xs">${mediaText}</td><td class="p-4 text-right flex items-center justify-end"><button onclick="openEvalModal(${u.id}, '${u.nome}')" class="text-xs bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white px-3 py-1.5 rounded-lg font-bold transition shadow-sm">Nova</button>${pdfBtn}</td></tr>` }).join(''); } else { document.getElementById('manager-perf-zone').classList.add('hidden'); } let minhasAval = dbAvaliacoes.filter(a => a.avaliado_id === sessionUser.id); document.getElementById('list-my-evals').innerHTML = minhasAval.length === 0 ? `<p class="text-sm text-zinc-400 italic">Nenhuma avaliação recebida ainda.</p>` : minhasAval.map(a => `<div onclick="downloadEvalPDF(${a.id})" class="p-4 border border-zinc-200 rounded-xl bg-zinc-50 flex items-center justify-between hover:border-blue-300 transition group cursor-pointer"><div class="flex items-center space-x-3"><div class="bg-blue-100 text-blue-600 p-2.5 rounded-lg"><i data-lucide="award" class="w-5 h-5"></i></div><div><h4 class="text-sm font-bold text-zinc-800">Avaliação de Período</h4><p class="text-[10px] text-zinc-500 uppercase font-bold mt-0.5">${new Date(a.created_at).toLocaleDateString('pt-BR')}</p></div></div><button class="text-blue-600 font-bold text-xs"><i data-lucide="download" class="w-4 h-4 mr-1 inline"></i> PDF</button></div>`).join(''); let notaGlobal = 0.0; if (minhasAval.length > 0) { let allSoma = 0; let allQtd = 0; minhasAval.forEach(av => { for(let key in av.notas) { allSoma += av.notas[key]; allQtd++; } }); notaGlobal = (allSoma / allQtd).toFixed(1); let porcentagem = (notaGlobal / 5.0) * 100; document.getElementById('score-circle').setAttribute('stroke-dasharray', `${porcentagem}, 100`); document.getElementById('score-msg').innerText = notaGlobal >= 4.0 ? "Você está acima da média do escritório!" : "Continue se desenvolvendo!"; document.getElementById('score-text').innerText = notaGlobal; } else { document.getElementById('score-circle').setAttribute('stroke-dasharray', `0, 100`); document.getElementById('score-text').innerText = "0.0"; document.getElementById('score-msg').innerText = "Aguardando avaliações..."; } try { lucide.createIcons(); } catch(e){} }
+        function downloadEvalPDF(evalId) { const avaliacao = dbAvaliacoes.find(a => a.id === evalId); if(!avaliacao) return alert("Avaliação não encontrada."); const avaliado = dbUsuarios.find(u => u.id === avaliacao.avaliado_id) || {nome: "Desconhecido", setor: "-"}; const avaliador = dbUsuarios.find(u => u.id === avaliacao.avaliador_id) || {nome: "Sistema"}; const dataAval = new Date(avaliacao.created_at).toLocaleDateString('pt-BR'); const baseUrl = window.location.href.replace('index.html', '').split('?')[0]; const element = document.createElement('div'); element.innerHTML = ` <div style="padding: 30px; font-family: Arial, sans-serif; color: #333; max-width: 800px; margin: 0 auto; background: #fff;"> <div style="border-bottom: 3px solid #8A151B; padding-bottom: 15px; margin-bottom: 25px; display: flex; justify-content: space-between; align-items: flex-end;"> <div style="display: flex; align-items: center; gap: 15px;"> <img src="${baseUrl}logo.png" style="height: 40px; width: auto; object-fit: contain;" onerror="this.src='https://via.placeholder.com/150x50?text=ADCOL'"> <h1 style="color: #8A151B; margin: 0; font-size: 22px; text-transform: uppercase;">Relatório de Desempenho</h1> </div> <span style="font-size: 11px; color: #777; font-weight: bold;">ADCOL Confidencial</span> </div> <div style="background-color: #f4f4f5; padding: 15px; border-radius: 8px; margin-bottom: 25px;"> <p style="margin: 6px 0; font-size: 13px;"><strong>Colaborador Avaliado:</strong> ${avaliado.nome} (${avaliado.setor})</p> <p style="margin: 6px 0; font-size: 13px;"><strong>Gestor Avaliador:</strong> ${avaliador.nome}</p> <p style="margin: 6px 0; font-size: 13px;"><strong>Data da Avaliação:</strong> ${dataAval}</p> </div> <table style="width: 100%; border-collapse: collapse; margin-bottom: 25px;"> <tr><th style="background-color: #8A151B; color: white; padding: 10px; text-align: left; font-size: 11px; text-transform: uppercase; border: 1px solid #ddd;">Critério Analisado</th><th style="width: 100px; text-align: center; background-color: #8A151B; color: white; padding: 10px; font-size: 11px; text-transform: uppercase; border: 1px solid #ddd;">Nota (1 a 5)</th></tr> ${evaluationCriteria.map(c => { let nota = avaliacao.notas[c.id] || 0; return `<tr><td style="border: 1px solid #ddd; padding: 10px;"><strong style="font-size: 13px;">${c.title}</strong><br><span style="font-size: 10px; color:#666;">${c.desc}</span></td><td style="border: 1px solid #ddd; padding: 10px; text-align: center; font-weight: bold; font-size: 15px;">${nota}</td></tr>`; }).join('')} </table> <div style="margin-bottom: 20px;"><h3 style="color: #444; border-bottom: 2px solid #eee; padding-bottom: 4px; font-size: 14px; margin-bottom: 10px;">Pontos Fortes (Destaques)</h3><p style="font-size: 13px; line-height: 1.5; background-color: #fcfcfc; padding: 12px; border-radius: 6px; border: 1px solid #eee; margin:0;">${avaliacao.pontos_fortes ? avaliacao.pontos_fortes.replace(/\n/g, '<br>') : 'Nenhum comentário registrado.'}</p></div> <div style="margin-bottom: 20px;"><h3 style="color: #444; border-bottom: 2px solid #eee; padding-bottom: 4px; font-size: 14px; margin-bottom: 10px;">Plano de Ação (Pontos a Desenvolver)</h3><p style="font-size: 13px; line-height: 1.5; background-color: #fcfcfc; padding: 12px; border-radius: 6px; border: 1px solid #eee; margin:0;">${avaliacao.pontos_melhorar ? avaliacao.pontos_melhorar.replace(/\n/g, '<br>') : 'Nenhum comentário registrado.'}</p></div> <div style="margin-top: 40px; text-align: center; font-size: 10px; color: #999; border-top: 1px solid #eee; padding-top: 8px;">Gerado automaticamente pelo Digital Workplace ADCOL em ${new Date().toLocaleString('pt-BR')}</div> </div> `; const options = { margin: [0.4, 0.4, 0.4, 0.4], filename: `Avaliacao_${avaliado.nome.replace(/ /g, '_')}_${dataAval.replace(/\//g, '_')}.pdf`, image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2, useCORS: true }, jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' } }; html2pdf().set(options).from(element).save(); }
+        function openEvalModal(userId, userName) { currentEvalUserId = userId; currentEvalScores = {}; document.getElementById('eval-modal-subtitle').innerText = `Avaliando: ${userName}`; document.getElementById('eval-fortes').value = ''; document.getElementById('eval-melhorar').value = ''; document.getElementById('criteria-list').innerHTML = evaluationCriteria.map(crit => `<div class="flex flex-col md:flex-row md:items-center justify-between p-3 border-b border-zinc-100 hover:bg-zinc-50 transition rounded-lg"><div class="mb-2 md:mb-0 md:mr-4 flex-1"><h4 class="font-bold text-sm text-zinc-800">${crit.title}</h4><p class="text-[11px] text-zinc-500 leading-tight">${crit.desc}</p></div><div class="flex space-x-1" id="stars-${crit.id}">${[1,2,3,4,5].map(v => `<i data-lucide="star" onclick="setRating('${crit.id}', ${v})" class="w-6 h-6 text-zinc-200 hover:text-yellow-400 cursor-pointer transition-colors" id="star-${crit.id}-${v}"></i>`).join('')}</div></div>`).join(''); document.getElementById('eval-modal').classList.remove('hidden'); try { lucide.createIcons(); } catch(e){} }
+        function setRating(critId, value) { currentEvalScores[critId] = value; for(let i=1; i<=5; i++) { let star = document.getElementById(`star-${critId}-${i}`); if(i <= value) { star.classList.remove('text-zinc-200'); star.classList.add('text-yellow-400', 'fill-yellow-400'); } else { star.classList.add('text-zinc-200'); star.classList.remove('text-yellow-400', 'fill-yellow-400'); } } }
+        function closeEvalModal() { document.getElementById('eval-modal').classList.add('hidden'); }
+        async function saveEvaluation() { if(Object.keys(currentEvalScores).length < evaluationCriteria.length) return alert("Preencha todas as notas de 1 a 5."); const evalData = { avaliador_id: sessionUser.id, avaliado_id: currentEvalUserId, notas: currentEvalScores, pontos_fortes: document.getElementById('eval-fortes').value, pontos_melhorar: document.getElementById('eval-melhorar').value }; const {data, error} = await supabaseClient.from('avaliacoes_desempenho').insert([evalData]).select(); if(data) { dbAvaliacoes.push(data[0]); alert("Avaliação salva no Supabase com sucesso!"); closeEvalModal(); renderPerformanceTab(); } else alert("Erro ao salvar: " + error.message); }
+
+        function renderGamification() { let u = dbUsuarios.find(x => x.id === sessionUser.id); document.getElementById('user-adcoins').innerText = u ? u.adcoins : 0; document.getElementById('rewards-store').innerHTML = dbRecompensas.map(r => `<div class="flex items-center justify-between p-4 border border-zinc-100 rounded-xl bg-white hover:border-yellow-400 hover:shadow-sm transition group"><div><h4 class="font-bold text-sm text-zinc-800">${r.nome}</h4><p class="text-xs font-bold text-yellow-600 mt-1">${r.custo} ADCoins</p></div><button onclick="redeemReward(${r.id}, ${r.custo})" class="bg-zinc-50 text-zinc-600 border border-zinc-200 hover:bg-yellow-500 hover:border-yellow-500 hover:text-white px-4 py-2 rounded-lg text-xs font-bold transition shadow-sm">Resgatar</button></div>`).join(''); let sel = document.getElementById('credit-user'); if(sel && sessionUser.role === 'admin') { sel.innerHTML = `<option value="">Selecione...</option>` + dbUsuarios.filter(x => x.id !== sessionUser.id).map(x => `<option value="${x.id}">${x.nome} (${x.setor}) - Saldo: ${x.adcoins}</option>`).join(''); } }
+        async function handleAddReward(e) { e.preventDefault(); const nome = document.getElementById('reward-name').value; const custo = parseInt(document.getElementById('reward-cost').value); const { data, error } = await supabaseClient.from('recompensas_adcol').insert([{ nome, custo }]).select(); if(!error && data) { dbRecompensas.push(data[0]); document.getElementById('reward-name').value = ''; document.getElementById('reward-cost').value = ''; renderGamification(); alert('Nova recompensa adicionada!'); } }
+        async function handleCreditPoints(e) { e.preventDefault(); const uid = parseInt(document.getElementById('credit-user').value); const pts = parseInt(document.getElementById('credit-amount').value); if(!uid || !pts) return; let u = dbUsuarios.find(x => x.id === uid); if(u) { let novoSaldo = (u.adcoins || 0) + pts; const { error } = await supabaseClient.from('usuarios_adcol').update({ adcoins: novoSaldo }).eq('id', uid); if(!error) { u.adcoins = novoSaldo; alert(`${pts} ADCoins creditados para ${u.nome}!`); document.getElementById('credit-amount').value = ''; document.getElementById('credit-reason').value = ''; renderGamification(); } } }
+        async function redeemReward(id, custo) { let u = dbUsuarios.find(x => x.id === sessionUser.id); let saldo = u.adcoins || 0; if(saldo >= custo) { if(confirm(`Resgatar por ${custo} ADCoins?`)) { let novoSaldo = saldo - custo; const { error } = await supabaseClient.from('usuarios_adcol').update({ adcoins: novoSaldo }).eq('id', sessionUser.id); if(!error) { u.adcoins = novoSaldo; sessionUser.adcoins = novoSaldo; localStorage.setItem('adcol_user', JSON.stringify(sessionUser)); alert('Resgate enviado ao RH!'); renderGamification(); } } } else { alert('ADCoins insuficientes.'); } }
+
+        function renderUsersTable() { document.getElementById('table-users').innerHTML = dbUsuarios.map(u => { let badgeColor = u.role === 'admin' ? 'bg-red-100 text-red-700' : (u.role === 'gestor' ? 'bg-blue-100 text-blue-700' : (u.role === 'estagiario' ? 'bg-orange-100 text-orange-700' : 'bg-zinc-100 text-zinc-600')); let dataFormatada = "Não informada"; if(u.data_nascimento) { const [y, m, d] = u.data_nascimento.split('-'); dataFormatada = `${d}/${m}/${y}`; } return `<tr class="hover:bg-zinc-50 transition"><td class="p-4 font-bold text-zinc-800"><div class="flex flex-col"><span>${u.nome}</span><span class="text-[10px] text-zinc-400 font-normal">${u.email}</span></div></td><td class="p-4 text-zinc-500 text-xs font-bold uppercase">${u.setor || 'N/A'}</td><td class="p-4 text-zinc-500 text-xs">${dataFormatada}</td><td class="p-4"><span class="text-[10px] px-2 py-1 rounded-md font-bold uppercase tracking-wider ${badgeColor}">${u.role}</span></td><td class="p-4 text-right"><button onclick="handleDeleteUser(${u.id})" class="text-zinc-400 hover:text-red-500 p-2 rounded hover:bg-red-50 transition"><i data-lucide="user-x" class="w-4 h-4"></i></button></td></tr>` }).join(''); try { lucide.createIcons(); } catch(e){} }
+        async function handleCreateUser(e) { e.preventDefault(); const nome = document.getElementById('adm-user-name').value; const email = document.getElementById('adm-user-email').value.toLowerCase(); const senha = document.getElementById('adm-user-password').value; const role = document.getElementById('adm-user-role').value; const setor = document.getElementById('adm-user-sector').value; const data_nascimento = document.getElementById('adm-user-birth').value; if (dbUsuarios.some(u => u.email === email)) return alert('⚠️ E-mail já cadastrado!'); const { data, error } = await supabaseClient.from('usuarios_adcol').insert([{ nome, email, senha, role, setor, adcoins: 0, data_nascimento }]).select(); if(data) { dbUsuarios.push(data[0]); document.getElementById('adm-user-name').value = ''; document.getElementById('adm-user-email').value = ''; document.getElementById('adm-user-password').value = ''; document.getElementById('adm-user-birth').value = ''; renderUsersTable(); alert(`Usuário criado com sucesso!`); } }
+        async function handleDeleteUser(id) { if (confirm('Remover o usuário definitivamente?')) { const { error } = await supabaseClient.from('usuarios_adcol').delete().eq('id', id); if(!error) { dbUsuarios = dbUsuarios.filter(u => u.id !== id); renderUsersTable(); } } }
+
+        function renderPosts() { document.getElementById('list-posts').innerHTML = dbPosts.length === 0 ? `<p class="text-sm text-zinc-400 italic p-4 text-center">Nenhuma publicação no feed ainda.</p>` : dbPosts.map(p => { let dataFormatada = new Date(p.created_at).toLocaleDateString('pt-BR', {hour: '2-digit', minute:'2-digit'}); let delBtn = (sessionUser && (sessionUser.role === 'admin' || sessionUser.id === p.user_id)) ? `<button onclick="deletePost(${p.id})" class="text-zinc-400 hover:text-red-500 p-2 rounded hover:bg-red-50 transition"><i data-lucide="trash-2" class="w-4 h-4"></i></button>` : ''; return `<div class="bg-white p-5 md:p-6 rounded-2xl shadow-sm border border-zinc-200"><div class="flex items-center justify-between mb-4"><div class="flex items-center space-x-3"><div class="w-10 h-10 rounded-full ${p.cor_avatar} flex items-center justify-center text-sm font-bold text-white shrink-0">${p.iniciais}</div><div><h4 class="text-sm font-bold text-zinc-800">${p.nome}</h4><p class="text-[11px] text-zinc-400">${dataFormatada}</p></div></div>${delBtn}</div><p class="text-sm text-zinc-700 mb-2 leading-relaxed">${p.texto}</p></div>`; }).join(''); try { lucide.createIcons(); } catch(e){} }
+        async function handleCreatePost(e) { e.preventDefault(); const text = document.getElementById('new-post-text').value; if(!text) return; const postData = { user_id: sessionUser.id, nome: sessionUser.nome, iniciais: sessionUser.nome.substring(0,2).toUpperCase(), role: sessionUser.role, texto: text, cor_avatar: (sessionUser.role === 'admin' || sessionUser.role === 'gestor') ? 'bg-zinc-800' : 'bg-emerald-600' }; const {data} = await supabaseClient.from('posts_rede_social').insert([postData]).select(); if(data) { dbPosts.unshift(data[0]); document.getElementById('new-post-text').value = ''; renderPosts(); } }
+        async function deletePost(id) { if(confirm('Apagar publicação?')) { await supabaseClient.from('posts_rede_social').delete().eq('id', id); dbPosts = dbPosts.filter(p => p.id !== id); renderPosts(); } }
+        
+        function renderSectorContent(sectorName) { const docsSetor = dbDocumentos.filter(d => d.sector === sectorName); const cargosList = docsSetor.filter(d => d.tipo === 'Cargo'); document.getElementById('list-cargos').innerHTML = cargosList.length === 0 ? `<li class="text-xs text-zinc-400 italic">Vazio.</li>` : cargosList.map(c => `<li class="flex items-center space-x-2 p-2 hover:bg-zinc-50 rounded-lg"><i data-lucide="file-text" class="w-4 h-4 text-zinc-400"></i><span class="font-medium">${c.nome}</span></li>`).join(''); const docsTabela = docsSetor.filter(d => d.tipo !== 'Cargo'); document.getElementById('table-documents').innerHTML = docsTabela.length === 0 ? `<tr><td colspan="3" class="p-4 text-center text-xs text-zinc-400 italic">Vazio.</td></tr>` : docsTabela.map(d => { let delBtn = (sessionUser && (sessionUser.role === 'admin' || sessionUser.role === 'gestor')) ? `<button onclick="deleteDocument(${d.id})" class="text-zinc-400 hover:text-red-600 p-2 rounded-lg hover:bg-red-50 transition ml-2"><i data-lucide="trash" class="w-4 h-4"></i></button>` : ''; return `<tr class="hover:bg-zinc-50 transition"><td class="p-4 font-medium text-zinc-800">${d.nome}</td><td class="p-4"><span class="inline-block text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded-md ${d.tipo === 'Formulário' ? 'bg-blue-50 text-blue-700' : 'bg-emerald-50 text-emerald-700'}">${d.tipo}</span></td><td class="p-4 text-right flex justify-end items-center"><button class="text-zinc-400 hover:text-burgundy p-2 rounded-lg hover:bg-red-50 transition"><i data-lucide="download" class="w-4 h-4"></i></button>${delBtn}</td></tr>`; }).join(''); try { lucide.createIcons(); } catch(e){} }
+        function openModal() { document.getElementById('modal-doc-sector').value = activeTab; document.getElementById('upload-modal').classList.remove('hidden'); }
+        function closeModal() { document.getElementById('upload-modal').classList.add('hidden'); document.getElementById('modal-doc-name').value = ''; }
+        async function handleUpload(e) { e.preventDefault(); const docData = { nome: document.getElementById('modal-doc-name').value, tipo: document.getElementById('modal-doc-type').value, sector: document.getElementById('modal-doc-sector').value }; const {data} = await supabaseClient.from('documentos_adcol').insert([docData]).select(); if(data) { dbDocumentos.push(data[0]); closeModal(); renderSectorContent(activeTab); } }
+        async function deleteDocument(id) { if(confirm('Excluir documento?')) { await supabaseClient.from('documentos_adcol').delete().eq('id', id); dbDocumentos = dbDocumentos.filter(d => d.id !== id); renderSectorContent(activeTab); } }
+
     </script>
 </body>
 </html>
